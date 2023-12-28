@@ -1,0 +1,18 @@
+{
+  "welcome": "Welcome Json",
+  "change_lang": "Change lang",
+  "logout": "LogOut",
+  "language_used_english": "Language Used English",
+  "language_used_turkish": "Language Used Turkish",
+  "Notification_close": "Notification will close in 2 seconds, you can close this notification now",
+  "Success": "Success",
+  "Unsuccessful": "Operation Failed",
+  "Please_wait": "Please Wait",
+  "Active_language": "Active Language",
+  "Submit": "Submit",
+  "Cancel": "Cancel",
+  "films": "Films",
+  "series": "Series",
+  "persons": "Persons",
+  "see more": "See More"
+}

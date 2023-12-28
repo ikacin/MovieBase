@@ -1,0 +1,17 @@
+{
+  "welcome": "Hoş geldiniz Json",
+  "change_lang": "Dili Değiştir",
+  "logout": "Çıkış",
+  "language_used_english": "Kullanılan Dil İngilizce",
+  "language_used_turkish": "Kullanılan Dil Türkçe",
+  "Notification_close": "Bildirim 2 saniye içinde kapanacak, bu bildirimi şimdi kapatabilirsiniz",
+  "Success": "İşlem Başarıyla Gerçekleştirildi",
+  "Unsuccessful": "Operation Failed",
+  "Please_wait": "Lütfen Bekleyiniz",
+  "Active_language": "Aktif Dil",
+  "Submit": "Gönder",
+  "Cancel": "Vazgeç",
+  "films": "Filmler",
+  "persons": "Kişiler",
+  "see_more": "Daha Fazla"
+}

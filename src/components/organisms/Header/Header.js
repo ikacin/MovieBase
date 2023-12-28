@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Menu, Group, Center, Burger, Container } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 // import { IconChevronDown } from '@tabler/icons-react';
@@ -8,33 +9,31 @@ import classes from './HeaderMenu.module.css';
 import styled from 'styled-components';
 
 
-const links = [
-    { link: '/about', label: 'Features' },
-    {
-        link: '#1',
-        label: 'Learn',
-        links: [
-            { link: '/docs', label: 'Documentation' },
-            { link: '/resources', label: 'Resources' },
-            { link: '/community', label: 'Community' },
-            { link: '/blog', label: 'Blog' },
-        ],
-    },
-    { link: '/about', label: 'About' },
-    { link: '/pricing', label: 'Pricing' },
-    {
-        link: '#2',
-        label: 'Support',
-        links: [
-            { link: '/faq', label: 'FAQ' },
-            { link: '/demo', label: 'Book a demo' },
-            { link: '/forums', label: 'Forums' },
-        ],
-    },
-];
+
+
 
 const Header = () => {
+    const { t, i18n } = useTranslation();
     const [opened, { toggle }] = useDisclosure(false);
+
+    const links = [
+        { link: '/about', label:  t("films") },
+        {
+            link: '#1',
+            label:t("series"),
+            links: [
+                { link: '/docs', label:"" },
+                { link: '/resources', label: 'Resources' },
+                { link: '/community', label: 'Community' },
+                { link: '/blog', label: 'Blog' },
+            ],
+        },
+        { link: '/about', label:  t("persons") },
+        { link: '/pricing', label:  t("see more") },
+    ];
+
+
+
 
     const items = links.map((link) => {
         const menuItems = link.links?.map((item) => (
@@ -97,7 +96,13 @@ const HeaderWrap = styled.div`
     align-items: center;
     height: 100%;
     color: #ffff;
-    font-size: 14px;
+    font-size: 16px;
+  }
+  
+  .mantine-Group-root{
+    text-transform:capitalize;
+    gap: 40px;
+    padding-left: 30px;
   }
 
 `
