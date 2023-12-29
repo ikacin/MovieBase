@@ -1,18 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useTranslation } from 'react-i18next';
-import { Menu, Group, Center, Burger, Container } from '@mantine/core';
+import { Menu, Group, Center, Burger, Container,Button } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-// import { IconChevronDown } from '@tabler/icons-react';
-// import { MantineLogo } from '@mantinex/mantine-logo';
+import { Text } from '@mantine/core';
 import logo from '../../../assests/image/header-logo.svg';
 import classes from './HeaderMenu.module.css';
 import styled from 'styled-components';
+import { IconSettings, IconSearch, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
+import Avatar from "../../atoms/Avatar";
 
 
-
-
-
-const Header = () => {
+const Header = ({onClick}) => {
     const { t, i18n } = useTranslation();
     const [opened, { toggle }] = useDisclosure(false);
 
@@ -29,10 +27,8 @@ const Header = () => {
             ],
         },
         { link: '/about', label:  t("persons") },
-        { link: '/pricing', label:  t("see more") },
+        { link: '/pricing', label:  t("see_more") },
     ];
-
-
 
 
     const items = links.map((link) => {
@@ -51,7 +47,6 @@ const Header = () => {
                         >
                             <Center>
                                 <span className={classes.linkLabel}>{link.label}</span>
-                                {/*<IconChevronDown size="0.9rem" stroke={1.5} />*/}
                             </Center>
                         </a>
                     </Menu.Target>
@@ -78,11 +73,25 @@ const Header = () => {
                 <Container size="md">
                     <HeaderText className={classes.inner}>
                         {/*<MantineLogo size={28} />*/}
-                        <img src={logo}  alt="Logo" width={"200px"} height={"200px"}/>
-                        <Group gap={5} visibleFrom="sm">
+                        <img src={logo}  alt="Logo" width={"150px"} height={"150px"}/>
+                        <Group gap={5} >
                             {items}
                         </Group>
-                        {/*<Burgered opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />*/}
+                        <RightList className={"tasd"}>
+                            <Menu shadow="md" width={200}>
+                                <Menu.Item icon={<IconSettings size={22} />}></Menu.Item>
+                                <Menu.Item icon={<IconMessageCircle size={22} />}
+                                           onClick={onClick}
+                                ></Menu.Item>
+                                <Menu.Item icon={<Avatar type={3}  content={"İ"}/>}></Menu.Item>
+                                <Menu.Item
+                                    icon={<IconSearch size={22} />}
+                                    rightSection={<Text size="xs" color="dimmed"></Text>}
+
+                                >
+                                </Menu.Item>
+                            </Menu>
+                        </RightList>
                     </HeaderText>
                 </Container>
             </header>
@@ -97,6 +106,11 @@ const HeaderWrap = styled.div`
     height: 100%;
     color: #ffff;
     font-size: 16px;
+    width: 100%;
+  }
+  
+  .HeaderMenu_inner__wIqxf{
+    width: 100%;
   }
   
   .mantine-Group-root{
@@ -107,11 +121,17 @@ const HeaderWrap = styled.div`
 
 `
 const HeaderText = styled.div`
-
+  .mantine-Menu-item{
+    background: transparent;
+    color: #ffffff;
+  }
   
 `
 
-
+const RightList = styled.div`
+  display: flex;
+  margin-left: auto;
+`
 
 
 export default Header

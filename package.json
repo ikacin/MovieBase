@@ -13,6 +13,7 @@
     "@mantine/notifications": "^6.0.0",
     "@mantine/nprogress": "^6.0.0",
     "@mantine/spotlight": "^6.0.0",
+    "@tabler/icons-react": "^2.44.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
