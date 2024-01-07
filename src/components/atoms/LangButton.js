@@ -26,7 +26,7 @@ const LangButton = ({}) => {
 
     return (
         <div>
-            <Header onClick={() => handleButtonClick()}/>
+            <Header onchange={() => handleButtonClick()}/>
         </div>
     );
 };

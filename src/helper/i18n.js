@@ -26,7 +26,11 @@ const resources = {
             films: "Films",
             series: "Series",
             persons: "Persons",
-            see_more: "See More"
+            see_more: "See More",
+            language_settings:"Language Settings",
+            default_language:"Default Language",
+            return_language:"Return Language",
+            refresh_page:"Refresh Page"
         },
     },
     tr: {
@@ -47,7 +51,11 @@ const resources = {
             Cancel: "Vazgeç",
             films: "Filmler",
             persons: "Kişiler",
-            see_more: "Daha Fazla"
+            see_more: "Daha Fazla",
+            language_settings:"Dil Ayarları",
+            default_language:"Varsayılan Dil",
+            return_language:"Geri Dönüş Dili",
+            refresh_page:"Sayfayı Yenile"
         },
     },
 };
