@@ -14,5 +14,7 @@
   "films": "Films",
   "series": "Series",
   "persons": "Persons",
-  "see more": "See More"
+  "see more": "See More",
+  "login_account": "Login to Your Account",
+  "login": "In order to use TMDb's editing and voting functions and to receive personalized recommendations, you must log in to your account. If you do not have a TMDB account yet, you can easily become a member for free. Click to get started."
 }

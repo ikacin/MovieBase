@@ -85,7 +85,7 @@ const Header = ({onClick,onchange}) => {
 
     return (
         <HeaderWrap>
-            <header className={classes.header}>
+            <header id={"header-wrap"} className={classes.header}>
                 <Container size="xl">
                     <HeaderText className={classes.inner}>
                         {/*<MantineLogo size={28} />*/}
@@ -172,6 +172,11 @@ const Header = ({onClick,onchange}) => {
 }
 
 const HeaderWrap = styled.div`
+  #header-wrap{
+    position: inherit;
+  }
+  
+  
   .mantine-Container-root{
     display: flex;
     align-items: center;

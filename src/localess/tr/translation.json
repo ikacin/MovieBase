@@ -13,5 +13,8 @@
   "Cancel": "Vazgeç",
   "films": "Filmler",
   "persons": "Kişiler",
-  "see_more": "Daha Fazla"
+  "see_more": "Daha Fazla",
+  "login_account": "Hesabına Gir",
+  "login_account_text": "TMDb'nin düzenleme ve oy verme işlevlerini kullanabilmek ve size özel tavsiyeler alabilmek için hesabınıza giriş yapmanız gerekmektedir. Eğer henüz bir TMDB hesabınız yoksa, kolayca ücretsiz üye olabilirsiniz. Başlamak için tıklayın"
+
 }
