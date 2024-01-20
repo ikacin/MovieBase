@@ -1,15 +1,19 @@
-import Header from "../../components/organisms/Header/Header";
 import styled from 'styled-components';
 import { Input } from '@mantine/core';
 import { Container } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import CustomButton from "../../components/atoms/CustomButton";
+import LangButton from "../../components/atoms/LangButton";
+import Footer from "../../components/organisms/Footer/Footer";
+import { IconPasswordMobilePhone } from '@tabler/icons-react';
+
+import { IconUserFilled } from '@tabler/icons-react';
 const Login = () => {
     const { t, i18n } = useTranslation();
         return(
           <StyledBox>
-              <Header/>
-              <Container  size="xl" px={"15px"} pt={"50px"}>
+              <LangButton/>
+              <Container  size="xl" px={"15px"} pt={"50px"} pb={"50px"}>
                   <LoginHeader>
                       <div>{t("language_settings")}</div>
                       <div>{t("login_account_text")}</div>
@@ -35,13 +39,14 @@ const Login = () => {
                         </Input.Wrapper>
                     </InputHeader>
 
-                  <FooterHeader>
-                      <CustomButton children={t("login")}  />
-                      <Link>{t("reset_password")}</Link>
+                  <FooterHeader >
+                      <CustomButton children={t("login")}  leftIcon={<IconUserFilled/>}/>
+                      <CustomButton color={"red"}  children={t("reset_password")}  leftIcon={<IconPasswordMobilePhone/>} variant={"outline"}/>
+
                   </FooterHeader>
               </Container>
 
-
+            <Footer/>
           </StyledBox>
 
         )
@@ -71,15 +76,10 @@ const FooterHeader = styled.div`
   gap: 20px;
   align-items: center;
   padding-top: 20px;
-`
-
-
-const Link = styled.a`
-  color: #228be6;
-  &:hover{
-    text-decoration: underline;
-    cursor: pointer;
-  }
   
 `
+
+
+
+
 export default Login

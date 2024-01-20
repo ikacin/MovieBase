@@ -7,8 +7,9 @@ import LangButton from "../../atoms/LangButton";
 const Layout = () => {
     return (
         <div>
-         Layout
             <LangButton/>
+         Layout
+
         </div>
 )
 }

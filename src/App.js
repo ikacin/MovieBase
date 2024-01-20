@@ -8,6 +8,7 @@ import language from './helper/i18n';
 import { I18nextProvider } from 'react-i18next';
 import Test from "./helper/test";
 import Login from "./pages/Login/Login";
+import SignUp from "./pages/SignUp/SignUp";
 const App = () => {
     return (
         <>
@@ -22,6 +23,7 @@ const App = () => {
                                         <Route path="/:lang" element={<HomePage/> }/>
                                         <Route path="/" element={<Test />} />
                                         <Route exact path="/:lang/login" element={<Login/>} />
+                                        <Route exact path="/:lang/signup" element={<SignUp/>} />
                                     </Routes>
                                 </Router>
                             </I18nextProvider>
