@@ -3,7 +3,7 @@ import { List, ThemeIcon } from '@mantine/core';
 import { IconCircleCheck, IconCheck } from '@tabler/icons-react';
 
 import styled from 'styled-components';
-const CustomPaper = ({title,type,shadow,color,background,padding,fontSize,borderRadius,textFirst,textSecond,textThird,textFourth,textFifth,textSixth,textSeventh}) => {
+const CustomPaper = ({title,type,shadow,color,background,padding,fontSize,borderradius,textFirst,textSecond,textThird,textFourth,textFifth,textSixth,textSeventh}) => {
     return (
         <Papers shadow={shadow ?? "sm"} radius="xs" w={"300px"} >
             <TextTitle
@@ -11,7 +11,7 @@ const CustomPaper = ({title,type,shadow,color,background,padding,fontSize,border
                 background={background}
                 padding={padding}
                 fontSize={fontSize}
-                borderRadius={borderRadius}
+                borderradius={borderradius}
                 >
                 {title}
             </TextTitle>
@@ -21,7 +21,7 @@ const CustomPaper = ({title,type,shadow,color,background,padding,fontSize,border
                     pt={"10px"}
                     pl={"20px"}
                     spacing="sm"
-                    size="lg"
+                    size="md"
                     center
                     icon={
                         <ThemeIcons  size={24} radius="xl">
@@ -54,7 +54,7 @@ const TextTitle = styled(Text)`
   background: ${({background}) => background};
   padding: ${({padding}) => padding};
   font-size: ${({fontSize}) => fontSize};
-  border-radius: ${({borderRadius}) => borderRadius};
+  border-radius: ${({ borderradius }) => borderradius};
 `
 
 const ThemeIcons = styled(ThemeIcon)`

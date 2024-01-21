@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core';
 import { IconDatabase } from '@tabler/icons-react';
-const CustomButton = ({disabled,loading,children,radius,color,variant,leftIcon}) => {
+const CustomButton = ({disabled,loading,children,radius,color,variant,leftIcon,onClick,type}) => {
     return (
         <Button
             variant={variant ?? "filled"}
@@ -10,6 +10,8 @@ const CustomButton = ({disabled,loading,children,radius,color,variant,leftIcon})
             disabled={disabled}
             radius={radius}
             color={color}
+            onClick={onClick}
+            type={type}
         >
             {children}
         </Button>

@@ -53,6 +53,7 @@ const resources = {
             sing_up_sixth:"Create custom mixtapes (movies & TV)",
             sing_up_seventh:"Join film and TV discussions",
             sing_up_fourty:"Contribute and improve the information in our database",
+            input_empty:"input value is empty"
         },
     },
     tr: {
@@ -100,6 +101,7 @@ const resources = {
             sing_up_sixth:"Özel karışık listeler oluşturun (filmler ve TV)",
             sing_up_seventh:" Film ve TV tartışmalarına katılın",
             sing_up_fourty:"Veritabanımızdaki bilgileri katkıda bulun ve geliştirin",
+            input_empty:"Lütfen Bilgilerinizi Giriniz."
         },
     },
 };

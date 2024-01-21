@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
-// Kullanıcı verilerini başlangıç durumu olarak oluşturun
+
 const initialState = {
     users: [
         { id: 1, name: "User 1", email: "user1@example.com" },
