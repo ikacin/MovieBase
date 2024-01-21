@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import axios from 'axios'
 import styled from 'styled-components';
 import { Input } from '@mantine/core';
@@ -72,6 +72,7 @@ const SignUp = () => {
 
         if (username !== "" && password !==  "" && password === passwordConfirmation && email ? email : "") {
             if (once){
+
                 setOnce(false)
                 dispatch({type: "SET_AUTHORIZATION", payload: {
                         authorization: {username: username,email:email, isLogin: true},
@@ -105,7 +106,8 @@ const SignUp = () => {
                                 autoClose: 1000,
                             });
                         }, 1000);
-
+                        localStorage.setItem("username",username)
+                        localStorage.setItem("email",email)
                         setTimeout(() => gotoHome(), 3000);
                     })
                     .catch(function (error) {
