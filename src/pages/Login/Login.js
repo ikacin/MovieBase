@@ -6,7 +6,6 @@ import CustomButton from "../../components/atoms/CustomButton";
 import LangButton from "../../components/atoms/LangButton";
 import Footer from "../../components/organisms/Footer/Footer";
 import { IconPasswordMobilePhone } from '@tabler/icons-react';
-
 import { IconUserFilled } from '@tabler/icons-react';
 const Login = () => {
     const { t, i18n } = useTranslation();

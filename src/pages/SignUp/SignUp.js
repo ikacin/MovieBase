@@ -15,6 +15,7 @@ import { showNotification,updateNotification } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
 import { IconX } from '@tabler/icons-react';
 import { IconCheck } from '@tabler/icons-react';
+import Photo from "../../helper/Photo";
 const SignUp = () => {
     const { t, i18n } = useTranslation();
     const [once, setOnce] = useState(true);
@@ -150,6 +151,7 @@ const SignUp = () => {
 
     return(
         <StyledBox>
+            <Photo/>
             <LangButton/>
                 <Container size={"xl"} display={"flex"}  pb={"50px"}  pt={"30px"} >
 

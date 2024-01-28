@@ -7,6 +7,8 @@ const GlobalStyle = createGlobalStyle`
     background: teal;
     font-family: Open-Sans, Helvetica, Sans-Serif;
   }
+  
+ 
 `;
 
 export default GlobalStyle;

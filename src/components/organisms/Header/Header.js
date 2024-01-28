@@ -184,6 +184,7 @@ const HeaderWrap = styled.div`
     color: #ffff;
     font-size: 16px;
     width: 100%;
+    max-width: 76.5rem;
   }
   
   .HeaderMenu_inner__wIqxf{

@@ -9,6 +9,7 @@ import { I18nextProvider } from 'react-i18next';
 import Test from "./helper/test";
 import Login from "./pages/Login/Login";
 import SignUp from "./pages/SignUp/SignUp";
+import Layout from "./components/organisms/Layout/Layout";
 const App = () => {
     return (
         <>
@@ -20,7 +21,7 @@ const App = () => {
                             <I18nextProvider i18n={language}>
                                 <Router>
                                     <Routes>
-                                        <Route path="/:lang" element={<HomePage/> }/>
+                                        <Route path="/:lang" element={<Layout/> }/>
                                         <Route path="/" element={<Test />} />
                                         <Route exact path="/:lang/login" element={<Login/>} />
                                         <Route exact path="/:lang/signup" element={<SignUp/>} />
