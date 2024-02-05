@@ -203,6 +203,10 @@ const HeaderText = styled.div`
     background: transparent;
     //color: #ffffff;
   }
+  
+img{
+    width: 150px;
+  }
 
   .mantine-Menu-divider{
     border: none;

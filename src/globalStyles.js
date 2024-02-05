@@ -8,7 +8,10 @@ const GlobalStyle = createGlobalStyle`
     font-family: Open-Sans, Helvetica, Sans-Serif;
   }
   
- 
+ img{
+   width: 100%;
+ }
+  
 `;
 
 export default GlobalStyle;

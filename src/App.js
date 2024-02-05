@@ -3,7 +3,6 @@ import React, {  } from 'react';
 import { BrowserRouter as Router, Route, Routes,} from 'react-router-dom';
 import { MyContext, MyProvider } from './store/Store';
 import GlobalStyle from './globalStyles';
-import HomePage from '../src/pages/HomePage/HomePage';
 import language from './helper/i18n';
 import { I18nextProvider } from 'react-i18next';
 import Test from "./helper/test";
