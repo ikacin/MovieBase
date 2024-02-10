@@ -201,7 +201,6 @@ const HeaderWrap = styled.div`
 const HeaderText = styled.div`
   .mantine-Menu-item{
     background: transparent;
-    //color: #ffffff;
   }
   
 img{

@@ -53,7 +53,10 @@ const resources = {
             sing_up_sixth:"Create custom mixtapes (movies & TV)",
             sing_up_seventh:"Join film and TV discussions",
             sing_up_fourty:"Contribute and improve the information in our database",
-            input_empty:"input value is empty"
+            input_empty:"input value is empty",
+            welcome_to:"Welcome",
+            more_films_discovery:"Millions of movies, TV shows, and people to discover. Explore now.",
+            the_best_year:"The best (and worst) of the year from TMDB."
         },
     },
     tr: {
@@ -101,7 +104,11 @@ const resources = {
             sing_up_sixth:"Özel karışık listeler oluşturun (filmler ve TV)",
             sing_up_seventh:" Film ve TV tartışmalarına katılın",
             sing_up_fourty:"Veritabanımızdaki bilgileri katkıda bulun ve geliştirin",
-            input_empty:"Lütfen Bilgilerinizi Giriniz."
+            input_empty:"Lütfen Bilgilerinizi Giriniz.",
+            welcome_to:"Hoş Geldiniz.",
+            more_films_discovery:"Milyonlarca film, TV şovu ve keşfedilecek kişi. Şimdi keşfedin.",
+            the_best_year:"TMDB'den yılın en iyileri (ve en kötüleri)."
+
         },
     },
 };

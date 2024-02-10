@@ -1,8 +1,8 @@
-import { useNavigate, useParams } from 'react-router-dom';
+
 import { Tabs } from '@mantine/core';
 import { IconPhoto, IconMessageCircle} from '@tabler/icons-react';
 import styled from 'styled-components';
-const CustomTabs = ({type,text,content,MediaHub,VisualComm,defaultValue,caption,NowPlaying}) =>  {
+const CustomTabs = ({type,text,content,MediaHub,VisualComm,defaultValue,caption,NowPlaying,display}) =>  {
 
     const handleTabChange = async (value) => {
         if (value === 'messages') {
@@ -24,15 +24,15 @@ const CustomTabs = ({type,text,content,MediaHub,VisualComm,defaultValue,caption,
                     type &&
                     <>
                         <Tabs.Panel className={"tabs-panel"} value="gallery" pt="xs">
-                         <div style={{display:"flex",gap:"15px"}}>
+                         <TabsStyle display={display}>
                              {text}
-                         </div>
+                         </TabsStyle>
                         </Tabs.Panel>
 
                         <Tabs.Panel  className={"tabs-panel"} value="messages" pt="xs">
-                           <div style={{display:"flex",gap:"15px"}}>
+                           <TabsStyle display={display}>
                                {content}
-                           </div>
+                           </TabsStyle>
                         </Tabs.Panel>
                     </>
                 }
@@ -44,37 +44,37 @@ const CustomTabs = ({type,text,content,MediaHub,VisualComm,defaultValue,caption,
 const StyledTabsMenu = styled.div`
   .tabs-panel {
     gap: 40px;
-    max-width: 1230px;
+    max-width: 1288px;
     overflow-y: hidden;
     overflow-x: scroll;
+    min-height: 360px;
   }
 
   .mantine-Tabs-tabsList {
     border: none;
+    padding-left: 40px;
+    gap: 10px;
   }
 
-  /* Yatay kaydırma çubuğu rengi */
 
   .tabs-panel::-webkit-scrollbar {
-    background-color: #ffffff; /* Arka plan rengi */
-    height: 8px; /* Yatay kaydırma çubuğu yüksekliği */
+    background-color: #ffffff; 
+    height: 8px;
     cursor: pointer;
   }
 
-  /* Kaydırma çubuğu */
-
   .tabs-panel::-webkit-scrollbar-thumb {
-    background-color: #dbdbdb; /* Kaydırma çubuğu rengi */
+    background-color: #dbdbdb;
 
   }
-
-  /* Kaydırma çubuğu hover durumu */
 
   .tabs-panel::-webkit-scrollbar-thumb:hover {
-    background-color: #c5c3c3; /* Kaydırma çubuğu hover rengi */
+    background-color: #c5c3c3; 
   }
+`
 
-
+const TabsStyle = styled.div`
+  display: ${({display}) => display};
 `
 
 export default CustomTabs
