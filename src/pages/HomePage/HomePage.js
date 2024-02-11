@@ -1,4 +1,5 @@
 import React,{useState,useEffect } from 'react';
+import {useNavigate,useParams } from "react-router-dom";
 import styled, { keyframes } from 'styled-components';
 import mainBanner from'../../assests/image/banner.webp';
 import subBanner from'../../assests/image/sub-banner.webp';
@@ -15,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 import { IconDots } from '@tabler/icons-react';
 import CustomMenu from "../../components/atoms/Menu";
 import CustomPaper from "../../components/atoms/Box";
-import {use} from "i18next";
 import CustomProgress from "../../components/atoms/Progress";
 import Footer from "../../components/organisms/Footer/Footer";
 
@@ -31,8 +31,14 @@ const HomePage = () => {
     const[loading,setLoading] = useState(true)
     const[isLoading,setIsloading] = useState(true);
     const[loadingData,setLoadingData] = useState(false)
+    const navigate = useNavigate();
+    const { lang } = useParams();
     const gotoPage = () => {
         window.location.href = "/2023";
+    }
+
+    const pageDetails = (id) => {
+        navigate(`/${lang}/movie/${id}`);
     }
 
     const gotoPageAndOpenMenu = () => {
@@ -151,6 +157,8 @@ const HomePage = () => {
 
 
 
+
+
     useEffect(() => {
         TopRated()
         PopularFilms()
@@ -254,7 +262,10 @@ const HomePage = () => {
                                                                     <CardStyle id={"card-style-first"}>
                                                                         <StyledMovie  key={index}>
                                                                             <StyledImage >
-                                                                                <img  src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
+                                                                                <img
+                                                                                    onClick={() => pageDetails(item.id)}
+                                                                                    src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}
+                                                                                />
                                                                                 <CustomMenu
                                                                                     Context={<PositionedIcon size={16} />}
                                                                                     onClick={() => handleMenuClick()}
@@ -858,19 +869,31 @@ const Item = styled.div`
     gap: 10px;
     display: flex;
     flex-direction: column;
+    padding: 10px 0;
  
 `
 
 const TitleStyled = styled.div`
   display: flex;
   gap: 20px;
+  
+  & div:first-child{
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+  }
+  
 `
 const InfoItem = styled.div`
+  
     &  div:first-child{
       font-size:11px;
       gap: 5px;
       display: flex;
       align-items: center;
+      font-family: "Poppins", sans-serif;
+      font-weight: 400;
+      font-style: normal;
     }
   & div:first-child::before {
     content: "";
@@ -886,6 +909,9 @@ const InfoItem = styled.div`
     gap: 5px;
     display: flex;
     align-items: center;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
   }
   & div:nth-child(2)::before {
     content: "";
