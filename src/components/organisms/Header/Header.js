@@ -88,8 +88,9 @@ const Header = ({onClick,onchange}) => {
             <header id={"header-wrap"} className={classes.header}>
                 <Container size="xl">
                     <HeaderText className={classes.inner}>
-                        {/*<MantineLogo size={28} />*/}
-                        <img src={logo}  alt="Logo" width={"150px"} height={"150px"}/>
+                        <a href="/">
+                            <img src={logo}  alt="Logo" width={"150px"} height={"150px"}/>
+                        </a>
                         <Group gap={5} >
                             {items}
                         </Group>

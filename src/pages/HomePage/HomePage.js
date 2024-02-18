@@ -249,6 +249,7 @@ const HomePage = () => {
                                             </StyledLoader>
                                             :
                                             <CustomTabs
+
                                                 display={"flex"}
                                                 NowPlaying={NowPlaying}
                                                 caption={"Trend"}
@@ -818,7 +819,6 @@ const StyledMovie = styled.div`
   animation: ${fadeIn} 2s ease;
   transition: transform 0.3s ease;
   ${({isMenuClicked}) => isMenuClicked && `
-  
     visibility: hidden;
     position: absolute;
     top: 0;

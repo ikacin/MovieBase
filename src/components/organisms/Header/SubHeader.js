@@ -72,10 +72,10 @@ const SubHeader = () => {
         <header className={classes.header}>
             <Container size="md">
                 <div className={classes.inner}>
-                    <Group gap={5} visibleFrom="sm">
+                    <Group gap={5} visiblefrom="sm">
                         {items}
                     </Group>
-                    <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />
+                    <Burger opened={opened} onClick={toggle} size="sm" hiddenfrom="sm" />
                 </div>
             </Container>
         </header>

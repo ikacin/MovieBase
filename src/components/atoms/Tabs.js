@@ -2,7 +2,7 @@
 import { Tabs } from '@mantine/core';
 import { IconPhoto, IconMessageCircle} from '@tabler/icons-react';
 import styled from 'styled-components';
-const CustomTabs = ({type,text,content,MediaHub,VisualComm,defaultValue,caption,NowPlaying,display}) =>  {
+const CustomTabs = ({type,text,content,MediaHub,VisualComm,defaultValue,caption,NowPlaying,display,firstCount,secondCount,maxHeight}) =>  {
 
     const handleTabChange = async (value) => {
         if (value === 'messages') {
@@ -13,11 +13,11 @@ const CustomTabs = ({type,text,content,MediaHub,VisualComm,defaultValue,caption,
 
     return (
         <StyledTabsMenu>
-            <Tabs defaultValue={defaultValue}  onTabChange={(value) => handleTabChange(value)}>
+            <Tabs maxHeight={maxHeight} defaultValue={defaultValue}  onTabChange={(value) => handleTabChange(value)}>
                 <Tabs.List>
                     <div id={"caption-text"}>{caption}</div>
-                    <Tabs.Tab  value="gallery" icon={<IconPhoto size="0.8rem" />}>{MediaHub}</Tabs.Tab>
-                    <Tabs.Tab value="messages" icon={<IconMessageCircle size="0.8rem" />}>{VisualComm}</Tabs.Tab>
+                    <Tabs.Tab  value="gallery" icon={<IconPhoto size="0.8rem" />}>{MediaHub} {firstCount}</Tabs.Tab>
+                    <Tabs.Tab value="messages" icon={<IconMessageCircle size="0.8rem" />}>{VisualComm} {secondCount}</Tabs.Tab>
                 </Tabs.List>
 
                 {
@@ -47,13 +47,14 @@ const StyledTabsMenu = styled.div`
     max-width: 1288px;
     overflow-y: hidden;
     overflow-x: scroll;
-    min-height: 360px;
+    max-height: ${({maxHeight}) => maxHeight ? maxHeight : "360px"};
   }
 
   .mantine-Tabs-tabsList {
     border: none;
     padding-left: 40px;
     gap: 10px;
+    align-items: center;
   }
 
 

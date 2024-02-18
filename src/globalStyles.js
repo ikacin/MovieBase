@@ -1,12 +1,12 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+
   body {
     margin: 0;
     padding: 0;
     background: teal;
     font-family: "Poppins", sans-serif!important;
-    font-weight: 700;
     font-style: normal;
   }
   .poppins-thin {

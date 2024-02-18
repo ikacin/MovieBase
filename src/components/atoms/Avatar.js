@@ -1,17 +1,16 @@
 import { Avatar } from '@mantine/core';
-import { IconStar } from '@tabler/icons-react';
 import styled from 'styled-components';
-const AvatarItems = ({type,content,size,color,background}) => {
+const AvatarItems = ({type,content,size,color,background,Icon,src}) => {
     return (
         <>
             {
                 type === 1 &&
-                <Avatar src="avatar.png" alt="it's me" />
+                <Avatars src={src} alt="it's me" />
             }
 
             {
                 type === 2 &&
-                <Avatar radius="xl" />
+                <Avatars radius="xl" />
             }
 
             {
@@ -21,9 +20,9 @@ const AvatarItems = ({type,content,size,color,background}) => {
 
             {
                 type === 4 &&
-                <Avatar color="blue" radius="sm">
-                    <IconStar size="1.5rem" />
-                </Avatar>
+                <Avatars color={color ?? "blue"}  radius="xl" size={size ?? "md"}  background={background ?? "#fff"}>
+                    {Icon}
+                </Avatars>
             }
 
         </>
