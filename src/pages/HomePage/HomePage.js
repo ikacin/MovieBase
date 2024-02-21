@@ -249,7 +249,7 @@ const HomePage = () => {
                                             </StyledLoader>
                                             :
                                             <CustomTabs
-
+                                                px={"30px"}
                                                 display={"flex"}
                                                 NowPlaying={NowPlaying}
                                                 caption={"Trend"}
