@@ -496,6 +496,159 @@ const Details = () => {
                                                                     />
                                                                 </div>
                                                             }
+                                                            videosText= {
+                                                                <div>
+                                                                    <CustomModal
+                                                                        position={"left"}
+                                                                        Btn={
+                                                                            <div style={{display:"flex"}}>
+                                                                                <PopularImage>
+                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}/>
+                                                                                </PopularImage>
+
+
+                                                                                <PopularImage>
+                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}/>
+                                                                                </PopularImage>
+
+                                                                                <PopularImage>
+                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}/>
+                                                                                </PopularImage>
+                                                                            </div>
+
+
+                                                                        }
+                                                                        title={"Fragmanı Oynat"}
+                                                                        size="75%"
+                                                                        height={"950px"}
+                                                                        padding={"5px 0 0 0"}
+                                                                        background={"transparent"}
+                                                                        boxshadow={"none"}
+                                                                        content={
+                                                                            <FragmentModal>
+                                                                                {videoList && videoList.map((item, index) => (
+                                                                                    <div key={index}>
+                                                                                        {index === 0 && (
+                                                                                            <iframe
+                                                                                                width="560"
+                                                                                                height="315"
+                                                                                                src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                                title="YouTube video player"
+                                                                                                frameBorder="0"
+                                                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                                allowFullScreen
+                                                                                            ></iframe>
+                                                                                        )}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </FragmentModal>
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            }
+                                                            rearText={
+                                                                <div>
+                                                                    <CustomModal
+                                                                        position={"left"}
+                                                                        Btn={
+                                                                            <div style={{display:"flex"}}>
+                                                                                <PopularImage>
+                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}/>
+                                                                                </PopularImage>
+
+                                                                                <PopularImage>
+                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}/>
+                                                                                </PopularImage>
+
+
+                                                                                <PopularImage>
+                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}/>
+                                                                                </PopularImage>
+
+                                                                            </div>
+
+
+                                                                        }
+                                                                        title={"Fragmanı Oynat"}
+                                                                        size="75%"
+                                                                        height={"950px"}
+                                                                        padding={"5px 0 0 0"}
+                                                                        background={"transparent"}
+                                                                        boxshadow={"none"}
+                                                                        content={
+                                                                            <FragmentModal>
+                                                                                {videoList && videoList.map((item, index) => (
+                                                                                    <div key={index}>
+                                                                                        {index === 0 && (
+                                                                                            <iframe
+                                                                                                width="560"
+                                                                                                height="315"
+                                                                                                src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                                title="YouTube video player"
+                                                                                                frameBorder="0"
+                                                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                                allowFullScreen
+                                                                                            ></iframe>
+                                                                                        )}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </FragmentModal>
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            }
+
+                                                            placardText={
+                                                                <div>
+                                                                    <CustomModal
+                                                                        position={"left"}
+                                                                        Btn={
+                                                                            <div style={{display:"flex"}}>
+                                                                                <PopularImage>
+                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}/>
+                                                                                </PopularImage>
+                                                                                <PopularImage>
+                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}/>
+                                                                                </PopularImage>
+
+                                                                                <PopularImage>
+                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}/>
+                                                                                </PopularImage>
+
+
+                                                                            </div>
+
+
+                                                                        }
+                                                                        title={"Fragmanı Oynat"}
+                                                                        size="75%"
+                                                                        height={"950px"}
+                                                                        padding={"5px 0 0 0"}
+                                                                        background={"transparent"}
+                                                                        boxshadow={"none"}
+                                                                        content={
+                                                                            <FragmentModal>
+                                                                                {videoList && videoList.map((item, index) => (
+                                                                                    <div key={index}>
+                                                                                        {index === 0 && (
+                                                                                            <iframe
+                                                                                                width="560"
+                                                                                                height="315"
+                                                                                                src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                                title="YouTube video player"
+                                                                                                frameBorder="0"
+                                                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                                allowFullScreen
+                                                                                            ></iframe>
+                                                                                        )}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </FragmentModal>
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            }
+
                                                             content={
                                                                 <div>
                                                                     {reviewsList.map((item, index) => (
@@ -592,7 +745,9 @@ const Details = () => {
                                                 </div>
                                             <div>
                                                 <div>İçerik Sonucu</div>
-
+                                                <div>
+                                                    <BadgeResult>{list.popularity}</BadgeResult>
+                                                </div>
                                             </div>
                                         </StyledMenu>
                                     }
@@ -1007,5 +1162,10 @@ const StyledMedia = styled.div`
 `
 const StyledSticker = styled.div`
   padding: 0 10px;
+`
+
+const BadgeResult = styled.div`
+
+
 `
 export default Details
