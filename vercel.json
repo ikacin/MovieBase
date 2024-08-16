@@ -1,8 +1,8 @@
 {
-  "rewrites": [
-    { "source": "/:lang/login", "destination": "/" },
-    { "source": "/:lang/signup", "destination": "/" },
-    { "source": "/:lang/movie/:movieId", "destination": "/" },
-    { "source": "/:lang", "destination": "/" }
+  "routes": [
+    { "src": "/:lang/login", "dest": "/" },
+    { "src": "/:lang/signup", "dest": "/" },
+    { "src": "/:lang/movie/:movieId", "dest": "/" },
+    { "src": "/:lang", "dest": "/" }
   ]
 }
