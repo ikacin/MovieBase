@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Menu, Group, Center, Burger, Container,Button,Select } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -13,7 +13,6 @@ import { useLocation } from 'react-router-dom';
 
 const Header = ({onClick,onchange}) => {
     const navigate = useNavigate();
-    const location = useLocation()
     const { t, i18n } = useTranslation();
     const [opened, { toggle }] = useDisclosure(false);
     const { lang } = useParams();

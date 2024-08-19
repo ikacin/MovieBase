@@ -1,16 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import logo from '../../../assests/image/footer-image.svg';
-import { useLocation,useParams } from 'react-router-dom';
-
-
-
-
+import {useParams } from 'react-router-dom';
 
 const Footer = () => {
-
     const {lang} = useParams()
-
 
     return (
         <FooterContainer>
