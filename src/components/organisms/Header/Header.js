@@ -8,12 +8,15 @@ import classes from './HeaderMenu.module.css';
 import styled from 'styled-components';
 import { IconSettings, IconSearch, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
 import Avatar from "../../atoms/Avatar";
-
+import {useNavigate, useParams} from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 const Header = ({onClick,onchange}) => {
+    const navigate = useNavigate();
+    const location = useLocation()
     const { t, i18n } = useTranslation();
     const [opened, { toggle }] = useDisclosure(false);
-
+    const { lang } = useParams();
     const links = [
         { link: '/about', label:  t("films") },
         {
@@ -30,7 +33,9 @@ const Header = ({onClick,onchange}) => {
         { link: '/pricing', label:  t("see_more") },
     ];
 
-
+    const LoginPage = () => {
+        navigate(`/${lang}/login`)
+    }
     const getLangInfo = (langCode) => {
         switch (langCode) {
             case "/tr":
@@ -153,7 +158,11 @@ const Header = ({onClick,onchange}) => {
 
 
                                         <Menu.Item color="red" icon={<IconTrash size={14} />}>Ayarlar</Menu.Item>
-                                        <Menu.Item color="red" icon={<IconTrash size={14} />}>Çıkış</Menu.Item>
+                                        <Menu.Item color="red" icon={<IconTrash size={14} />}><span
+                                        onClick={() => LoginPage()}
+                                        >
+                                            Çıkış
+                                        </span></Menu.Item>
 
                                     </Menu.Dropdown>
                                 </Menu>

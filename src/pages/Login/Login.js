@@ -10,7 +10,7 @@ import { IconUserFilled } from '@tabler/icons-react';
 const Login = () => {
     const { t, i18n } = useTranslation();
         return(
-          <StyledBox>
+          <div>
               <LangButton/>
               <Container  size="xl" px={"15px"} pt={"50px"} pb={"50px"}>
                   <LoginHeader>
@@ -18,7 +18,7 @@ const Login = () => {
                       <div>{t("login_account_text")}</div>
                       <div>{t("login_account_email")}</div>
                   </LoginHeader>
-                    <InputHeader>
+                    <div>
                         <Input.Wrapper
                             mt="xl"
                             id="input-demo"
@@ -36,30 +36,19 @@ const Login = () => {
                         >
                             <Input id="input-demo" placeholder={t("login_password")} />
                         </Input.Wrapper>
-                    </InputHeader>
+                    </div>
 
                   <FooterHeader >
                       <CustomButton children={t("login")}  leftIcon={<IconUserFilled/>}/>
                       <CustomButton color={"red"}  children={t("reset_password")}  leftIcon={<IconPasswordMobilePhone/>} variant={"outline"}/>
-
                   </FooterHeader>
               </Container>
 
             <Footer/>
-          </StyledBox>
+          </div>
 
         )
 }
-
-
-const StyledBox = styled.div`
-   
-`
-
-const InputHeader = styled.div`
-
-
-`
 
 
 const LoginHeader = styled.div`
@@ -77,8 +66,5 @@ const FooterHeader = styled.div`
   padding-top: 20px;
   
 `
-
-
-
 
 export default Login
