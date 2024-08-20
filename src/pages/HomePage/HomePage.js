@@ -1,4 +1,4 @@
-import React,{useState,useEffect } from 'react';
+import React,{useState,useEffect,useContext } from 'react';
 import {useNavigate,useParams } from "react-router-dom";
 import styled, { keyframes } from 'styled-components';
 import mainBanner from'../../assests/image/banner.webp';
@@ -18,6 +18,7 @@ import CustomMenu from "../../components/atoms/Menu";
 import CustomPaper from "../../components/atoms/Box";
 import CustomProgress from "../../components/atoms/Progress";
 import Footer from "../../components/organisms/Footer/Footer";
+import {MyContext} from "../../store/Store";
 
 const HomePage = () => {
     const { t, i18n } = useTranslation();
@@ -30,9 +31,11 @@ const HomePage = () => {
     const[names,setNames] = useState([])
     const[loading,setLoading] = useState(true)
     const[isLoading,setIsloading] = useState(true);
-    const[loadingData,setLoadingData] = useState(false)
+    const [isMenuClicked, setIsMenuClicked] = useState(false);
+    const [selectedItemId, setSelectedItemId] = useState(null);
     const navigate = useNavigate();
     const { lang } = useParams();
+    const{state,dispatch} = useContext(MyContext)
     const gotoPage = () => {
         window.location.href = "/2023";
     }
@@ -131,7 +134,6 @@ const HomePage = () => {
 
 
     const Leaderboards = async () => {
-        setLoadingData(true)
         const options = {
             method: 'GET',
             headers: {
@@ -150,8 +152,6 @@ const HomePage = () => {
             }
         } catch (error) {
             console.error(error);
-        }finally {
-            setLoadingData(false)
         }
     };
 
@@ -163,6 +163,7 @@ const HomePage = () => {
         TopRated()
         PopularFilms()
         UpComing()
+        console.log(state)
         setTimeout(() => {
             Leaderboards()
         },3000)
@@ -172,8 +173,6 @@ const HomePage = () => {
         return Math.round(number);
     }
 
-    const [isMenuClicked, setIsMenuClicked] = useState(false);
-    const [selectedItemId, setSelectedItemId] = useState(null);
 
     const handleMenuClick = () => {
         setIsMenuClicked(!isMenuClicked);

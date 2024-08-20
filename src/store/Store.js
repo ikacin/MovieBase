@@ -1,21 +1,37 @@
-import React, { createContext, useContext, useReducer } from 'react';
-
+import React, { createContext, useReducer } from 'react';
 
 const initialState = {
-    users: [
-        { id: 1, name: "User 1", email: "user1@example.com" },
-        { id: 2, name: "User 2", email: "user2@example.com" },
-    ],
+    authorization: {
+        id:null,
+        name: null,
+        email:null ,
+        date: null,
+        accessToken: null,
+        refreshToken: null,
+        userRole: null,
+        expiresAt: null,
+        isAuthenticated: false
+    },
+    users: []
 };
-
 
 const reducer = (state, action) => {
     switch (action.type) {
         case 'SET_AUTHORIZATION':
             return {
                 ...state,
-                authorization: action.payload.authorization,
-            }
+                authorization: {
+                    id:action.payload.id,
+                    name: action.payload.name,
+                    email:action.payload.email ,
+                    date: action.payload.date,
+                    accessToken: action.payload.accessToken,
+                    refreshToken: action.payload.refreshToken,
+                    userRole: action.payload.userRole,
+                    expiresAt: action.payload.expiresAt,
+                    isAuthenticated: action.payload.isAuthenticated
+                }
+            };
         case 'ADD_USER':
             return {
                 ...state,
@@ -32,11 +48,9 @@ const reducer = (state, action) => {
     }
 };
 
-
 const MyContext = createContext();
 
-
-function MyProvider({ children }) {
+const MyProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     return (

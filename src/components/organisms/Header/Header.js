@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import { useTranslation } from 'react-i18next';
 import { Menu, Group, Center, Burger, Container,Button,Select } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
@@ -9,13 +9,15 @@ import styled from 'styled-components';
 import { IconSettings, IconSearch, IconPhoto, IconMessageCircle, IconTrash, IconArrowsLeftRight } from '@tabler/icons-react';
 import Avatar from "../../atoms/Avatar";
 import {useNavigate, useParams} from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+import {MyContext} from "../../../store/Store";
+
 
 const Header = ({onClick,onchange}) => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
-    const [opened, { toggle }] = useDisclosure(false);
     const { lang } = useParams();
+    const{state,dispatch} = useContext(MyContext);
+
     const links = [
         { link: '/about', label:  t("films") },
         {
@@ -34,6 +36,7 @@ const Header = ({onClick,onchange}) => {
 
     const LoginPage = () => {
         navigate(`/${lang}/login`)
+        localStorage.clear()
     }
     const getLangInfo = (langCode) => {
         switch (langCode) {
@@ -49,6 +52,11 @@ const Header = ({onClick,onchange}) => {
         const langInfo = getLangInfo(langCode);
 
         return language === 'turkish' ? langInfo.turkish : langInfo.english;
+    }
+
+    const shortName = () => {
+        let name = state.authorization.name.toLocaleUpperCase();
+        return name && name.charAt(0) ? name.charAt(0) : "İ";
     }
 
     const items = links.map((link) => {
@@ -137,13 +145,14 @@ const Header = ({onClick,onchange}) => {
 
                                 <Menu shadow="md" width={200}>
                                     <Menu.Target>
-                                        <ProfilButton leftIcon={<Avatar type={3} color={"#fff"}  content={"İ"}/>}>
+                                        <ProfilButton leftIcon={<Avatar type={3} color={"#fff"}  content={shortName()}/>}>
                                         </ProfilButton>
                                     </Menu.Target>
 
                                     <Menu.Dropdown>
 
-                                        <Menu.Item icon={<IconSettings size={14} />}>İKACİN
+                                        <Menu.Item icon={<IconSettings size={14} />}>
+                                            {state.authorization.email}
                                             <div>Profili görüntüle</div>
                                         </Menu.Item>
 

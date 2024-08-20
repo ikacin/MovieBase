@@ -40,6 +40,7 @@ const resources = {
             password_confirmation:"Password Confirmation",
             email:"Email",
             reset_password:"Reset Password",
+            clean:"Reset",
             sign:"Sign up for an account",
             sign_text:"Signing up for an account is free and easy. Fill out the form below to get started. JavaScript is required to to continue.",
             sign_click:"By clicking the \"Sign up\" button below, I certify that I have read and agree to the TMDB terms of use and privacy policy.",
@@ -56,7 +57,10 @@ const resources = {
             input_empty:"input value is empty",
             welcome_to:"Welcome",
             more_films_discovery:"Millions of movies, TV shows, and people to discover. Explore now.",
-            the_best_year:"The best (and worst) of the year from TMDB."
+            the_best_year:"The best (and worst) of the year from TMDB.",
+            error_password_too_short:"error password too short",
+            error_invalid_email:"Error İnvalid Email",
+
         },
     },
     tr: {
@@ -91,6 +95,7 @@ const resources = {
             email:"Email",
             login:"Giriş",
             reset_password:"Şifreyi Sıfırla",
+            clean: "Temizle",
             sign:"Bir hesap için kaydolun",
             sign_text:"Bir hesaba kaydolmak ücretsiz ve kolaydır. Başlamak için aşağıdaki formu doldurun.",
             sign_click:"Aşağıdaki \"Kayıt Ol\" düğmesini tıklayarak, TMDB kullanım şartlarını ve gizlilik politikasını okudum ve kabul ettiğimi onaylıyorum.",
@@ -107,8 +112,9 @@ const resources = {
             input_empty:"Lütfen Bilgilerinizi Giriniz.",
             welcome_to:"Hoş Geldiniz.",
             more_films_discovery:"Milyonlarca film, TV şovu ve keşfedilecek kişi. Şimdi keşfedin.",
-            the_best_year:"TMDB'den yılın en iyileri (ve en kötüleri)."
-
+            the_best_year:"TMDB'den yılın en iyileri (ve en kötüleri).",
+            error_password_too_short:"Geçersiz Şifre Kısa",
+            error_invalid_email:"Geçersiz E-Posta",
         },
     },
 };
