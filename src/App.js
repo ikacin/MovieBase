@@ -10,6 +10,9 @@ import SignUp from "./pages/SignUp/SignUp";
 import Layout from "./components/organisms/Layout/Layout";
 import Details from "./pages/MovieDetails/Details";
 import ProtectedRoute from "./helper/ProtectedRoute";
+import Person from "./pages/Person/Person";
+
+
 
 
 const App = () => {
@@ -22,6 +25,7 @@ const App = () => {
                         <Routes>
                             <Route path="/:lang" element={<ProtectedRoute><Layout /></ProtectedRoute>} />
                             <Route path="/:lang/movie/:movieId" element={<ProtectedRoute><Details /></ProtectedRoute>} />
+                            <Route path="/:lang/person/:personId" element={<ProtectedRoute><Person /></ProtectedRoute>} />
                             <Route path="/" element={<Test />} />
                             <Route path="/:lang/login" element={<Login />} />
                             <Route path="/:lang/signup" element={<SignUp />} />

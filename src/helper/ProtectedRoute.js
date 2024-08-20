@@ -8,8 +8,8 @@ const ProtectedRoute = ({ children }) => {
     const{state} = useContext(MyContext);
 
     useEffect(() => {
-        const authToken = localStorage.getItem('username');
-        if (!authToken) {
+        const authToken = state.authorization;
+        if (!authToken || Object.values(authToken).some(value => value === null)) {
             navigate(`/${lang}/login`);
         }
     }, [navigate, lang]);

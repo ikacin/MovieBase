@@ -4,7 +4,7 @@ import SubHeader from "../../components/organisms/Header/SubHeader";
 import {Container} from '@mantine/core';
 import styled, { keyframes, css } from 'styled-components';
 import Axios from 'axios';
-import {useParams } from "react-router-dom";
+import {useParams,useNavigate } from "react-router-dom";
 import CustomRingProgress from "../../components/atoms/RingProgress";
 import { IconList,IconHeartFilled,IconBookmarkFilled,IconStarFilled,IconPlayerPlayFilled,IconBrandFacebook,IconBrandTwitterFilled,IconBrandInstagram,IconBrandGooglePlay,IconDna} from '@tabler/icons-react';
 import AvatarItems from "../../components/atoms/Avatar";
@@ -25,12 +25,14 @@ const Details = () => {
     const[creditsList,setCreditsList] = useState([])
     const[loading,setLoading] = useState(true)
     const { movieId } = useParams();
+    const{lang} = useParams()
     const[isLoading,setIsloading] = useState(true);
     const [posterUrl, setPosterUrl] = useState(null);
     const [reviewsList, setReviewsList] = useState([]);
     const[keywordsList,setKeywordsList] = useState([]);
     const[total,setTotal] = useState(null)
-    const[preparing,setPreparing] = useState(false)
+    const[preparing,setPreparing] = useState(false);
+    const navigate = useNavigate()
     const MovieDetails = async () => {
         setLoading(true)
         const options = {
@@ -168,6 +170,12 @@ const Details = () => {
     function formatNumberToDollar(number) {
         return '$' + new Intl.NumberFormat('en-US').format(number);
     }
+
+    const personBtn = (item) => {
+        const formattedName = item.name.replace(/\s+/g, '-').toLowerCase();
+        navigate(`/${lang}/person/${item.id}-${formattedName}`);
+    }
+
 
     return(
         <div>
@@ -349,7 +357,7 @@ const Details = () => {
                                                                         <CardStyle id={"card-style-first"}>
                                                                             <StyledMovie>
                                                                                 <StyledImage>
-                                                                                    <img src={item.profile_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.profile_path}.jpg` : logo} />
+                                                                                    <img onClick={() => personBtn(item)} src={item.profile_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.profile_path}.jpg` : logo} />
                                                                                 </StyledImage>
 
                                                                                 <div className={"movie-text"}>

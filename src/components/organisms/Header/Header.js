@@ -55,7 +55,7 @@ const Header = ({onClick,onchange}) => {
     }
 
     const shortName = () => {
-        let name = state.authorization.name.toLocaleUpperCase();
+        let name = state?.authorization?.name?.toLocaleUpperCase();
         return name && name.charAt(0) ? name.charAt(0) : "İ";
     }
 
