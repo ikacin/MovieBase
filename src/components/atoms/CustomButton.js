@@ -1,7 +1,7 @@
 import { Button } from '@mantine/core';
 import styled from 'styled-components';
 import { IconDatabase } from '@tabler/icons-react';
-const CustomButton = ({disabled,loading,children,radius,color,variant,leftIcon,onClick,type,size,bordercolor,fontsize,background}) => {
+const CustomButton = ({disabled,loading,children,radius,color,variant,leftIcon,onClick,type,size,bordercolor,fontsize,background,padding}) => {
     return (
         <Buttons
             variant={variant ?? "filled"}
@@ -17,6 +17,7 @@ const CustomButton = ({disabled,loading,children,radius,color,variant,leftIcon,o
             bordercolor={bordercolor}
             fontsize={fontsize}
             background={background}
+            padding={padding}
         >
             {children}
         </Buttons>
@@ -28,6 +29,7 @@ const Buttons = styled(Button)`
   background: ${({ background }) => (background )};
   border-color: ${({ bordercolor }) => (bordercolor ? bordercolor : '#ffffff')};
   font-size: ${({ fontsize }) => (fontsize ? fontsize : '14px')};
+  padding: ${({ padding }) => padding};
 
   &:active {
     transform: scale(1);

@@ -172,8 +172,8 @@ const Details = () => {
     }
 
     const personBtn = (item) => {
-        const formattedName = item.name.replace(/\s+/g, '-').toLowerCase();
-        navigate(`/${lang}/person/${item.id}-${formattedName}`);
+        // const formattedName = item.name.replace(/\s+/g, '-').toLowerCase();
+        navigate(`/${lang}/person/${item.id}`);
     }
 
 

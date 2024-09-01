@@ -60,6 +60,7 @@ const resources = {
             the_best_year:"The best (and worst) of the year from TMDB.",
             error_password_too_short:"error password too short",
             error_invalid_email:"Error İnvalid Email",
+            biography:"Biography"
 
         },
     },
@@ -115,6 +116,7 @@ const resources = {
             the_best_year:"TMDB'den yılın en iyileri (ve en kötüleri).",
             error_password_too_short:"Geçersiz Şifre Kısa",
             error_invalid_email:"Geçersiz E-Posta",
+            biography:"Biyografi"
         },
     },
 };
