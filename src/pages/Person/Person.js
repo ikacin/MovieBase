@@ -3,7 +3,7 @@ import React,{useEffect,useState} from "react";
 import {useParams,useNavigate } from "react-router-dom";
 import Header from "../../components/organisms/Header/Header";
 import SubHeader from "../../components/organisms/Header/SubHeader";
-import {Container, Flex,Image,Button} from "@mantine/core";
+import {Container, Flex,Image,Text,List,Card  } from "@mantine/core";
 import CustomDivider from "../../components/atoms/Divider";
 import logo from "../../assests/image/no-image-.png";
 import {useTranslation} from "react-i18next";
@@ -11,10 +11,15 @@ import styled, { keyframes, css } from 'styled-components';
 import CustomSkeleton from "../../components/atoms/Skeleton";
 import trending from "../../assests/image/trending-bg.svg";
 import CustomButton from "../../components/atoms/CustomButton";
-import { IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight,IconBrandInstagram  } from '@tabler/icons-react';
+import moment from 'moment';
+import Footer from "../../components/organisms/Footer/Footer";
+import { IconPoint } from '@tabler/icons-react';
+import Tooltip from "../../components/atoms/Tooltip";
 const Person = () => {
     const[personList,setPersonList] = useState([])
     const[personImages,setpersonImages] = useState([])
+    const[totalFilms,setTotalFilms] = useState([])
     const [loading,setLoading] = useState(false)
     const { personId } = useParams();
     const { t, i18n } = useTranslation();
@@ -55,6 +60,8 @@ const Person = () => {
             const response = await Axios.get(`https://api.themoviedb.org/3/person/${personId}/movie_credits`, options);
             console.log("images",response.data);
             setpersonImages(response.data)
+            setTotalFilms(response.data.cast.length)
+
 
         } catch (error) {
             console.error(error);
@@ -69,11 +76,10 @@ const Person = () => {
     },[])
 
     const personBtn = (item) => {
-        // const formattedName = item.name.replace(/\s+/g, '-').toLowerCase();
         navigate(`/${lang}/person/${item.id}`);
     }
     const [showFullText, setShowFullText] = useState(false);
-    const MAX_LENGTH = 500; // Gösterilecek maksimum karakter sayısı
+    const MAX_LENGTH = 500;
     const displayedText = showFullText ? personList.biography : personList.biography?.slice(0, MAX_LENGTH) + (personList?.biography?.length > MAX_LENGTH ? '...' : '');
     const handleToggleText = () => {
         setShowFullText(!showFullText);
@@ -85,6 +91,7 @@ const Person = () => {
                 <CustomDivider/>
                 <Container
                     style={{flexDirection:"column"}}
+                    mb={"40px"}
                     mt={"40px"}
                     px={"60px"}
                     size={"xl"}
@@ -95,18 +102,76 @@ const Person = () => {
                     justify={"flex-start"}
                     gap={"40px"}
                    >
-                            <Image
-                                maw={340}
-                                miw={300}
-                                mx="auto"
-                                radius="md"
-                                src={personList.profile_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${personList.profile_path}.jpg` : logo}
-                                alt="Random image"
+                    <Flex
+                    direction={"column"}
+                    gap={"30px"}
+                    >
+                        <Image
+                            maw={340}
+                            miw={300}
+                            mx="auto"
+                            radius="md"
+                            src={personList.profile_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${personList.profile_path}.jpg` : logo}
+                            alt="Random image"
+                        />
+                        <Flex
+                        direction={"column"}
+                        gap={"30px"}
+                        >
+                            <Tooltip
+                                position="top-start"
+                                label={"İnstagramı Ziyaret Edin"}
+                                text={
+                                <IconBrandInstagram stroke={2} size={"35px"}/>
+                                  }
                             />
+
+                            <Flex
+                            direction={"column"}
+                            gap={"20px"}
+                            >
+                                <Text fz={"xl"}  fw={700}>Kişisel Bilgi</Text>
+                                <div>
+                                    <Text fw={600}>Bilinen İşi</Text>
+                                    <Text>{personList.known_for_department}</Text>
+                                </div>
+
+                                <div>
+                                    <Text fw={600}>Bilinen Filmleri</Text>
+                                    <Text>{totalFilms}</Text>
+                                </div>
+
+                                <div>
+                                    <Text fw={600}>Cinsiyet</Text>
+                                    <Text>{personList.gender === 2 ? "Erkek" : "Kadın"}</Text>
+                                </div>
+
+                                <div>
+                                    <Text fw={600}>Doğum Günü</Text>
+                                    <Text> {moment(personList.birthday).add(10, 'days').calendar()}</Text>
+                                </div>
+
+                                <div>
+                                    <Text fw={600}>Doğum Yeri</Text>
+                                    <Text>{personList.place_of_birth}</Text>
+                                </div>
+
+                                <div>
+                                    <Text fw={600}>Ayrıca Şöyle de Bilinir</Text>
+                                    <Text>{personList.also_known_as}</Text>
+                                </div>
+
+                                <div>
+                                    <Text fw={600}>İçerik Sonucu </Text>
+                                    <Text>{personList.popularity}</Text>
+                                </div>
+                            </Flex>
+                        </Flex>
+                    </Flex>
 
                        <Flex
                            direction={"column"}
-                           gap={"15px"}
+                           gap={"20px"}
                        >
                            <Title>
                                {personList.name}
@@ -157,8 +222,7 @@ const Person = () => {
                                                                                <img onClick={() => personBtn(item)} src={item.poster_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg` : logo} />
                                                                            </StyledImage>
                                                                            <div className={"movie-text"}>
-                                                                               <div>{item.original_name}</div>
-                                                                               <div>{item.character}</div>
+                                                                               <div>{item.title}</div>
                                                                            </div>
                                                                        </StyledMovie>
                                                                    </CardStyle>
@@ -172,17 +236,67 @@ const Person = () => {
                                    </div>
                                </StyledTrend>
                            </SliderContent>
+
+                           <Flex
+                            gap={"20px"}
+                            direction={"column"}
+                           >
+                               <Text fw={600}>Oyunculuk</Text>
+                              <Flex
+                                gap={"10px"}
+                                direction={"column"}
+                              >
+                                  {
+
+                                      loading ? <StyledTextLoader>
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                              <CustomSkeleton heights={["calc(50px*1.5)"]} widths={['100%']}  radius={"sm"} />
+                                          </StyledTextLoader>
+                                          :
+                                          personImages?.cast?.sort((a, b) => new Date(b.release_date) - new Date(a.release_date)).map((item,index) => {
+                                          return(
+                                              <Card shadow="sm" padding="lg" radius="md" withBorder>
+                                              <Flex
+                                              direction={"column"}
+                                              >
+                                                <Flex
+                                                >
+                                                    <Text>{item.release_date ? item.release_date : "-"}</Text>
+                                                    <List
+                                                        withPadding
+                                                        spacing="xs"
+                                                        size="sm"
+                                                        center
+                                                        icon={
+                                                            <IconPoint stroke={2} />
+                                                        }
+
+                                                    >
+                                                        <List.Item> {item.original_title}</List.Item>
+                                                    </List>
+                                                </Flex>
+                                              </Flex>
+                                            </Card>
+                                          )
+                                      })
+                                  }
+                              </Flex>
+                           </Flex>
                        </Flex>
                    </Flex>
-
-
-
                 </Container>
+                <Footer/>
             </>
         )
 }
-
-
 
 
 const Title = styled.div`
@@ -198,16 +312,13 @@ const SubTitle = styled.div`
   font-family: "Source Sans Pro",Arial,sans-serif;
 `
 const SubText = styled.div`
-  font-size: 16px;
+  font-size: 14px;
   font-family: "Source Sans Pro",Arial,sans-serif;
 `
-
-
 
 const SliderContent = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
   justify-content: center;
   gap: 20px;
   color: #ffffff;
@@ -237,14 +348,18 @@ const StyledLoader = styled.div`
   overflow-x: scroll;
   min-height: 320px;
 `
-
+const StyledTextLoader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap:5px;
+`
 const StyledCredits = styled.div`
   display: flex;
   gap: 15px;
   max-width: 990px;
   overflow-y: hidden;
   overflow-x: scroll;
-  min-height: 200px;
+  min-height: 330px;
 `
 const StyledTrend = styled.div`
 .wrap-list{
@@ -309,7 +424,7 @@ const CardStyle = styled.div`
   min-height: calc(150px*1.5);
   height: calc(150px*1.5);
   z-index: 9;
-  
+  cursor: pointer;
   .movie-text{
     padding: 10px 0;
     text-align: center;
@@ -317,15 +432,16 @@ const CardStyle = styled.div`
   }
   
   .movie-text div:nth-child(1){
-    font-weight: 700;
     color: #000;
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: 500;
   }
 
-  .movie-text div:nth-child(2){
-    color: rgba(0,0,0,.6);
-    font-size: 12px;
+  .movie-text div:nth-child(1):hover{
+    color:#01b4e4;
   }
+
+
   
   & img{
     border-radius: 8px;

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useEffect,useContext} from 'react';
 import styled from 'styled-components';
 import logo from '../../../assests/image/footer-image.svg';
 import {useParams } from 'react-router-dom';
+import {MyContext} from "../../../store/Store";
 
 const Footer = () => {
+    const{state,dispatch} = useContext(MyContext);
     const {lang} = useParams()
 
     return (
@@ -12,7 +14,8 @@ const Footer = () => {
                 <div className="join">
                     <img src={logo} alt="The Movie Database (TMDB)" width="130" height="94" />
                     <a className="rounded" href={`/${lang}/signup`}>
-                        Foruma Katılın
+                        {state?.authorization
+                            ? `merhaba ${state?.authorization.name} `: "Foruma Katılın"}
                     </a>
                 </div>
 
