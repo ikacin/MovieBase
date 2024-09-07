@@ -1,7 +1,7 @@
 import { useDisclosure } from '@mantine/hooks';
 import { Modal, Button, Group } from '@mantine/core';
 import styled from 'styled-components';
-const CustomModal = ({content,Btn,title,size,height,padding,background,boxshadow,position}) => {
+const CustomModal = ({content,Btn,title,size,height,padding,background,boxshadow,position,className,display}) => {
     const [opened, { open, close }] = useDisclosure(false);
 
     return (
@@ -14,11 +14,12 @@ const CustomModal = ({content,Btn,title,size,height,padding,background,boxshadow
                    padding={padding}
                    background={background}
                    boxShadow={boxshadow}
+                   display={display}
             >
                 {content}
             </ModalX>
 
-            <Group position={position ?? "center"}>
+            <Group position={position ?? "center"}  className={className}>
                 <ButtonX onClick={open}>{Btn}</ButtonX>
             </Group>
         </>
@@ -34,8 +35,9 @@ const ButtonX = styled.div`
 const ModalX = styled(Modal)`
   .mantine-Modal-header{
     padding: 15px;
-    background: #000;
+    background-color: ${({background}) => background ?  background :  "#000"};
     color: #fff;
+    display: ${({display}) => display};
   }
 
     .mantine-Modal-content{

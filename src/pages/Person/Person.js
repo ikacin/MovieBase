@@ -24,7 +24,10 @@ const Person = () => {
     const { personId } = useParams();
     const { t, i18n } = useTranslation();
     const navigate =  useNavigate()
-    const lang = useParams()
+    const langs = useParams()
+    const [showFullText, setShowFullText] = useState(false);
+    const MAX_LENGTH = 500;
+    const lang = langs.lang
     const getPerson = async () => {
         const options = {
             method: 'GET',
@@ -75,11 +78,11 @@ const Person = () => {
         getImages()
     },[])
 
-    const personBtn = (item) => {
-        navigate(`/${lang}/person/${item.id}`);
+
+    const pageDetails = (item) => {
+        navigate(`/${lang}/movie/${item.id}`);
     }
-    const [showFullText, setShowFullText] = useState(false);
-    const MAX_LENGTH = 500;
+
     const displayedText = showFullText ? personList.biography : personList.biography?.slice(0, MAX_LENGTH) + (personList?.biography?.length > MAX_LENGTH ? '...' : '');
     const handleToggleText = () => {
         setShowFullText(!showFullText);
@@ -219,7 +222,7 @@ const Person = () => {
                                                                    <CardStyle id={"card-style-first"}>
                                                                        <StyledMovie>
                                                                            <StyledImage>
-                                                                               <img onClick={() => personBtn(item)} src={item.poster_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg` : logo} />
+                                                                               <img onClick={() => pageDetails(item)} src={item.poster_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg` : logo} />
                                                                            </StyledImage>
                                                                            <div className={"movie-text"}>
                                                                                <div>{item.title}</div>

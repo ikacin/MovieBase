@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import LangButton from "../../components/atoms/LangButton";
 import SubHeader from "../../components/organisms/Header/SubHeader";
-import {Container} from '@mantine/core';
+import {Container, Flex, Text} from '@mantine/core';
 import styled, { keyframes, css } from 'styled-components';
 import Axios from 'axios';
 import {useParams,useNavigate } from "react-router-dom";
 import CustomRingProgress from "../../components/atoms/RingProgress";
-import { IconList,IconHeartFilled,IconBookmarkFilled,IconStarFilled,IconPlayerPlayFilled,IconBrandFacebook,IconBrandTwitterFilled,IconBrandInstagram,IconBrandGooglePlay,IconDna} from '@tabler/icons-react';
+import { IconList,IconHeartFilled,IconBookmarkFilled,IconStarFilled,IconPlayerPlayFilled,IconBrandFacebook,IconBrandTwitterFilled,IconBrandInstagram,IconBrandGooglePlay,IconDna,IconThumbDown,IconThumbUp  } from '@tabler/icons-react';
 import AvatarItems from "../../components/atoms/Avatar";
 import CustomToolTip from "../../components/atoms/Tooltip";
 import CustomModal from "../../components/atoms/Modal";
@@ -17,7 +17,8 @@ import CustomDivider from "../../components/atoms/Divider";
 import CustomTabs from "../../components/atoms/Tabs";
 import Footer from "../../components/organisms/Footer/Footer";
 import CustomGrid from "../../components/atoms/Grid";
-import CustomBadge from "../../components/atoms/Badge"; //
+import CustomBadge from "../../components/atoms/Badge";
+import Images from "../../components/atoms/Images"; //
 const Details = () => {
     const [list,setList] = useState([])
     const[movieDetails,setMovieDetails] = useState([]);
@@ -187,9 +188,100 @@ const Details = () => {
                 <Container  fluid={true} px={0}>
                     <InnerContentCustomBg posterUrl={posterUrl}>
                         <HeaderLargeFirst  posterUrl={posterUrl}>
-                            <Flex>
+                            <Wrappers>
                                 <StyledPoster>
                                     <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}/>
+
+
+                                    <CustomModal
+                                        className={"overlay"}
+                                        position={"left"}
+                                        Btn={
+                                            "Büyüt"
+
+
+                                        }
+
+                                        size="45%"
+                                        height={"550px"}
+                                        display={"none"}
+                                        boxshadow={"none"}
+                                        padding={"0"}
+                                        content={
+                                            <Flex
+
+                                            >
+                                               <div>
+                                                   <Images
+
+                                                       height={"550px"}
+                                                       radius="0"
+                                                       src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                   />
+                                               </div>
+
+                                             <Flex
+
+                                             >
+                                                <Flex
+                                                direction={"column"}
+
+                                                >
+                                                    <Flex
+                                                        justify={"space-between"}
+                                                        w={250}
+                                                    >
+                                                        <div >
+                                                            <IconThumbDown stroke={2} />
+                                                        </div>
+                                                        <div>
+                                                            <IconThumbUp stroke={2} />
+                                                        </div>
+                                                    </Flex>
+
+                                                    <Flex
+                                                        justify={"space-between"}
+                                                    >
+                                                        <div>Bilgi</div>
+                                                        <div>Bilgi</div>
+                                                    </Flex>
+                                                    <CustomDivider />
+
+                                                    <Flex
+                                                    direction={"column"}
+                                                    gap={"20px"}
+                                                    >
+                                                        <div>
+                                                            Birincil
+                                                        </div>
+                                                        <div>
+                                                            <Text fw={600}>Bilinen İşi</Text>
+                                                            <Text>""</Text>
+                                                        </div>
+                                                        <div>
+                                                            <Text fw={600}>Ekleyen</Text>
+                                                            <Text>""</Text>
+                                                        </div>
+                                                        <div>
+                                                            <Text fw={600}>Boyut</Text>
+                                                            <Text>""</Text>
+                                                        </div>
+                                                        <div>
+                                                            <Text fw={600}>Dil</Text>
+                                                            <Text>""</Text>
+                                                        </div>
+                                                    </Flex>
+
+                                                </Flex>
+                                             </Flex>
+
+
+
+                                            </Flex>
+                                        }
+                                        background={"white"}
+                                    />
+
                                 </StyledPoster>
                                 <StyledList>
                                     <Title>{list.original_title}</Title>
@@ -326,7 +418,7 @@ const Details = () => {
                                         <div>{list.overview}</div>
                                     </StyleOverview>
                                 </StyledList>
-                            </Flex>
+                            </Wrappers>
                         </HeaderLargeFirst>
                     </InnerContentCustomBg>
 
@@ -820,7 +912,29 @@ const StyledPoster = styled.div`
       border-width: 0;
       outline: 0;
       object-fit: cover;
+      transition: filter 0.3s ease;
     }
+
+  & img:hover{
+    filter: blur(5px);
+  }
+
+
+  .overlay {
+    position: absolute;
+    top: 60%;
+    left: 23%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease; 
+  }
+
+  &:hover .overlay {
+    opacity: 1; 
+  }
   
 `
 
@@ -828,7 +942,7 @@ const StyledList = styled.div`
   color: #ffffff;
   padding: 100px 0;
 `
-const Flex = styled.div`
+const Wrappers = styled.div`
   display: flex;
   gap: 50px;
   align-items: center;

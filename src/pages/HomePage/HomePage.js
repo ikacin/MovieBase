@@ -298,7 +298,7 @@ const HomePage = () => {
                                                                     <TrendingContainer>
                                                                         <CardStyle id={"card-style-first"}>
                                                                             <StyledMovie>
-                                                                                <img  src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
+                                                                                <img  onClick={() => pageDetails(item.id)}  src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
                                                                                 <ProgressWrap>
                                                                                     <RingProgress size={40} count={<span style={{display:"flex",alignItems:"center",justifyContent:"center",fontSize:"10px"}}>{`${roundToInteger(item.popularity)}`}<span style={{ fontSize:"6px", color: '#ffffff' }}>%</span></span>
                                                                                     } thickness={4} value={item.popularity} color={item.popularity > 70 ? "#c1c42d" : "green"} textColor={item.popularity > 70 ? "#c1c42d" : "green"}/>
@@ -355,7 +355,7 @@ const HomePage = () => {
                                                                     <CardStyle id={"card-style-first"}>
                                                                         <StyledMovie  key={index}>
                                                                             <StyledImage >
-                                                                                <img  src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
+                                                                                <img  onClick={() => pageDetails(item.id)}   src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
                                                                                 <CustomMenu
                                                                                     Context={<PositionedIcon size={16} />}
                                                                                     onClick={() => handleMenuClick()}
@@ -388,7 +388,7 @@ const HomePage = () => {
                                                                     <TrendingContainer>
                                                                         <CardStyle id={"card-style-first"}>
                                                                             <StyledMovie>
-                                                                                <img  src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
+                                                                                <img  onClick={() => pageDetails(item.id)}  src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
                                                                                 <ProgressWrap>
                                                                                     <RingProgress size={40} count={<span style={{display:"flex",alignItems:"center",justifyContent:"center",fontSize:"10px"}}>{`${roundToInteger(item.popularity)}`}<span style={{ fontSize:"6px", color: '#ffffff' }}>%</span></span>
                                                                                     } thickness={4} value={item.popularity} color={item.popularity > 70 ? "#c1c42d" : "green"} textColor={item.popularity > 70 ? "#c1c42d" : "green"}/>
@@ -444,7 +444,7 @@ const HomePage = () => {
                                                                     <CardStyle id={"card-style-first"}>
                                                                         <StyledMovie  key={index}>
                                                                             <StyledImage >
-                                                                                <img  src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
+                                                                                <img  onClick={() => pageDetails(item.id)}  src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
                                                                                 <CustomMenu
                                                                                     Context={<PositionedIcon size={16} />}
                                                                                     onClick={() => handleMenuClick()}
@@ -840,6 +840,7 @@ const StyledMovie = styled.div`
 const StyledImage = styled.div`
   position: relative;
   display: inline-block; /* Optional: makes the container fit its content */
+  cursor: pointer;
 `;
 
 const PositionedIcon = styled(IconDots)`
