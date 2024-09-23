@@ -1,12 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import LangButton from "../../components/atoms/LangButton";
 import SubHeader from "../../components/organisms/Header/SubHeader";
-import {Container, Flex, Text} from '@mantine/core';
+import {CloseButton, Container, Flex, Text} from '@mantine/core';
 import styled, { keyframes, css } from 'styled-components';
 import Axios from 'axios';
 import {useParams,useNavigate } from "react-router-dom";
 import CustomRingProgress from "../../components/atoms/RingProgress";
-import { IconList,IconHeartFilled,IconBookmarkFilled,IconStarFilled,IconPlayerPlayFilled,IconBrandFacebook,IconBrandTwitterFilled,IconBrandInstagram,IconBrandGooglePlay,IconDna,IconThumbDown,IconThumbUp  } from '@tabler/icons-react';
+import {
+    IconList,
+    IconHeartFilled,
+    IconBookmarkFilled,
+    IconStarFilled,
+    IconPlayerPlayFilled,
+    IconBrandFacebook,
+    IconBrandTwitterFilled,
+    IconBrandInstagram,
+    IconBrandGooglePlay,
+    IconDna,
+    IconThumbDown,
+    IconThumbUp,
+    IconLock
+} from '@tabler/icons-react';
 import AvatarItems from "../../components/atoms/Avatar";
 import CustomToolTip from "../../components/atoms/Tooltip";
 import CustomModal from "../../components/atoms/Modal";
@@ -149,6 +163,9 @@ const Details = () => {
     };
 
 
+
+
+
     useEffect(() => {
         MovieDetails()
         getVideos()
@@ -177,6 +194,13 @@ const Details = () => {
         navigate(`/${lang}/person/${item.id}`);
     }
 
+    const getHomePageLink = (link) => {
+        window.open(link, '_blank');
+    }
+
+    const closeBtn = () => {
+
+    }
 
     return(
         <div>
@@ -191,17 +215,12 @@ const Details = () => {
                             <Wrappers>
                                 <StyledPoster>
                                     <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}/>
-
-
                                     <CustomModal
                                         className={"overlay"}
                                         position={"left"}
                                         Btn={
                                             "Büyüt"
-
-
                                         }
-
                                         size="45%"
                                         height={"550px"}
                                         display={"none"}
@@ -209,7 +228,6 @@ const Details = () => {
                                         padding={"0"}
                                         content={
                                             <Flex
-
                                             >
                                                <div>
                                                    <Images
@@ -228,47 +246,72 @@ const Details = () => {
 
                                                 >
                                                     <Flex
-                                                        justify={"space-between"}
+                                                        px={"10px"}
+                                                        justify={"flex-end"}
                                                         w={250}
                                                     >
-                                                        <div >
-                                                            <IconThumbDown stroke={2} />
-                                                        </div>
-                                                        <div>
-                                                            <IconThumbUp stroke={2} />
+                                                        <div
+                                                        onClick={closeBtn}
+                                                        >
+                                                            <CloseButton
+                                                                title="Close popover"
+                                                                size="xl"
+                                                                iconSize={20}
+                                                            />
                                                         </div>
                                                     </Flex>
 
-                                                    <Flex
-                                                        justify={"space-between"}
-                                                    >
-                                                        <div>Bilgi</div>
-                                                        <div>Bilgi</div>
-                                                    </Flex>
-                                                    <CustomDivider />
+                                                    <div>
+                                                        <Flex
+                                                            pt={"50px"}
+                                                            px={"20px"}
+                                                            justify={"space-between"}
+                                                        >
+                                                            <div>Bilgi</div>
+                                                            <div>
+                                                                <IconLock stroke={2} size={"20px"}/>
+                                                            </div>
 
+                                                        </Flex>
+
+                                                        <CustomDivider />
+                                                    </div>
                                                     <Flex
+                                                    px={"20px"}
                                                     direction={"column"}
                                                     gap={"20px"}
                                                     >
                                                         <div>
-                                                            Birincil
+                                                            <Text fw={600}>Birincil</Text>
+                                                            <Text>{movieDetails.title}</Text>
                                                         </div>
                                                         <div>
-                                                            <Text fw={600}>Bilinen İşi</Text>
-                                                            <Text>""</Text>
+                                                            <Text fw={600}>yayın tarihi</Text>
+                                                            <Text>{movieDetails.release_date}</Text>
                                                         </div>
                                                         <div>
-                                                            <Text fw={600}>Ekleyen</Text>
-                                                            <Text>""</Text>
+                                                            <Text fw={600}>Slogan</Text>
+                                                            <Text>{movieDetails.tagline}</Text>
                                                         </div>
-                                                        <div>
-                                                            <Text fw={600}>Boyut</Text>
-                                                            <Text>""</Text>
-                                                        </div>
+
                                                         <div>
                                                             <Text fw={600}>Dil</Text>
-                                                            <Text>""</Text>
+                                                            <Text>
+                                                                {movieDetails && movieDetails.spoken_languages &&
+                                                                     movieDetails.spoken_languages[0].english_name
+                                                                   }
+                                                            </Text>
+
+                                                        </div>
+                                                        <div>
+                                                            <Text fw={600}>Link</Text>
+                                                            <Text
+                                                            style={{cursor:"pointer"}}
+                                                            >
+                                                                  <span
+                                                                  onClick={() => getHomePageLink(movieDetails.homepage)}
+                                                                  >İzlemek için Tıkla</span>
+                                                            </Text>
                                                         </div>
                                                     </Flex>
 
