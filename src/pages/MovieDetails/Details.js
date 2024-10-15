@@ -32,7 +32,10 @@ import CustomTabs from "../../components/atoms/Tabs";
 import Footer from "../../components/organisms/Footer/Footer";
 import CustomGrid from "../../components/atoms/Grid";
 import CustomBadge from "../../components/atoms/Badge";
-import Images from "../../components/atoms/Images"; //
+import Images from "../../components/atoms/Images";
+import DataNotFound from "../../components/atoms/DataNotFound";
+
+
 const Details = () => {
     const [list,setList] = useState([])
     const[movieDetails,setMovieDetails] = useState([]);
@@ -226,12 +229,12 @@ const Details = () => {
                                         display={"none"}
                                         boxshadow={"none"}
                                         padding={"0"}
+                                        centered={true}
                                         content={
                                             <Flex
                                             >
                                                <div>
                                                    <Images
-
                                                        height={"550px"}
                                                        radius="0"
                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
@@ -248,7 +251,7 @@ const Details = () => {
                                                     <Flex
                                                         px={"10px"}
                                                         justify={"flex-end"}
-                                                        w={250}
+                                                        w={"100%"}
                                                     >
                                                         <div
                                                         onClick={closeBtn}
@@ -542,21 +545,35 @@ const Details = () => {
                                                             content={
 
                                                                 <div>
-                                                                    {reviewsList.map((item, index) => (
-                                                                        index < 3 && (
-                                                                            <div key={index}>
-                                                                                <StyledReviews>
+                                                                    {reviewsList.length ? (
+                                                                        <>
+                                                                            {reviewsList.slice(0, 3).map((item) => (
+                                                                                <StyledReviews
+                                                                                    key={item.id || item.author_details.username}>
                                                                                     <WrapNames>
-                                                                                        <AvatarItems type={1} src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`} />
+                                                                                        <AvatarItems
+                                                                                            type={1}
+                                                                                            src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`}
+                                                                                        />
                                                                                         <div>{item.author_details.username}</div>
                                                                                     </WrapNames>
                                                                                     <div>{new Date(item.created_at).toLocaleString('tr-TR')}</div>
                                                                                 </StyledReviews>
-                                                                            </div>
-                                                                        )
-                                                                    ))}
-                                                                    {reviewsList.length > 3 && <Argument>Tartışmalara Git</Argument>}
+                                                                            ))}
+                                                                            {reviewsList.length > 3 &&
+                                                                                <Argument>Tartışmalara Git</Argument>}
+                                                                        </>
+                                                                    ) : (
+                                                                        <DataNotFound
+                                                                            height={"100%"}
+                                                                            fontSize={"12px"}
+                                                                            backgroundSize={"50px"}
+                                                                            paddingTop={"0"}
+
+                                                                        />
+                                                                    )}
                                                                 </div>
+
 
                                                             }
                                                             type={"list"}
@@ -945,6 +962,7 @@ const StyledPoster = styled.div`
   height: 534px;
   overflow: hidden;
   border-radius: 13px;
+  position: relative;  
  
     & img{
       display: block;
@@ -964,9 +982,10 @@ const StyledPoster = styled.div`
 
 
   .overlay {
+    cursor: pointer;   
     position: absolute;
-    top: 60%;
-    left: 23%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     color: white;
     font-size: 24px;
@@ -984,12 +1003,14 @@ const StyledPoster = styled.div`
 const StyledList = styled.div`
   color: #ffffff;
   padding: 100px 0;
+  max-width: 740px; 
 `
 const Wrappers = styled.div`
   display: flex;
   gap: 50px;
   align-items: center;
-  padding-left: 170px;
+
+    
 `
 const Title = styled.div`
   font-size: 35.2px;

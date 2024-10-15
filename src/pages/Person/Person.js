@@ -133,39 +133,39 @@ const Person = () => {
                             direction={"column"}
                             gap={"20px"}
                             >
-                                <Text fz={"xl"}  fw={700}>Kişisel Bilgi</Text>
+                                <Text fz={"xl"}  fw={800}>Kişisel Bilgi</Text>
                                 <div>
-                                    <Text fw={600}>Bilinen İşi</Text>
+                                    <Text fw={700}>Bilinen İşi</Text>
                                     <Text>{personList.known_for_department}</Text>
                                 </div>
 
                                 <div>
-                                    <Text fw={600}>Bilinen Filmleri</Text>
+                                    <Text fw={700}>Bilinen Filmleri</Text>
                                     <Text>{totalFilms}</Text>
                                 </div>
 
                                 <div>
-                                    <Text fw={600}>Cinsiyet</Text>
+                                    <Text fw={700}>Cinsiyet</Text>
                                     <Text>{personList.gender === 2 ? "Erkek" : "Kadın"}</Text>
                                 </div>
 
                                 <div>
-                                    <Text fw={600}>Doğum Günü</Text>
+                                    <Text fw={700}>Doğum Günü</Text>
                                     <Text> {moment(personList.birthday).add(10, 'days').calendar()}</Text>
                                 </div>
 
                                 <div>
-                                    <Text fw={600}>Doğum Yeri</Text>
+                                    <Text fw={700}>Doğum Yeri</Text>
                                     <Text>{personList.place_of_birth}</Text>
                                 </div>
 
                                 <div>
-                                    <Text fw={600}>Ayrıca Şöyle de Bilinir</Text>
-                                    <Text>{personList.also_known_as}</Text>
+                                    <Text fw={700}>Ayrıca Şöyle de Bilinir</Text>
+                                    <Text>{personList.also_known_as && personList.also_known_as.lenght > 0 ? personList.also_known_as.join(',') : "-"}</Text>
                                 </div>
 
                                 <div>
-                                    <Text fw={600}>İçerik Sonucu </Text>
+                                    <Text fw={700}>İçerik Sonucu </Text>
                                     <Text>{personList.popularity}</Text>
                                 </div>
                             </Flex>
