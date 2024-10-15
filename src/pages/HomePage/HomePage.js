@@ -21,7 +21,7 @@ import Footer from "../../components/organisms/Footer/Footer";
 import {MyContext} from "../../store/Store";
 
 const HomePage = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const [list,setList] = useState([])
     const [nowList,setNowList] = useState([])
     const [popularList,setPopularList] = useState([])

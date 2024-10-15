@@ -1,12 +1,10 @@
 import i18n from 'i18next';
-import React, { useEffect,useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from "../organisms/Header/Header";
 
 
-const LangButton = ({}) => {
-    const { t } = useTranslation();
+const LangButton = () => {
     const { lang } = useParams();
     const navigate = useNavigate();
 

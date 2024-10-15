@@ -1,13 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-
-const localePaths = {
-    en: '../../public/locales/en/translation.json',
-    tr: '../../public/locales/tr/translation.json',
-};
-
-
 const resources = {
     en: {
         translation: {

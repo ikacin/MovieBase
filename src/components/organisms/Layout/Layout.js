@@ -1,6 +1,4 @@
-import React,{useState,useEffect } from 'react';
-
-import Footer from "../Footer/Footer";
+import React from 'react';
 import LangButton from "../../atoms/LangButton";
 import HomePage from "../../../pages/HomePage/HomePage";
 const Layout = () => {
@@ -9,7 +7,6 @@ const Layout = () => {
         <div>
             <LangButton/>
             <HomePage/>
-            {/*<Footer/>*/}
         </div>
     )
 

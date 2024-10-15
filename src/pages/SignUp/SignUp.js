@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext} from 'react';
 import axios from 'axios'
 import styled from 'styled-components';
 import { Input } from '@mantine/core';
@@ -17,7 +17,7 @@ import { IconX } from '@tabler/icons-react';
 import { IconCheck } from '@tabler/icons-react';
 import Photo from "../../helper/Photo";
 const SignUp = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const [once, setOnce] = useState(true);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');

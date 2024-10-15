@@ -17,8 +17,6 @@ import {
     IconBrandInstagram,
     IconBrandGooglePlay,
     IconDna,
-    IconThumbDown,
-    IconThumbUp,
     IconLock
 } from '@tabler/icons-react';
 import AvatarItems from "../../components/atoms/Avatar";
@@ -41,7 +39,6 @@ const Details = () => {
     const[movieDetails,setMovieDetails] = useState([]);
     const[videoList,setVideoList] = useState([])
     const[creditsList,setCreditsList] = useState([])
-    const[loading,setLoading] = useState(true)
     const { movieId } = useParams();
     const{lang} = useParams()
     const[isLoading,setIsloading] = useState(true);
@@ -49,10 +46,8 @@ const Details = () => {
     const [reviewsList, setReviewsList] = useState([]);
     const[keywordsList,setKeywordsList] = useState([]);
     const[total,setTotal] = useState(null)
-    const[preparing,setPreparing] = useState(false);
     const navigate = useNavigate()
     const MovieDetails = async () => {
-        setLoading(true)
         const options = {
             method: 'GET',
             headers: {
@@ -70,7 +65,7 @@ const Details = () => {
         } catch (error) {
             console.error(error);
         }  finally {
-            setLoading(false);
+
         }
     };
 
@@ -116,12 +111,12 @@ const Details = () => {
         } catch (error) {
             console.error(error);
         }  finally {
-            setIsloading(false)
+            setIsloading(true)
         }
     };
 
     const getReviews = async () => {
-        setPreparing(true)
+        setIsloading(true)
         const options = {
             method: 'GET',
             headers: {
@@ -138,7 +133,7 @@ const Details = () => {
         } catch (error) {
             console.error(error);
         }  finally {
-            setPreparing(false)
+            setIsloading(false)
         }
     };
 
@@ -166,16 +161,12 @@ const Details = () => {
     };
 
 
-
-
-
     useEffect(() => {
         MovieDetails()
         getVideos()
         getCredits()
         getKeywords()
     },[])
-
 
 
     function formatRuntime(runtime) {
@@ -193,7 +184,6 @@ const Details = () => {
     }
 
     const personBtn = (item) => {
-        // const formattedName = item.name.replace(/\s+/g, '-').toLowerCase();
         navigate(`/${lang}/person/${item.id}`);
     }
 
@@ -217,7 +207,10 @@ const Details = () => {
                         <HeaderLargeFirst  posterUrl={posterUrl}>
                             <Wrappers>
                                 <StyledPoster>
-                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}/>
+                                    <img
+                                        alt={""}
+                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                    />
                                     <CustomModal
                                         className={"overlay"}
                                         position={"left"}
@@ -537,47 +530,64 @@ const Details = () => {
                                                             MediaHub={"Değerlendirmeler"}
                                                             firstCount={0}
                                                             secondCount={total}
+                                                            type={"list"}
+                                                            defaultValue={"gallery"}
                                                             text={
                                                                 <Evaluation>
                                                                     {list.title} için yorumumuz yok. bir tane yazmak ister misiniz?
                                                                 </Evaluation>
                                                             }
                                                             content={
+                                                                <Flex
+                                                                direction={"column"}
+                                                                >
+                                                                    {
+                                                                        isLoading ?
+                                                                            <Flex
+                                                                            direction={"column"}
+                                                                            >
+                                                                                <CustomSkeleton heights={["calc(30px*1.5)"]} widths={['100%']}  />
+                                                                                <CustomSkeleton heights={["calc(30px*1.5)"]} widths={['100%']}  />
+                                                                                <CustomSkeleton heights={["calc(30px*1.5)"]} widths={['100%']}  />
+                                                                            </Flex>
 
-                                                                <div>
-                                                                    {reviewsList.length ? (
-                                                                        <>
-                                                                            {reviewsList.slice(0, 3).map((item) => (
-                                                                                <StyledReviews
-                                                                                    key={item.id || item.author_details.username}>
-                                                                                    <WrapNames>
-                                                                                        <AvatarItems
-                                                                                            type={1}
-                                                                                            src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`}
-                                                                                        />
-                                                                                        <div>{item.author_details.username}</div>
-                                                                                    </WrapNames>
-                                                                                    <div>{new Date(item.created_at).toLocaleString('tr-TR')}</div>
-                                                                                </StyledReviews>
-                                                                            ))}
-                                                                            {reviewsList.length > 3 &&
-                                                                                <Argument>Tartışmalara Git</Argument>}
-                                                                        </>
-                                                                    ) : (
-                                                                        <DataNotFound
-                                                                            height={"100%"}
-                                                                            fontSize={"12px"}
-                                                                            backgroundSize={"50px"}
-                                                                            paddingTop={"0"}
-
-                                                                        />
-                                                                    )}
-                                                                </div>
-
-
+                                                                        :
+                                                                            reviewsList.length ? (
+                                                                                    <>
+                                                                                        {reviewsList.slice(0, 3).map((item) => (
+                                                                                            <StyledReviews
+                                                                                                key={item.id || item.author_details.username}>
+                                                                                                <WrapNames>
+                                                                                                    <AvatarItems
+                                                                                                        type={1}
+                                                                                                        src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`}
+                                                                                                    />
+                                                                                                    <Text
+                                                                                                        size={"sm"}
+                                                                                                    >{item.author_details.username}
+                                                                                                    </Text>
+                                                                                                </WrapNames>
+                                                                                                <Text
+                                                                                                    c={"dimmed"}
+                                                                                                    size={"xs"}
+                                                                                                >{new Date(item.created_at).toLocaleString('tr-TR')}
+                                                                                                </Text>
+                                                                                            </StyledReviews>
+                                                                                        ))}
+                                                                                        {reviewsList.length > 3 &&
+                                                                                            <Argument>Tartışmalara Git</Argument>}
+                                                                                    </>
+                                                                                ) : (
+                                                                                    <DataNotFound
+                                                                                        height={"100%"}
+                                                                                        fontSize={"12px"}
+                                                                                        backgroundSize={"50px"}
+                                                                                        paddingTop={"0"}
+                                                                                    />
+                                                                                )
+                                                                    }
+                                                                </Flex>
                                                             }
-                                                            type={"list"}
-                                                            defaultValue={"gallery"}
                                                         />
                                                     </div>
                                                     <div>
@@ -613,16 +623,25 @@ const Details = () => {
                                                                         Btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt={""}
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
 
 
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt={""}
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
 
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt={""}
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
                                                                             </div>
 
@@ -663,16 +682,25 @@ const Details = () => {
                                                                         Btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt={""}
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
 
 
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt={""}
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
 
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt={""}
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
                                                                             </div>
 
@@ -713,16 +741,25 @@ const Details = () => {
                                                                         Btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt=""
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
 
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt=""
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
 
 
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt=""
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
 
                                                                             </div>
@@ -765,14 +802,23 @@ const Details = () => {
                                                                         Btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt=""
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt=""
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
 
                                                                                 <PopularImage>
-                                                                                    <img src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}/>
+                                                                                    <img
+                                                                                        alt=""
+                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                    />
                                                                                 </PopularImage>
 
 

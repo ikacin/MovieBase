@@ -1,5 +1,5 @@
-import { ThemeIcon, RingProgress, Text, Center } from '@mantine/core';
-import { IconCheck } from '@tabler/icons-react';
+import {  RingProgress, Text} from '@mantine/core';
+
 
 const CustomRingProgress = ({size,count,thickness,value,color,textColor}) => {
     return (

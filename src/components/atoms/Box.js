@@ -1,6 +1,6 @@
 import { Text, Paper } from '@mantine/core';
 import { List, ThemeIcon } from '@mantine/core';
-import { IconCircleCheck, IconCheck } from '@tabler/icons-react';
+import { IconCheck } from '@tabler/icons-react';
 
 import styled from 'styled-components';
 import Avatar from "./Avatar";

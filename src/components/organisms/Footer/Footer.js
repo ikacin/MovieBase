@@ -1,4 +1,4 @@
-import React, {useEffect,useContext} from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import logo from '../../../assests/image/footer-image.svg';
 import {useParams } from 'react-router-dom';
@@ -12,10 +12,12 @@ const Footer = () => {
         <FooterContainer>
             <Navigation>
                 <div className="join">
-                    <img src={logo} alt="The Movie Database (TMDB)" width="130" height="94" />
+                    <img src={logo} alt="The Movie Database (TMDB)" width="130" height="94"/>
                     <a className="rounded" href={`/${lang}/signup`}>
-                        {state?.authorization
-                            ? `merhaba ${state?.authorization.name} `: "Foruma Katılın"}
+                        {state?.authorization?.name
+                            ? `Merhaba ${state.authorization.name}`
+                            : "Foruma Katılın"
+                        }
                     </a>
                 </div>
 

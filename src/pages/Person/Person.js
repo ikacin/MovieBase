@@ -7,7 +7,7 @@ import {Container, Flex,Image,Text,List,Card  } from "@mantine/core";
 import CustomDivider from "../../components/atoms/Divider";
 import logo from "../../assests/image/no-image-.png";
 import {useTranslation} from "react-i18next";
-import styled, { keyframes, css } from 'styled-components';
+import styled, { keyframes} from 'styled-components';
 import CustomSkeleton from "../../components/atoms/Skeleton";
 import trending from "../../assests/image/trending-bg.svg";
 import CustomButton from "../../components/atoms/CustomButton";
@@ -22,7 +22,7 @@ const Person = () => {
     const[totalFilms,setTotalFilms] = useState([])
     const [loading,setLoading] = useState(false)
     const { personId } = useParams();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate =  useNavigate()
     const langs = useParams()
     const [showFullText, setShowFullText] = useState(false);
@@ -222,7 +222,10 @@ const Person = () => {
                                                                    <CardStyle id={"card-style-first"}>
                                                                        <StyledMovie>
                                                                            <StyledImage>
-                                                                               <img onClick={() => pageDetails(item)} src={item.poster_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg` : logo} />
+                                                                               <img
+                                                                                   alt="logo"
+                                                                                   onClick={() => pageDetails(item)} src={item.poster_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg` : logo}
+                                                                               />
                                                                            </StyledImage>
                                                                            <div className={"movie-text"}>
                                                                                <div>{item.title}</div>
@@ -382,25 +385,11 @@ const LeadActors = styled.div`
   font-size: 1.0em;
   padding: 0 0 20px 0;
 `
-const StyledReviews = styled.div`
-  width: 100%;
-  background: #fff;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  color: #000;
-`
-const WrapNames = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`
+
+
 const StyledImage = styled.div`
   position: relative;
-  display: inline-block; /* Optional: makes the container fit its content */
+  display: inline-block;
   min-height: 230px;
 `;
 

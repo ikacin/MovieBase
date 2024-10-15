@@ -1,7 +1,6 @@
 import React,{useContext} from 'react';
 import { useTranslation } from 'react-i18next';
-import { Menu, Group, Center, Burger, Container,Button,Select } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { Menu, Group, Center, Container,Button,Select } from '@mantine/core';
 import { Text } from '@mantine/core';
 import logo from '../../../assests/image/header-logo.svg';
 import classes from './HeaderMenu.module.css';
@@ -14,7 +13,7 @@ import {MyContext} from "../../../store/Store";
 
 const Header = ({onClick,onchange}) => {
     const navigate = useNavigate();
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const { lang } = useParams();
     const{state,dispatch} = useContext(MyContext);
 
