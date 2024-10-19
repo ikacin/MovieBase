@@ -5,7 +5,6 @@ import mainBanner from'../../assests/image/banner.webp';
 import subBanner from'../../assests/image/sub-banner.webp';
 import trending from'../../assests/image/trending-bg.svg';
 import {Container} from '@mantine/core';
-import { Input } from '@mantine/core';
 import CustomButton from "../../components/atoms/CustomButton";
 import {IconSearch, IconArrowRight} from '@tabler/icons-react';
 import CustomTabs from "../../components/atoms/Tabs";
@@ -19,6 +18,8 @@ import CustomPaper from "../../components/atoms/Box";
 import CustomProgress from "../../components/atoms/Progress";
 import Footer from "../../components/organisms/Footer/Footer";
 import {MyContext} from "../../store/Store";
+import SearchInput from "../../components/molecules/SearchInput";
+import Search from "../Search/Search";
 
 const HomePage = () => {
     const { t } = useTranslation();
@@ -33,6 +34,8 @@ const HomePage = () => {
     const[isLoading,setIsloading] = useState(true);
     const [isMenuClicked, setIsMenuClicked] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
+    const[searchValue,setSearchValue] = useState("");
+    const[searchList,setSearchList] = useState([]);
     const navigate = useNavigate();
     const { lang } = useParams();
     const{state,dispatch} = useContext(MyContext)
@@ -155,7 +158,26 @@ const HomePage = () => {
         }
     };
 
+    const getSearch = async (params) => {
+        cleanSearchTerm(params)
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+            }
+        };
+        try {
+            const response = await Axios.get(`https://api.themoviedb.org/3/search/movie?query=${params}&include_adult=false&language=en-US&page=1`, options);
+            console.log("search", response.data);
+            setSearchList(response.data.results);
+            navigate(`/${lang}/search`,{state:{searchList:response.data.results}});
+        } catch (error) {
+            console.error(error);
+        } finally {
 
+        }
+    };
 
 
 
@@ -177,6 +199,18 @@ const HomePage = () => {
     const handleMenuClick = () => {
         setIsMenuClicked(!isMenuClicked);
     };
+
+    const cleanSearchTerm = (searchTerm) => {
+        return searchTerm.toLowerCase().replace(/[^a-zA-Z0-9\s]/g, '').trim();
+    };
+
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            getSearch(searchValue);
+        }
+    };
+
     return(
             <>
                 <Container size={"xl"} mb={"50px"}>
@@ -190,11 +224,15 @@ const HomePage = () => {
 
                                 <SearchWrap className="search">
                                     <div>
-                                        <Input
-                                            size="md"
-                                            radius="lg"
-                                            placeholder="Film, dizi, kişi ara..."
+                                        <SearchInput
+                                          placeholder={"Film, dizi, kişi ara..."}
+                                          size="md"
+                                          radius="lg"
+                                          value={searchValue}
+                                          setValue={setSearchValue}
+                                          onKeyDown={(event) => handleKeyDown(event)}
                                         />
+
                                         <CustomButton
                                             children={"Search"}
                                             radius={"60px"}
@@ -223,7 +261,6 @@ const HomePage = () => {
                                             variant="outline"
                                             leftIcon={<IconArrowRight size="1rem" />}
                                             onClick={gotoPageAndOpenMenu}
-
                                         />
 
 
@@ -597,11 +634,9 @@ const HomePage = () => {
                                         <CustomProgress value={average[9]} color={"#e05666"}/>
                                     </Item>
                                 }
-
                             />
-
-
                         </StyledLead>
+
                     </Section>
                 </Container>
                <Footer/>

@@ -42,6 +42,7 @@ const Details = () => {
     const { movieId } = useParams();
     const{lang} = useParams()
     const[isLoading,setIsloading] = useState(true);
+    const[loading,setLoading] = useState(true);
     const [posterUrl, setPosterUrl] = useState(null);
     const [reviewsList, setReviewsList] = useState([]);
     const[keywordsList,setKeywordsList] = useState([]);
@@ -94,7 +95,7 @@ const Details = () => {
 
 
     const getCredits = async () => {
-        setIsloading(true)
+        setLoading(true)
         const options = {
             method: 'GET',
             headers: {
@@ -111,7 +112,7 @@ const Details = () => {
         } catch (error) {
             console.error(error);
         }  finally {
-            setIsloading(true)
+            setLoading(false)
         }
     };
 
@@ -470,7 +471,7 @@ const Details = () => {
                                     <StyledTrend>
                                         <div className={"wrap-list"}>
                                             {
-                                                isLoading ? <StyledLoader>
+                                                loading ? <StyledLoader>
                                                         <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
                                                         <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
                                                         <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
