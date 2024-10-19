@@ -1,9 +1,12 @@
-import React from 'react';
-import {ActionIcon, Container, Flex} from "@mantine/core";
+import React, {useState} from "react";
+import {ActionIcon, Container, Flex, Input} from "@mantine/core";
 import Divider from "../atoms/Divider";
 import { IconSearch } from '@tabler/icons-react';
+import SearchInput from "./SearchInput";
 
-const SearchBar = () => {
+
+const SearchBar = ({value,setValue,onKeyDown,variant}) => {
+
     return (
         <Container
             size="77rem"
@@ -13,9 +16,15 @@ const SearchBar = () => {
           align={'center'}
           >
             <Flex>
-                <ActionIcon variant="transparent" >
-                    <IconSearch style={{ width: '70%', height: '70%' }} stroke={1.5} />
-                </ActionIcon>
+
+                <SearchInput
+                    placeholder={"Film, dizi, kişi ara..."}
+                    value={value}
+                    setValue={setValue}
+                    onKeyDown={onKeyDown}
+                    variant={variant}
+                />
+
             </Flex>
               <Flex>
                   <Divider/>

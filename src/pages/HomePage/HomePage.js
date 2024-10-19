@@ -171,7 +171,7 @@ const HomePage = () => {
             const response = await Axios.get(`https://api.themoviedb.org/3/search/movie?query=${params}&include_adult=false&language=en-US&page=1`, options);
             console.log("search", response.data);
             setSearchList(response.data.results);
-            navigate(`/${lang}/search`,{state:{searchList:response.data.results}});
+            navigate(`/${lang}/search?query=${encodeURIComponent(params)}`,{state:{searchList:response.data.results}});
         } catch (error) {
             console.error(error);
         } finally {

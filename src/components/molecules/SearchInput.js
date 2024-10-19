@@ -3,7 +3,7 @@ import {TextInput, ActionIcon} from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 
 
-const SearchInput = ({value,setValue,onKeyDown,label,placeholder,size,radius}) => {
+const SearchInput = ({value,setValue,onKeyDown,label,placeholder,size,radius,variant}) => {
 
 
     return (
@@ -23,6 +23,7 @@ const SearchInput = ({value,setValue,onKeyDown,label,placeholder,size,radius}) =
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={onKeyDown}
+                variant={variant}
             />
 
         </>
