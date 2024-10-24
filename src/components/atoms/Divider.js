@@ -1,9 +1,9 @@
 import { Divider } from '@mantine/core';
 
-const CustomDivider = () => {
+const CustomDivider = ({color}) => {
     return (
         <>
-            <Divider/>
+            <Divider color={color}/>
         </>
     );
 }

@@ -97,7 +97,10 @@ const Header = ({onClick,onchange}) => {
     return (
         <HeaderWrap>
             <header id={"header-wrap"} className={classes.header}>
-                <Container size="xl">
+                <Container
+                    size="xl"
+                    p={0}
+                >
                     <HeaderText className={classes.inner}>
                         <a href="/">
                             <img src={logo}  alt="Logo" width={"150px"} height={"150px"}/>
@@ -201,7 +204,7 @@ const HeaderWrap = styled.div`
     color: #ffff;
     font-size: 16px;
     width: 100%;
-    max-width: 76.5rem;
+ 
   }
   
   .HeaderMenu_inner__wIqxf{

@@ -3,8 +3,7 @@ import { Box, NavLink } from '@mantine/core';
 import styled from 'styled-components';
 
 
-const NavLinks = ({data,border,gap,padding,fontSize,fontWeight}) => {
-    const [active, setActive] = useState(0);
+const NavLinks = ({data,border,gap,padding,fontSize,fontWeight,active,setActive}) => {
 
     const items = data.map((item, index) => (
         <NavLink
@@ -15,7 +14,7 @@ const NavLinks = ({data,border,gap,padding,fontSize,fontWeight}) => {
             rightSection={item.rightSection}
             leftSection={<item.icon size="1rem" stroke={1.5} />}
             onClick={() => setActive(index)}
-            bg={active === index ? "gray.3" : ""}
+            bg={active === item.media_type ? "gray.3" : ""}
             styles={{
                 label:{
                     fontSize:fontSize,

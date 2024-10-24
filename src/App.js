@@ -12,6 +12,8 @@ import Details from "./pages/MovieDetails/Details";
 import ProtectedRoute from "./helper/ProtectedRoute";
 import Person from "./pages/Person/Person";
 import Search from "./pages/Search/Search";
+import Company from "./pages/Company/Company";
+import Keyword from "./pages/Keyword/Keyword";
 
 
 
@@ -28,6 +30,8 @@ const App = () => {
                             <Route path="/:lang/movie/:movieId" element={<ProtectedRoute><Details /></ProtectedRoute>} />
                             <Route path="/:lang/person/:personId" element={<ProtectedRoute><Person /></ProtectedRoute>} />
                             <Route path="/:lang/search" element={<ProtectedRoute><Search/></ProtectedRoute>} />
+                            <Route path="/:lang/company/:company_id/movie" element={<ProtectedRoute><Company/></ProtectedRoute>} />
+                            <Route path="/:lang/keyword/:keyword_id/movie" element={<ProtectedRoute><Keyword/></ProtectedRoute>} />
                             <Route path="/" element={<Test />} />
                             <Route path="/:lang/login" element={<Login />} />
                             <Route path="/:lang/signup" element={<SignUp />} />
