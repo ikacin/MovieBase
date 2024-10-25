@@ -86,26 +86,36 @@ const Keyword = () => {
 
 
     return (
-        <>
-            <Header />
+        <div style={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh"
+        }}>
+
+            <Header/>
 
             <ActionHeader
                 content={keywordDetails.name ? keywordDetails.name : "-"}
                 count={totalKeywords ? `${totalKeywords} film` : "0"}
             />
 
-            <SubHeader />
+            <SubHeader/>
             <Divider/>
             <Container
                 size={"xl"}
-                my={ "xl"}
+                my={"xl"}
                 p={0}
+                style={{
+                    flex: 1,
+                    width: "100%",
+                    padding: "20px",
+                }}
             >
-                    <Flex
+                <Flex
                     direction={"column"}
                     gap={"xl"}
-                    >
-                        {keywordList.length > 0 ? (
+                >
+                    {keywordList.length > 0 ? (
                             keywordList.map((item, index) => (
                                 loading ? (
                                     <Flex
@@ -119,7 +129,7 @@ const Keyword = () => {
                                             widths={["100%"]}
                                         />
                                     </Flex>
-                                ):(
+                                ) : (
 
                                     <Flex key={index} alignItems="center" w="100%" mih="135px">
                                         <Box maw={90} mx="auto" bg={item.poster_path ? "" : "#dbdbdb"} mah="135px">
@@ -169,17 +179,17 @@ const Keyword = () => {
                                 )
 
                             ))
-                        ):
-                            (
-                                <DataNotFound/>
-                            )
+                        ) :
+                        (
+                            <DataNotFound/>
+                        )
 
-                        }
-                    </Flex>
+                    }
+                </Flex>
             </Container>
             <Footer/>
 
-        </>
+        </div>
     );
 };
 

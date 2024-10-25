@@ -1,11 +1,16 @@
 import { Divider } from '@mantine/core';
 
-const CustomDivider = ({color}) => {
+const Dividers = ({color,orientation,size}) => {
     return (
         <>
-            <Divider color={color}/>
+            <Divider
+                color={color}
+                orientation={orientation}
+                size={size}
+
+            />
         </>
     );
 }
 
-export default CustomDivider
+export default Dividers

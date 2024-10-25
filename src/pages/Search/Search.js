@@ -2,8 +2,8 @@ import Axios from "axios";
 import React,{useEffect,useState} from "react";
 import {useParams,useNavigate,useLocation } from "react-router-dom";
 import Header from "../../components/organisms/Header/Header";
-import {Container, Flex, Text, Card, Box, Divider} from "@mantine/core";
-import CustomDivider from "../../components/atoms/Divider";
+import {Container, Flex, Text, Card, Box, Image} from "@mantine/core";
+import Dividers from "../../components/atoms/Divider";
 import {useTranslation} from "react-i18next";
 import CustomSkeleton from "../../components/atoms/Skeleton";
 import {IconGauge, IconFingerprint, IconActivity} from '@tabler/icons-react';
@@ -13,7 +13,10 @@ import NavLinks from "../../components/atoms/NavLinks";
 import Badge from "../../components/atoms/Badge";
 import Images from "../../components/atoms/Images";
 import NoImage from "../../assests/image/glyphicons.svg"
+import NoUserImage from "../../assests/image/user-icon.svg"
 import DataNotFound from "../../components/atoms/DataNotFound";
+import styled from "styled-components";
+import logo from "../../assests/image/no-image-.png";
 
 
 const Search = ({}) => {
@@ -44,7 +47,7 @@ const Search = ({}) => {
                 padding={"0 8px"}
                 radius={"md"}
                 size={"lg"}
-                background={"#fff"}
+                background={"#fcf7f7"}
                 text={
                     <Text
                         fw={"400"}
@@ -62,7 +65,7 @@ const Search = ({}) => {
                     padding={"0 8px"}
                     radius={"md"}
                     size={"lg"}
-                    background={"#fff"}
+                    background={"#fcf7f7"}
                     text={
                         <Text
                             fw={"400"}
@@ -80,7 +83,7 @@ const Search = ({}) => {
                     padding={"0 8px"}
                     radius={"md"}
                     size={"lg"}
-                    background={"#fff"}
+                    background={"#fcf7f7"}
                     text={
                         <Text
                             fw={"400"}
@@ -98,7 +101,7 @@ const Search = ({}) => {
                 padding={"0 8px"}
                 radius={"md"}
                 size={"lg"}
-                background={"#fff"}
+                background={"#fcf7f7"}
                 text={
                     <Text
                         fw={"400"}
@@ -116,7 +119,7 @@ const Search = ({}) => {
                 padding={"0 8px"}
                 radius={"md"}
                 size={"lg"}
-                background={"#fff"}
+                background={"#fcf7f7"}
                 text={
                     <Text
                         fw={"400"}
@@ -134,7 +137,7 @@ const Search = ({}) => {
                 padding={"0 8px"}
                 radius={"md"}
                 size={"lg"}
-                background={"#fff"}
+                background={"#fcf7f7"}
                 text={
                     <Text
                         fw={"400"}
@@ -151,12 +154,12 @@ const Search = ({}) => {
                 padding={"0 8px"}
                 radius={"md"}
                 size={"lg"}
-                background={"#fff"}
+                background={"#fcf7f7"}
                 text={
                     <Text
                         fw={"400"}
                         c={"#000"}
-                    >"0"
+                    >0
                     </Text>
                 }
             />
@@ -269,6 +272,7 @@ const Search = ({}) => {
             getSearch(searchText)
             getSearchCollection(searchText)
             getSearchKeywords(searchText)
+            getSearchCompany(queryParams)
         }
     })
 
@@ -280,7 +284,6 @@ const Search = ({}) => {
     }, [queryParams]);
 
     useEffect(() => {
-        getSearch(queryParams)
         getSearch(queryParams)
         getSearchCollection(queryParams)
         getSearchKeywords(queryParams)
@@ -296,6 +299,10 @@ const Search = ({}) => {
         navigate(`/${lang}/keyword/${id}/movie`);
     }
 
+    const ClickedPerson = (id) => {
+        navigate(`/${lang}/person/${id}`);
+    }
+
     return(
             <>
                 <Header/>
@@ -306,7 +313,7 @@ const Search = ({}) => {
                 variant={"unstyled"}
                 />
 
-                <CustomDivider/>
+                <Dividers/>
                 <Container
                     mb={"40px"}
                     mt={"40px"}
@@ -347,7 +354,7 @@ const Search = ({}) => {
                </Flex>
                     {(active === 'tv' || active === 'movie' || active === 'person') ? (
                         <div>
-                            <Flex wrap="wrap" w="100%" gap="20px">
+                            <Flex wrap="wrap" w="100%" gap={active === 'person' ? "10px" : "20px"}>
                                 {searchList?.filter(item => item.media_type === active)
                                     .map((item, index) => (
 
@@ -360,6 +367,93 @@ const Search = ({}) => {
                                                                 widths={["900px"]}
                                                             />
                                                     </Flex>
+                                            ):active === 'person' ? (
+                                                <Flex key={index}
+                                                      align={"center"}
+                                                      w="100%"
+                                                      gap={"10px"}
+                                                      onClick={() => ClickedPerson(item.id)}
+                                                      style={{cursor: "pointer"}}
+                                                >
+                                                    <Box
+                                                        mx="auto"
+                                                    >
+                                                        {
+                                                            item.profile_path ? (
+                                                                <StyledImage
+                                                                    backgroundSize={"55px"}
+                                                                    background={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.profile_path}.jpg`} />
+                                                            ) : (
+                                                                <StyledImage
+                                                                backgroundSize={"50px"}
+                                                                />
+                                                            )
+                                                        }
+
+
+                                                    </Box>
+                                                    <Card
+                                                        component="a"
+                                                        target="_blank"
+                                                        w="100%"
+                                                        p="0"
+                                                        m="0 0 0 0"
+
+                                                    >
+                                                        <Flex
+                                                            w="100%"
+
+                                                        >
+                                                            <Flex
+                                                                direction="column"
+                                                            >
+                                                                <Text fw={700} fz="18px">
+                                                                    {item.original_name || item.title}
+                                                                </Text>
+                                                                <Flex
+                                                                align={"center"}
+                                                                gap={"5px"}
+                                                                >
+                                                                    <Text fw={400}
+                                                                          fz="md"
+                                                                    >
+                                                                        {item.known_for_department || "-"}
+                                                                    </Text>
+                                                                    <Dividers
+                                                                        orientation="vertical"
+                                                                        size={"sm"}
+                                                                    />
+                                                                    <Flex
+                                                                    align={"center"}
+                                                                    >
+                                                                        {item.known_for && item.known_for.length > 0 ? (
+                                                                                item.known_for.map((item,index) => (
+
+                                                                                        <Text
+                                                                                            key={index}
+                                                                                            fw={400}
+                                                                                            color="dimmed"
+                                                                                            fz="md"
+                                                                                        >
+                                                                                            {item.original_name || item.title}
+                                                                                        </Text>
+                                                                                ))
+                                                                            )
+                                                                            :
+                                                                            <Text fw={400} color="dimmed" fz="xs">
+                                                                                Data Bulunamadı
+                                                                            </Text>
+                                                                        }
+                                                                    </Flex>
+
+                                                                </Flex>
+                                                                <Text lineClamp={2} mt="xs" size="sm">
+                                                                    {item.overview}
+                                                                </Text>
+                                                            </Flex>
+                                                        </Flex>
+                                                    </Card>
+                                                </Flex>
                                             ):
                                                 <Flex key={index} alignItems="center" w="100%" mih="135px">
                                                     <Box maw={90} mx="auto" bg={item.poster_path ? "" : "#dbdbdb"} mah="135px">
@@ -410,9 +504,12 @@ const Search = ({}) => {
                                     ))}
                             </Flex>
                         </div>
-                    ) : active === "keywords" && searchKeywords?.length > 0 ? (
+                    ) : active === "keywords"
+                    && searchKeywords?.length > 0 ? (
 
-                        <Flex direction={"column"}>
+                        <Flex
+                            direction={"column"}
+                        >
                             {searchKeywords?.map((item, index) => (
                                 loading ? (
                                         <Flex direction="column">
@@ -424,14 +521,16 @@ const Search = ({}) => {
                                             />
                                         </Flex>
                                     ):
-                                <Text
-                                    key={index}
-                                    fw={400}
-                                    fz={"sm"}
-                                    onClick={() => ClickedKeyword(item.id)}
-                                >
-                                    {item.name}
-                                </Text>
+
+                                    <Text
+                                        style={{cursor:"pointer"}}
+                                        key={index}
+                                        fw={400}
+                                        fz={"md"}
+                                        onClick={() => ClickedKeyword(item.id)}
+                                    >
+                                        {item.name}
+                                    </Text>
                             ))}
                         </Flex>
                     ) : active === "collections" && searchCollection?.length > 0 ? (
@@ -525,7 +624,7 @@ const Search = ({}) => {
                                                         fz={"md"}>
                                                         {item.name}
                                                     </Text>
-                                                <Divider
+                                                <Dividers
                                                 color="#ececec"
                                                 />
                                             </Flex>
@@ -545,6 +644,14 @@ const Search = ({}) => {
         )
 }
 
+
+const StyledImage = styled.div`
+    background: ${({ background }) => background ? `url(${background})` : `url(${NoUserImage})`}#dbdbdb center no-repeat;
+    background-size:${({backgroundSize}) => backgroundSize};
+    width: 70px;
+    height: 70px;
+    border-radius: 6px;
+`
 
 
 export default Search

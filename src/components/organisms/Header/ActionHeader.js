@@ -18,7 +18,7 @@ const ActionHeader = ({content,count}) => {
                     <Text
                     color="white"
                     fz={"30px"}
-                    fw={"600"}
+                    fw={"700"}
                     >
                         {content}
                     </Text>
