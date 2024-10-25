@@ -390,7 +390,6 @@ const Search = ({}) => {
                                                             )
                                                         }
 
-
                                                     </Box>
                                                     <Card
                                                         component="a"
@@ -402,7 +401,6 @@ const Search = ({}) => {
                                                     >
                                                         <Flex
                                                             w="100%"
-
                                                         >
                                                             <Flex
                                                                 direction="column"
@@ -500,13 +498,11 @@ const Search = ({}) => {
                                                         </Flex>
                                                     </Card>
                                                 </Flex>
-
                                     ))}
                             </Flex>
                         </div>
                     ) : active === "keywords"
                     && searchKeywords?.length > 0 ? (
-
                         <Flex
                             direction={"column"}
                         >
@@ -616,7 +612,6 @@ const Search = ({}) => {
                                             <Flex direction="column"
                                                 w="100%"
                                             >
-
                                                     <Text
                                                         onClick={() => ClickedCompanies(item.id)}
                                                         key={index}
@@ -635,9 +630,7 @@ const Search = ({}) => {
                         (
                            <DataNotFound/>
                         )
-
                     }
-
                 </Container>
                 <Footer/>
             </>
