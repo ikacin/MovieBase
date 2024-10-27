@@ -14,6 +14,9 @@ import Person from "./pages/Person/Person";
 import Search from "./pages/Search/Search";
 import Company from "./pages/Company/Company";
 import Keyword from "./pages/Keyword/Keyword";
+import Tv from "./pages/Tv/Tv";
+import Collection from "./pages/Collection/Collection";
+
 
 
 
@@ -29,6 +32,8 @@ const App = () => {
                             <Route path="/:lang" element={<ProtectedRoute><Layout /></ProtectedRoute>} />
                             <Route path="/:lang/movie/:movieId" element={<ProtectedRoute><Details /></ProtectedRoute>} />
                             <Route path="/:lang/person/:personId" element={<ProtectedRoute><Person /></ProtectedRoute>} />
+                            <Route path="/:lang/tv/:movieId" element={<ProtectedRoute><Tv/></ProtectedRoute>} />
+                            <Route path="/:lang/collection/:movieId" element={<ProtectedRoute><Collection/></ProtectedRoute>} />
                             <Route path="/:lang/search" element={<ProtectedRoute><Search/></ProtectedRoute>} />
                             <Route path="/:lang/company/:company_id/movie" element={<ProtectedRoute><Company/></ProtectedRoute>} />
                             <Route path="/:lang/keyword/:keyword_id/movie" element={<ProtectedRoute><Keyword/></ProtectedRoute>} />

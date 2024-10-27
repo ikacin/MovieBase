@@ -414,36 +414,46 @@ const Details = () => {
                                             </div>
                                             <div>
                                                 <StyledPlay>
-                                                    <IconPlayerPlayFilled
-                                                        stroke={2.5}
-                                                        size={"24px"}
 
-                                                    />
                                                     <CustomModal Btn={"Fragmanı Oynat"}
+                                                                heightX={""}
+                                                                 leftIcon={ <IconPlayerPlayFilled
+                                                                     stroke={2.5}
+                                                                     size={"24px"}
+
+                                                                 />}
                                                                  title={"Fragmanı Oynat"}
                                                                  size="75%"
                                                                  height={"950px"}
                                                                  padding={"5px 0 0 0"}
                                                                  background={"transparent"}
                                                                  boxshadow={"none"}
+                                                                 disabled={videoList.length === 0 ? true : false}
                                                                  content={
                                                                      <FragmentModal>
-                                                                         {videoList && videoList.map((item, index) => (
-                                                                             <div key={index}>
-                                                                                 {index === 2 && (
-                                                                                     <iframe
-                                                                                         width="560"
-                                                                                         height="315"
-                                                                                         src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
-                                                                                         title="YouTube video player"
-                                                                                         frameBorder="0"
-                                                                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                                         allowFullScreen
-                                                                                     ></iframe>
-                                                                                 )}
-                                                                             </div>
-                                                                         ))}
+                                                                         {loading ? (
+                                                                             <div>Yükleniyor...</div>
+                                                                         ) : videoList.length > 0 ? (
+                                                                             videoList.map((item, index) => (
+                                                                                 <div key={index}>
+                                                                                     {index === 2 && (
+                                                                                         <iframe
+                                                                                             width="560"
+                                                                                             height="315"
+                                                                                             src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                             title="YouTube video player"
+                                                                                             frameBorder="0"
+                                                                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                             allowFullScreen
+                                                                                         ></iframe>
+                                                                                     )}
+                                                                                 </div>
+                                                                             ))
+                                                                         ) : (
+                                                                            <DataNotFound/>
+                                                                         )}
                                                                      </FragmentModal>
+
                                                                  }
                                                     />
                                                 </StyledPlay>
@@ -645,8 +655,6 @@ const Details = () => {
                                                                                     />
                                                                                 </PopularImage>
                                                                             </div>
-
-
                                                                     }
                                                                                  title={"Fragmanı Oynat"}
                                                                                  size="75%"
@@ -1117,7 +1125,7 @@ const ContentList = styled.div`
 const StyledIcons = styled.div `
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
   padding-left: 30px;
   cursor: pointer;
 `

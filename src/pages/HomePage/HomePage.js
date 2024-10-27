@@ -208,6 +208,7 @@ const HomePage = () => {
                                 <SearchWrap className="search">
                                     <div>
                                         <SearchInput
+                                          leftIcon={false}
                                           placeholder={"Film, dizi, kişi ara..."}
                                           size="md"
                                           radius="lg"

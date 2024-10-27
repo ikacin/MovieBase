@@ -1,7 +1,8 @@
-import {Box, Card, Container, Flex, Text} from "@mantine/core";
-import Axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {Box, Card, Container, Flex, Text} from "@mantine/core";
+import { useHover } from '@mantine/hooks';
+import Axios from "axios";
+import { useParams ,useNavigate} from "react-router-dom";
 import Header from "../../components/organisms/Header/Header";
 import SubHeader from "../../components/organisms/Header/SubHeader";
 import ActionHeader from "../../components/organisms/Header/ActionHeader";
@@ -9,8 +10,9 @@ import CustomSkeleton from "../../components/atoms/Skeleton";
 import DataNotFound from "../../components/atoms/DataNotFound";
 import Divider from "../../components/atoms/Divider";
 import Images from "../../components/atoms/Images";
-import NoImage from "../../assests/image/glyphicons.svg";
 import Footer from "../../components/organisms/Footer/Footer";
+import NoImage from "../../assests/image/glyphicons.svg";
+
 
 const Keyword = () => {
     const [loading, setLoading] = useState(true);
@@ -18,7 +20,9 @@ const Keyword = () => {
     const [totalKeywords, setTotalKeywords] = useState("0");
     const [keywordDetails, setKeywordDetails] = useState({});
     const { keyword_id } = useParams();
-
+    const {lang} = useParams();
+    const navigate = useNavigate()
+    const { hovered, ref } = useHover();
 
 
 
@@ -83,6 +87,10 @@ const Keyword = () => {
         getSearchKeywords(keyword_id)
     },[keyword_id])
 
+    const ClickedMovie = (id) => {
+        navigate(`/${lang}/movie/${id}`);
+    }
+
 
 
     return (
@@ -108,7 +116,6 @@ const Keyword = () => {
                 style={{
                     flex: 1,
                     width: "100%",
-                    padding: "20px",
                 }}
             >
                 <Flex
@@ -131,7 +138,15 @@ const Keyword = () => {
                                     </Flex>
                                 ) : (
 
-                                    <Flex key={index} alignItems="center" w="100%" mih="135px">
+                                    <Flex
+                                        key={index}
+                                        alignItems="center"
+                                        w="100%"
+                                        mih="135px"
+                                        style={{cursor:"pointer"}}
+                                        onClick={() => ClickedMovie(item.id)}
+
+                                    >
                                         <Box maw={90} mx="auto" bg={item.poster_path ? "" : "#dbdbdb"} mah="135px">
                                             <Images
                                                 fit="cover"
@@ -163,8 +178,13 @@ const Keyword = () => {
                                         >
                                             <Flex w="100%">
                                                 <Flex direction="column" p="md">
-                                                    <Text fw={700} fz="18px">
-                                                        {item.original_title ? item.original_title : item.title}
+                                                    <Text
+                                                        fw={700}
+                                                        fz="18px"
+                                                        ref={ref}
+                                                        color={hovered ? "black" : "blue"}
+                                                    >
+                                                        {hovered ? item.original_title : item.title}
                                                     </Text>
                                                     <Text fw={400} color="dimmed" fz="xs">
                                                         {item.release_date}

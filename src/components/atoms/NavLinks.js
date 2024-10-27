@@ -12,7 +12,6 @@ const NavLinks = ({data,border,gap,padding,fontSize,fontWeight,active,setActive}
             label={item.label}
             description={item.description}
             rightSection={item.rightSection}
-            leftSection={<item.icon size="1rem" stroke={1.5} />}
             onClick={() => setActive(index)}
             bg={active === item.media_type ? "gray.3" : ""}
             styles={{
@@ -26,7 +25,7 @@ const NavLinks = ({data,border,gap,padding,fontSize,fontWeight,active,setActive}
 
     return <Box
         sx={(theme) => ({
-           border: border,
+            border: border,
             cursor: 'pointer',
             display: 'flex',
             flexDirection: 'column',

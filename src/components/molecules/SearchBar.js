@@ -1,7 +1,5 @@
-import React, {useState} from "react";
-import {ActionIcon, Container, Flex, Input} from "@mantine/core";
+import { Container, Flex} from "@mantine/core";
 import Divider from "../atoms/Divider";
-import { IconSearch } from '@tabler/icons-react';
 import SearchInput from "./SearchInput";
 
 
@@ -9,11 +7,12 @@ const SearchBar = ({value,setValue,onKeyDown,variant}) => {
 
     return (
         <Container
-            size="77rem"
+            p={0}
+            size={"xl"}
         >
           <Flex
            py={"8px"}
-          align={'center'}
+           align={'center'}
           >
             <Flex>
 

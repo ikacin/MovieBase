@@ -2,7 +2,7 @@ import Axios from "axios";
 import React,{useEffect,useState} from "react";
 import {useParams,useNavigate,useLocation } from "react-router-dom";
 import Header from "../../components/organisms/Header/Header";
-import {Container, Flex, Text, Card, Box, Image} from "@mantine/core";
+import {Container, Flex, Text, Card, Box} from "@mantine/core";
 import Dividers from "../../components/atoms/Divider";
 import {useTranslation} from "react-i18next";
 import CustomSkeleton from "../../components/atoms/Skeleton";
@@ -16,7 +16,8 @@ import NoImage from "../../assests/image/glyphicons.svg"
 import NoUserImage from "../../assests/image/user-icon.svg"
 import DataNotFound from "../../components/atoms/DataNotFound";
 import styled from "styled-components";
-import logo from "../../assests/image/no-image-.png";
+
+
 
 
 const Search = ({}) => {
@@ -27,7 +28,7 @@ const Search = ({}) => {
     const location = useLocation()
     const getParams = new URLSearchParams(location.search);
     const queryParams = getParams.get('query');
-    const[searchText, setSearchText] = useState( "");
+    const[searchText, setSearchText] = useState( queryParams);
     const[searchList, setSearchList] = useState( []);
     const[searchKeywords, setSearchKeywords] = useState( {});
     const[searchCollection, setSearchCollection] = useState( []);
@@ -269,19 +270,25 @@ const Search = ({}) => {
 
     const handleKeyDown = ((event) => {
         if(event.key === 'Enter') {
+
             getSearch(searchText)
             getSearchCollection(searchText)
             getSearchKeywords(searchText)
-            getSearchCompany(queryParams)
+            getSearchCompany(searchText)
+
+            const newParams = new URLSearchParams();
+            newParams.set('query',searchText);
+            navigate(`${location.pathname}?${newParams}`);
         }
     })
 
-
     useEffect(() => {
-        if (queryParams) {
-            setSearchText(queryParams);
+        if (queryParams !== searchText) {
+            setSearchText(searchText || '');
         }
     }, [queryParams]);
+
+
 
     useEffect(() => {
         getSearch(queryParams)
@@ -303,6 +310,19 @@ const Search = ({}) => {
         navigate(`/${lang}/person/${id}`);
     }
 
+    const ClickedMovie = (id) => {
+        navigate(`/${lang}/movie/${id}`);
+    }
+
+
+    const ClickedTv = (id) => {
+        navigate(`/${lang}/tv/${id}`);
+    }
+
+    const ClickedCollection = (id) => {
+        navigate(`/${lang}/collection/${id}`);
+    }
+
     return(
             <>
                 <Header/>
@@ -317,7 +337,7 @@ const Search = ({}) => {
                 <Container
                     mb={"40px"}
                     mt={"40px"}
-                    px={"60px"}
+                    p={0}
                     size={"xl"}
                     display={"flex"}
                     style={{gap:"30px"}}
@@ -326,7 +346,7 @@ const Search = ({}) => {
                direction={"column"}
                >
                    <Badge
-                   radius={"10px 10px 0 0"}
+                   radius={"8px 8px 0 0"}
                    background={"#4bb4e4"}
                    padding={"30px 60px"}
                    text={
@@ -338,7 +358,6 @@ const Search = ({}) => {
                        >Arama Sonuçları</Text>
                    }
                    color={"#fff"}
-
                    />
 
                    <NavLinks
@@ -357,7 +376,6 @@ const Search = ({}) => {
                             <Flex wrap="wrap" w="100%" gap={active === 'person' ? "10px" : "20px"}>
                                 {searchList?.filter(item => item.media_type === active)
                                     .map((item, index) => (
-
                                             loading ? (
                                                     <Flex direction="column">
                                                             <CustomSkeleton
@@ -367,6 +385,7 @@ const Search = ({}) => {
                                                                 widths={["900px"]}
                                                             />
                                                     </Flex>
+
                                             ):active === 'person' ? (
                                                 <Flex key={index}
                                                       align={"center"}
@@ -480,13 +499,21 @@ const Search = ({}) => {
                                                         style={{
                                                             boxShadow:
                                                                 "rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px",
+                                                            cursor: "pointer",
                                                         }}
                                                         mih="135px"
+                                                        onClick={() => {
+                                                            if (active === 'movie') {
+                                                                ClickedMovie(item.id)
+                                                            }else if (active === 'tv') {
+                                                                ClickedTv(item.id)
+                                                            }
+                                                        }}
                                                     >
                                                         <Flex w="100%">
                                                             <Flex direction="column" p="md">
                                                                 <Text fw={700} fz="18px">
-                                                                    {item.original_name}
+                                                                    {item.original_name || item.title}
                                                                 </Text>
                                                                 <Text fw={400} color="dimmed" fz="xs">
                                                                     {item.release_date}
@@ -544,7 +571,14 @@ const Search = ({}) => {
                                     )
                                     :
 
-                                <Flex key={index} alignItems="center" w="100%" mih="135px">
+                                <Flex
+                                    key={index}
+                                    alignItems="center"
+                                    w="100%"
+                                    mih="135px"
+                                    onClick={() => ClickedCollection(item.id)}
+                                    style={{cursor: "pointer"}}
+                                >
                                     <Box maw={90} mx="auto" bg={item.poster_path ? "" : "#dbdbdb"} mah="135px">
                                         <Images
                                             fit="cover"
