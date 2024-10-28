@@ -109,6 +109,7 @@ const Login = () => {
                           children={t("login")}
                           leftIcon={<IconUserFilled/>}
                           onClick={() => goHome()}
+                          hoverBackground={"#bebebb"}
                       />
                       <CustomButton
                           color={"red"}

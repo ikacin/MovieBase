@@ -1,7 +1,7 @@
 import { Button } from '@mantine/core';
 import styled from 'styled-components';
 import { IconDatabase } from '@tabler/icons-react';
-const CustomButton = ({disabled,loading,children,radius,color,variant,leftIcon,onClick,type,size,bordercolor,fontsize,background,padding,height}) => {
+const CustomButton = ({disabled,loading,children,radius,color,variant,leftIcon,onClick,type,size,bordercolor,fontsize,background,padding,height,hoverBackground,hoverColor}) => {
     return (
         <Buttons
             variant={variant ?? "filled"}
@@ -19,6 +19,8 @@ const CustomButton = ({disabled,loading,children,radius,color,variant,leftIcon,o
             background={background}
             padding={padding}
             height={height}
+            hoverBackground={hoverBackground}
+            hoverColor={hoverColor}
         >
             {children}
         </Buttons>
@@ -41,7 +43,8 @@ const Buttons = styled(Button)`
     transform: scale(1);
   }
     &:hover {
-    background: none;
+    background: ${({ hoverBackground }) => (hoverBackground ? hoverBackground : "initial")};
+    color: ${({ hoverColor }) => (hoverColor ? hoverColor : 'initial')};     
     }  
     
 `;

@@ -278,7 +278,7 @@ const Search = ({}) => {
 
             const newParams = new URLSearchParams();
             newParams.set('query',searchText);
-            navigate(`${location.pathname}?${newParams}`);
+            navigate(`${location.pathname}?${newParams.toString()}`);
         }
     })
 
@@ -303,7 +303,7 @@ const Search = ({}) => {
     }
 
     const ClickedKeyword = (id)  => {
-        navigate(`/${lang}/keyword/${id}/movie`);
+        navigate(`/${lang}/keyword/${id}/movie?page=1`);
     }
 
     const ClickedPerson = (id) => {
@@ -472,7 +472,13 @@ const Search = ({}) => {
                                                     </Card>
                                                 </Flex>
                                             ):
-                                                <Flex key={index} alignItems="center" w="100%" mih="135px">
+                                                <Flex
+                                                    key={index}
+                                                    alignItems="center"
+                                                    w="100%"
+                                                    mih="135px"
+                                                    miw="calc(100vw - 475px)"
+                                                >
                                                     <Box maw={90} mx="auto" bg={item.poster_path ? "" : "#dbdbdb"} mah="135px">
                                                         <Images
                                                             fit="cover"
@@ -631,6 +637,7 @@ const Search = ({}) => {
                                     direction={"column"}
                                     w={"100%"}
                                     gap={"md"}
+                                    style={{cursor: "pointer"}}
                                 >
                                     {searchCompany?.map((item, index) => (
                                         loading ? (

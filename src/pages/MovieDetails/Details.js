@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import LangButton from "../../components/atoms/LangButton";
 import SubHeader from "../../components/organisms/Header/SubHeader";
-import {CloseButton, Container, Flex, Text} from '@mantine/core';
+import {ActionIcon, CloseButton, Container, Flex, Text} from '@mantine/core';
 import styled, { keyframes, css } from 'styled-components';
 import Axios from 'axios';
 import {useParams,useNavigate } from "react-router-dom";
@@ -17,7 +17,9 @@ import {
     IconBrandInstagram,
     IconBrandGooglePlay,
     IconDna,
-    IconLock
+    IconLock,
+    IconThumbDown,
+    IconThumbUp, IconThumbDownFilled, IconThumbUpFilled, IconSearch
 } from '@tabler/icons-react';
 import AvatarItems from "../../components/atoms/Avatar";
 import CustomToolTip from "../../components/atoms/Tooltip";
@@ -32,6 +34,7 @@ import CustomGrid from "../../components/atoms/Grid";
 import CustomBadge from "../../components/atoms/Badge";
 import Images from "../../components/atoms/Images";
 import DataNotFound from "../../components/atoms/DataNotFound";
+import {openModal} from "@mantine/modals";
 
 
 const Details = () => {
@@ -200,276 +203,300 @@ const Details = () => {
         <div>
             <LangButton/>
             <SubHeader/>
-            <CustomGrid
-                firstValue={12}
-            first={
-                <Container  fluid={true} px={0}>
+                <Container
+                    fluid={true}
+                    px={0}
+                >
                     <InnerContentCustomBg posterUrl={posterUrl}>
-                        <HeaderLargeFirst  posterUrl={posterUrl}>
-                            <Wrappers>
-                                <StyledPoster>
-                                    <img
-                                        alt={""}
-                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
-                                    />
-                                    <CustomModal
-                                        className={"overlay"}
-                                        position={"left"}
-                                        Btn={
-                                            "Büyüt"
-                                        }
-                                        size="45%"
-                                        height={"550px"}
-                                        display={"none"}
-                                        boxshadow={"none"}
-                                        padding={"0"}
-                                        centered={true}
-                                        content={
-                                            <Flex
-                                            >
-                                               <div>
-                                                   <Images
-                                                       height={"550px"}
-                                                       radius="0"
-                                                       src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
-                                                   />
-                                               </div>
+                      <Container
+                          fluid={true}
+                          m={"0"}
+                          p={"0"}
 
-                                             <Flex
+                      >
+                          <HeaderLargeFirst  posterUrl={posterUrl}>
+                              <Wrappers>
+                                  <StyledPoster>
+                                      <img
+                                          alt={""}
+                                          src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}
+                                      />
+                                      <CustomModal
+                                          headerDisplay={"none"}
+                                          className={"overlay"}
+                                          position={"left"}
+                                          Btn={
+                                              "Büyüt"
+                                          }
+                                          size="60%"
+                                          height={"650px"}
+                                          boxshadow={"none"}
+                                          padding={"0"}
+                                          centered={true}
+                                          content={
+                                              <Flex
+                                              >
+                                                  <div>
+                                                      <Images
+                                                          height={"650px"}
+                                                          radius="0"
+                                                          src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                      />
+                                                  </div>
 
-                                             >
-                                                <Flex
-                                                direction={"column"}
+                                                  <Flex
+                                                   style={{flexGrow:1}}
+                                                  >
+                                                      <Flex
+                                                          direction={"column"}
+                                                          w={"100%"}
+                                                      >
+                                                          <Flex
+                                                              px={"10px"}
+                                                              justify={"flex-end"}
+                                                              w={"100%"}
+                                                              style={{flexGrow:"0.5"}}
+                                                          >
+                                                              <div
+                                                                  onClick={closeBtn}
+                                                              >
+                                                                  <CloseButton
+                                                                      title="Close popover"
+                                                                      size="xl"
+                                                                      iconSize={20}
+                                                                  />
+                                                              </div>
+                                                          </Flex>
 
-                                                >
-                                                    <Flex
-                                                        px={"10px"}
-                                                        justify={"flex-end"}
-                                                        w={"100%"}
-                                                    >
-                                                        <div
-                                                        onClick={closeBtn}
-                                                        >
-                                                            <CloseButton
-                                                                title="Close popover"
-                                                                size="xl"
-                                                                iconSize={20}
-                                                            />
-                                                        </div>
-                                                    </Flex>
+                                                          <Flex
+                                                          justify={"space-between"}
+                                                          px={"xl"}
+                                                          >
+                                                              <ActionIcon  variant="transparent" >
+                                                                  <IconThumbUpFilled stroke={2} />
+                                                              </ActionIcon>
+                                                              <ActionIcon  variant="transparent" >
+                                                                  <IconThumbDownFilled stroke={2} />
+                                                              </ActionIcon>
 
-                                                    <div>
-                                                        <Flex
-                                                            pt={"50px"}
-                                                            px={"20px"}
-                                                            justify={"space-between"}
-                                                        >
-                                                            <div>Bilgi</div>
-                                                            <div>
-                                                                <IconLock stroke={2} size={"20px"}/>
-                                                            </div>
+                                                          </Flex>
 
-                                                        </Flex>
+                                                          <Flex
+                                                          direction={"column"}
+                                                          gap={"md"}
+                                                          >
+                                                              <Flex
+                                                                  pt={"50px"}
+                                                                  px={"20px"}
+                                                                  justify={"space-between"}
+                                                              >
+                                                                  <div>Bilgi</div>
+                                                                  <div>
+                                                                      <IconLock stroke={2} size={"20px"}/>
+                                                                  </div>
 
-                                                        <CustomDivider />
-                                                    </div>
-                                                    <Flex
-                                                    px={"20px"}
-                                                    direction={"column"}
-                                                    gap={"20px"}
-                                                    >
-                                                        <div>
-                                                            <Text fw={600}>Birincil</Text>
-                                                            <Text>{movieDetails.title}</Text>
-                                                        </div>
-                                                        <div>
-                                                            <Text fw={600}>yayın tarihi</Text>
-                                                            <Text>{movieDetails.release_date}</Text>
-                                                        </div>
-                                                        <div>
-                                                            <Text fw={600}>Slogan</Text>
-                                                            <Text>{movieDetails.tagline}</Text>
-                                                        </div>
+                                                              </Flex>
 
-                                                        <div>
-                                                            <Text fw={600}>Dil</Text>
-                                                            <Text>
-                                                                {movieDetails && movieDetails.spoken_languages &&
-                                                                     movieDetails.spoken_languages[0].english_name
-                                                                   }
-                                                            </Text>
+                                                              <CustomDivider />
+                                                          </Flex>
+                                                          <Flex
+                                                              pt={"20px"}
+                                                              px={"20px"}
+                                                              direction={"column"}
+                                                              gap={"20px"}
+                                                          >
+                                                              <div>
+                                                                  <Text fw={600}>Birincil</Text>
+                                                                  <Text>{movieDetails.title}</Text>
+                                                              </div>
+                                                              <div>
+                                                                  <Text fw={600}>yayın tarihi</Text>
+                                                                  <Text>{movieDetails.release_date}</Text>
+                                                              </div>
+                                                              <div>
+                                                                  <Text fw={600}>Slogan</Text>
+                                                                  <Text>{movieDetails.tagline}</Text>
+                                                              </div>
 
-                                                        </div>
-                                                        <div>
-                                                            <Text fw={600}>Link</Text>
-                                                            <Text
-                                                            style={{cursor:"pointer"}}
-                                                            >
+                                                              <div>
+                                                                  <Text fw={600}>Dil</Text>
+                                                                  <Text>
+                                                                      {movieDetails && movieDetails.spoken_languages &&
+                                                                          movieDetails.spoken_languages[0].english_name
+                                                                      }
+                                                                  </Text>
+
+                                                              </div>
+                                                              <div>
+                                                                  <Text fw={600}>Link</Text>
+                                                                  <Text
+                                                                      style={{cursor:"pointer"}}
+                                                                  >
                                                                   <span
-                                                                  onClick={() => getHomePageLink(movieDetails.homepage)}
+                                                                      onClick={() => getHomePageLink(movieDetails.homepage)}
                                                                   >İzlemek için Tıkla</span>
-                                                            </Text>
-                                                        </div>
-                                                    </Flex>
+                                                                  </Text>
+                                                              </div>
+                                                          </Flex>
 
-                                                </Flex>
-                                             </Flex>
+                                                      </Flex>
+                                                  </Flex>
 
 
 
-                                            </Flex>
-                                        }
-                                        background={"white"}
-                                    />
+                                              </Flex>
+                                          }
+                                      />
 
-                                </StyledPoster>
-                                <StyledList>
-                                    <Title>{list.original_title}</Title>
-                                    <InfoItem>
-                                        <div>{list.release_date}</div>
-                                        <div>{formattedRuntime}</div>
-                                        <StyleGenres>
-                                            {list.genres &&  list.genres.map((genre) => (
-                                                <div key={genre.id}>{genre.name}</div>
-                                            ))}
-                                        </StyleGenres>
+                                  </StyledPoster>
+                                  <StyledList>
+                                      <Title>{list.original_title}</Title>
+                                      <InfoItem>
+                                          <div>{list.release_date}</div>
+                                          <div>{formattedRuntime}</div>
+                                          <StyleGenres>
+                                              {list.genres &&  list.genres.map((genre) => (
+                                                  <div key={genre.id}>{genre.name}</div>
+                                              ))}
+                                          </StyleGenres>
 
-                                    </InfoItem>
-                                    <ContentList>
-                                        <CustomRingProgress
-                                            value={list.vote_average}
-                                            count={list.vote_average}
-                                            color={"green"}
-                                            size={90}
-                                            thickness={10}
-                                        />
-                                        <div>Üye Puanları</div>
-                                        <StyledIcons>
-                                            <div>
-                                                <CustomToolTip
-                                                    label={"Listeye Ekle"}
-                                                    position={"bottom"}
-                                                    text={
-                                                        <AvatarItems
-                                                            background={"#032541"}
-                                                            size={"50px"}
-                                                            color={"#fff"}
-                                                            type={4}
-                                                            Icon={<IconList
-                                                                stroke={2.5}
-                                                                size={"15px"}/>}/>
-                                                    } />
+                                      </InfoItem>
+                                      <ContentList>
+                                          <CustomRingProgress
+                                              value={list.vote_average}
+                                              count={list.vote_average}
+                                              color={"green"}
+                                              size={90}
+                                              thickness={10}
+                                          />
+                                          <div>Üye Puanları</div>
+                                          <StyledIcons>
+                                              <div>
+                                                  <CustomToolTip
+                                                      label={"Listeye Ekle"}
+                                                      position={"bottom"}
+                                                      text={
+                                                          <AvatarItems
+                                                              background={"#032541"}
+                                                              size={"50px"}
+                                                              color={"#fff"}
+                                                              type={4}
+                                                              Icon={<IconList
+                                                                  stroke={2.5}
+                                                                  size={"15px"}/>}/>
+                                                      } />
 
-                                            </div>
-                                            <div>
+                                              </div>
+                                              <div>
 
-                                                <CustomToolTip
-                                                    label={"Favori Olarak İşaretle"}
-                                                    position={"bottom"}
-                                                    text={
-                                                        <AvatarItems
-                                                            background={"#032541"}
-                                                            size={"50px"}
-                                                            type={4}
-                                                            color={"#fff"}
-                                                            Icon={<IconHeartFilled
-                                                                stroke={2.5}
-                                                                size={"15px"}/>}/>
-                                                    } />
+                                                  <CustomToolTip
+                                                      label={"Favori Olarak İşaretle"}
+                                                      position={"bottom"}
+                                                      text={
+                                                          <AvatarItems
+                                                              background={"#032541"}
+                                                              size={"50px"}
+                                                              type={4}
+                                                              color={"#fff"}
+                                                              Icon={<IconHeartFilled
+                                                                  stroke={2.5}
+                                                                  size={"15px"}/>}/>
+                                                      } />
 
-                                            </div>
-                                            <div>
+                                              </div>
+                                              <div>
 
-                                                <CustomToolTip
-                                                    label={"İzleme Listesine Ekle"}
-                                                    position={"bottom"}
-                                                    text={
-                                                        <AvatarItems
-                                                            background={"#032541"}
-                                                            size={"50px"}
-                                                            type={4}
-                                                            color={"#fff"}
-                                                            Icon={<IconBookmarkFilled
-                                                                stroke={2.5}
-                                                                size={"15px"}/>}/>
-                                                    } />
+                                                  <CustomToolTip
+                                                      label={"İzleme Listesine Ekle"}
+                                                      position={"bottom"}
+                                                      text={
+                                                          <AvatarItems
+                                                              background={"#032541"}
+                                                              size={"50px"}
+                                                              type={4}
+                                                              color={"#fff"}
+                                                              Icon={<IconBookmarkFilled
+                                                                  stroke={2.5}
+                                                                  size={"15px"}/>}/>
+                                                      } />
 
-                                            </div>
-                                            <div>
+                                              </div>
+                                              <div>
 
-                                                <CustomToolTip
-                                                    label={"Oyla!"}
-                                                    position={"bottom"}
-                                                    text={
-                                                        <AvatarItems
-                                                            background={"#032541"}
-                                                            size={"50px"}
-                                                            type={4}
-                                                            color={"#fff"}
-                                                            Icon={<IconStarFilled
-                                                                stroke={2.5}
-                                                                size={"15px"}/>}/>
-                                                    } />
+                                                  <CustomToolTip
+                                                      label={"Oyla!"}
+                                                      position={"bottom"}
+                                                      text={
+                                                          <AvatarItems
+                                                              background={"#032541"}
+                                                              size={"50px"}
+                                                              type={4}
+                                                              color={"#fff"}
+                                                              Icon={<IconStarFilled
+                                                                  stroke={2.5}
+                                                                  size={"15px"}/>}/>
+                                                      } />
 
-                                            </div>
-                                            <div>
-                                                <StyledPlay>
+                                              </div>
+                                              <div>
+                                                  <StyledPlay>
 
-                                                    <CustomModal Btn={"Fragmanı Oynat"}
-                                                                heightX={""}
-                                                                 leftIcon={ <IconPlayerPlayFilled
-                                                                     stroke={2.5}
-                                                                     size={"24px"}
+                                                      <CustomModal Btn={"Fragmanı Oynat"}
+                                                                   heightX={""}
+                                                                   leftIcon={ <IconPlayerPlayFilled
+                                                                       stroke={2.5}
+                                                                       size={"24px"}
 
-                                                                 />}
-                                                                 title={"Fragmanı Oynat"}
-                                                                 size="75%"
-                                                                 height={"950px"}
-                                                                 padding={"5px 0 0 0"}
-                                                                 background={"transparent"}
-                                                                 boxshadow={"none"}
-                                                                 disabled={videoList.length === 0 ? true : false}
-                                                                 content={
-                                                                     <FragmentModal>
-                                                                         {loading ? (
-                                                                             <div>Yükleniyor...</div>
-                                                                         ) : videoList.length > 0 ? (
-                                                                             videoList.map((item, index) => (
-                                                                                 <div key={index}>
-                                                                                     {index === 2 && (
-                                                                                         <iframe
-                                                                                             width="560"
-                                                                                             height="315"
-                                                                                             src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
-                                                                                             title="YouTube video player"
-                                                                                             frameBorder="0"
-                                                                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                                             allowFullScreen
-                                                                                         ></iframe>
-                                                                                     )}
-                                                                                 </div>
-                                                                             ))
-                                                                         ) : (
-                                                                            <DataNotFound/>
-                                                                         )}
-                                                                     </FragmentModal>
+                                                                   />}
+                                                                   title={"Fragmanı Oynat"}
+                                                                   size="75%"
+                                                                   height={"950px"}
+                                                                   padding={"5px 0 0 0"}
+                                                                   background={"transparent"}
+                                                                   boxshadow={"none"}
+                                                                   disabled={videoList.length === 0 ? true : false}
+                                                                   content={
+                                                                       <FragmentModal>
+                                                                           {loading ? (
+                                                                               <div>Yükleniyor...</div>
+                                                                           ) : videoList.length > 0 ? (
+                                                                               videoList.map((item, index) => (
+                                                                                   <div key={index}>
+                                                                                       {index === 2 && (
+                                                                                           <iframe
+                                                                                               width="560"
+                                                                                               height="315"
+                                                                                               src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                               title="YouTube video player"
+                                                                                               frameBorder="0"
+                                                                                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                               allowFullScreen
+                                                                                           ></iframe>
+                                                                                       )}
+                                                                                   </div>
+                                                                               ))
+                                                                           ) : (
+                                                                               <DataNotFound/>
+                                                                           )}
+                                                                       </FragmentModal>
 
-                                                                 }
-                                                    />
-                                                </StyledPlay>
-                                            </div>
-                                        </StyledIcons>
-                                    </ContentList>
-                                    <TagLine>
-                                        {list.tagline}
-                                    </TagLine>
-                                    <StyleOverview>
-                                        <div>Özet</div>
-                                        <div>{list.overview}</div>
-                                    </StyleOverview>
-                                </StyledList>
-                            </Wrappers>
-                        </HeaderLargeFirst>
+                                                                   }
+                                                      />
+                                                  </StyledPlay>
+                                              </div>
+                                          </StyledIcons>
+                                      </ContentList>
+                                      <TagLine>
+                                          {list.tagline}
+                                      </TagLine>
+                                      <StyleOverview>
+                                          <div>Özet</div>
+                                          <div>{list.overview}</div>
+                                      </StyleOverview>
+                                  </StyledList>
+                              </Wrappers>
+                          </HeaderLargeFirst>
+                      </Container>
                     </InnerContentCustomBg>
 
                     <Container size={"xl"}>
@@ -970,9 +997,7 @@ const Details = () => {
 
                     </Container>
                 </Container>
-            }
 
-            />
             <Footer/>
         </div>
     )
@@ -983,20 +1008,17 @@ const Details = () => {
 
 
 const HeaderLargeFirst = styled.div`
-  
+  padding-left: 90px;  
   border-bottom: 1px solid var(--primaryColor);
   background-position: left calc((50vw - 170px) - 340px) top;
   background-size: cover;
   background-repeat: no-repeat;
-
   min-height: 600px;
   display: flex;
   align-items: center;
-  justify-content: center;
   ${({ posterUrl }) => css`
     background-image: linear-gradient(to right, rgba(31.5, 31.5, 31.5, 1) calc((50vw - 170px) - 340px), rgba(31.5, 31.5, 31.5, 0.84) 50%, rgba(31.5, 31.5, 31.5, 0.84) 100%), url(${posterUrl});
   `}
-  
 `;
 
 const InnerContentCustomBg = styled.div`
