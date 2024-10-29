@@ -19,7 +19,7 @@ import {
     IconDna,
     IconLock,
     IconThumbDown,
-    IconThumbUp, IconThumbDownFilled, IconThumbUpFilled, IconSearch
+    IconThumbUp, IconThumbDownFilled, IconThumbUpFilled, IconSearch, IconCheck, IconX
 } from '@tabler/icons-react';
 import AvatarItems from "../../components/atoms/Avatar";
 import CustomToolTip from "../../components/atoms/Tooltip";
@@ -35,6 +35,8 @@ import CustomBadge from "../../components/atoms/Badge";
 import Images from "../../components/atoms/Images";
 import DataNotFound from "../../components/atoms/DataNotFound";
 import {openModal} from "@mantine/modals";
+import axios from "axios";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 
 const Details = () => {
@@ -199,6 +201,15 @@ const Details = () => {
 
     }
 
+
+
+
+
+
+
+
+
+
     return(
         <div>
             <LangButton/>
@@ -272,13 +283,16 @@ const Details = () => {
                                                           justify={"space-between"}
                                                           px={"xl"}
                                                           >
-                                                              <ActionIcon  variant="transparent" >
-                                                                  <IconThumbUpFilled stroke={2} />
+                                                              <ActionIcon
+                                                                  variant="transparent"
+                                                              >
+                                                                  <IconThumbUpFilled
+                                                                      stroke={2}
+                                                                  />
                                                               </ActionIcon>
                                                               <ActionIcon  variant="transparent" >
                                                                   <IconThumbDownFilled stroke={2} />
                                                               </ActionIcon>
-
                                                           </Flex>
 
                                                           <Flex

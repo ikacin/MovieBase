@@ -121,7 +121,7 @@ const SignUp = () => {
                             color: 'white',
                             icon: <IconX size="1rem" />,
                             className: 'my-notification-class',
-                            style: { backgroundColor: 'red' },
+                            style: { backgroundColor: 'white' },
                             sx: { backgroundColor: 'red' },
                             loading: false,
                         });

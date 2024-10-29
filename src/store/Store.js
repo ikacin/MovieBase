@@ -12,7 +12,8 @@ const initialState = {
         expiresAt: null,
         isAuthenticated: false
     },
-    users: []
+    users: [],
+    favoriteItems:[]
 };
 
 const reducer = (state, action) => {
@@ -49,6 +50,20 @@ const reducer = (state, action) => {
             };
             localStorage.setItem('appState', JSON.stringify(filteredState));
             return filteredState;
+
+        case 'FAVORITE':
+            const isFavorited = state.favoriteItems.includes(action.payload);
+            const updatedFavorites = isFavorited
+                ? state.favoriteItems.filter(id => id !== action.payload)
+                : [...state.favoriteItems, action.payload];
+
+            const updatedStateWithFavorites = {
+                ...state,
+                favoriteItems: updatedFavorites
+            };
+            localStorage.setItem('appState', JSON.stringify(updatedStateWithFavorites));
+            return updatedStateWithFavorites;
+
         default:
             return state;
     }
@@ -58,7 +73,7 @@ const MyContext = createContext();
 
 const MyProvider = ({ children }) => {
     const storedState = localStorage.getItem('appState');
-    const initial = storedState ? JSON.parse(storedState) : initialState;
+    const initial = storedState ? { ...initialState, ...JSON.parse(storedState) } : initialState;
 
     const [state, dispatch] = useReducer(reducer, initial);
 

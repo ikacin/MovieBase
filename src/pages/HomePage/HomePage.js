@@ -6,7 +6,7 @@ import subBanner from'../../assests/image/sub-banner.webp';
 import trending from'../../assests/image/trending-bg.svg';
 import {Container} from '@mantine/core';
 import CustomButton from "../../components/atoms/CustomButton";
-import {IconSearch, IconArrowRight} from '@tabler/icons-react';
+import {IconSearch, IconArrowRight, IconCheck, IconX} from '@tabler/icons-react';
 import CustomTabs from "../../components/atoms/Tabs";
 import Axios from 'axios';
 import RingProgress from "../../components/atoms/RingProgress";
@@ -19,7 +19,7 @@ import CustomProgress from "../../components/atoms/Progress";
 import Footer from "../../components/organisms/Footer/Footer";
 import {MyContext} from "../../store/Store";
 import SearchInput from "../../components/molecules/SearchInput";
-import Search from "../Search/Search";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 const HomePage = () => {
     const { t } = useTranslation();
@@ -55,7 +55,7 @@ const HomePage = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
             }
         };
 
@@ -76,7 +76,7 @@ const HomePage = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
             }
         };
 
@@ -98,7 +98,7 @@ const HomePage = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
             }
         };
 
@@ -119,7 +119,7 @@ const HomePage = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
             }
         };
 
@@ -140,7 +140,7 @@ const HomePage = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
             }
         };
 
@@ -161,25 +161,6 @@ const HomePage = () => {
 
 
 
-
-
-
-
-    useEffect(() => {
-        TopRated()
-        PopularFilms()
-        UpComing()
-        console.log(state)
-        setTimeout(() => {
-            Leaderboards()
-        },3000)
-    }, []);
-
-    const roundToInteger = (number) => {
-        return Math.round(number);
-    }
-
-
     const handleMenuClick = () => {
         setIsMenuClicked(!isMenuClicked);
     };
@@ -193,6 +174,106 @@ const HomePage = () => {
             navigate(`/${lang}/search?query=${encodeURIComponent(searchTerm)}`);
         }
     };
+
+
+
+    const addFavorite = (item) => {
+
+            const isFavorited = state?.favoriteItems?.includes(item.id) || false;
+            const message = isFavorited ? "Favoriden çıkarıldı." : "Favorilere eklendi.";
+            Axios.post(`https://api.themoviedb.org/3/account/20865423/favorite`, {
+                "media_id": item.id,
+                "media_type": "movie",
+                "favorite": !isFavorited
+            }, {
+                headers: {
+                    accept: 'application/json',
+                    'content-type': 'application/json',
+                    Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+                }
+            }).then(function (response) {
+                if (response.data.success === true) {
+                   dispatch({type:'FAVORITE',payload:item.id});
+                }else {
+                    return response
+                } showNotification({
+                    id: 'load-data',
+                    autoClose: false,
+                    disallowclose: true,
+                    loading: true,
+                    title:"Please Wait",
+                })
+                setTimeout(() => {
+                    updateNotification({
+                        id: 'load-data',
+                        color: 'teal',
+                        title:"Success",
+                        message:message,
+                        icon: <IconCheck size="1rem" />,
+                        autoClose: 1000,
+                    });
+                }, 1000);
+            })
+                .catch(function (error) {
+                    console.error("Error submitting rating:", error);
+                    showNotification({
+                        id: 'error-notification',
+                        disallowClose: false,
+                        autoClose: 5000,
+                        title: "Error",
+                        message: "An error occurred while submitting your rating. Please try again.",
+                        color: 'red',
+                        icon: <IconX size="1rem" />,
+                        className: 'my-notification-class',
+                        style: { backgroundColor: '#fff' },
+                        loading: false,
+                    });
+                });
+    };
+
+
+
+    const getAllFavorite = async () => {
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+            }
+        };
+
+        try {
+            const response = await Axios.get('https://api.themoviedb.org/3/account/20865423/favorite/movies?language=en-US&page=1&sort_by=created_at.desc', options);
+            console.log(response.data);
+            if (response.data.results.length > 0) {
+
+
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
+
+
+    useEffect(() => {
+        TopRated()
+        PopularFilms()
+        UpComing()
+        getAllFavorite()
+        console.log(state)
+        setTimeout(() => {
+            Leaderboards()
+        },3000)
+    }, []);
+
+    const roundToInteger = (number) => {
+        return Math.round(number);
+    }
+
+
+
 
     return(
             <>
@@ -288,8 +369,9 @@ const HomePage = () => {
                                                                                     src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}
                                                                                 />
                                                                                 <CustomMenu
-                                                                                    Context={<PositionedIcon size={16} />}
-                                                                                    onClick={() => handleMenuClick()}
+                                                                                    addFavorite={() => addFavorite(item)}
+                                                                                    Context={<PositionedIcon size={18}  />}
+                                                                                    onClick={() => handleMenuClick(item)}
                                                                                     itemId={item.id}
                                                                                     setSelectedItemId={setSelectedItemId}
                                                                                 />
@@ -866,7 +948,7 @@ const PositionedIcon = styled(IconDots)`
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #9b9d9f;
+  background: #999fa3;
   border-radius: 50%;
   
   &:hover{
