@@ -53,7 +53,7 @@ const Tv = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
 
@@ -77,7 +77,7 @@ const Tv = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
 
@@ -100,7 +100,7 @@ const Tv = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
 
@@ -122,7 +122,7 @@ const Tv = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
 
@@ -145,7 +145,7 @@ const Tv = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
 
@@ -215,7 +215,7 @@ const Tv = () => {
                                     <CustomModal
                                         className={"overlay"}
                                         position={"left"}
-                                        Btn={
+                                        btn={
                                             "Büyüt"
                                         }
                                         size="45%"
@@ -419,7 +419,7 @@ const Tv = () => {
                                                         size={"24px"}
 
                                                     />
-                                                    <CustomModal Btn={"Fragmanı Oynat"}
+                                                    <CustomModal btn={"Fragmanı Oynat"}
                                                                  title={"Fragmanı Oynat"}
                                                                  size="75%"
                                                                  height={"950px"}
@@ -621,7 +621,7 @@ const Tv = () => {
                                                                 <div>
                                                                     <CustomModal
                                                                         position={"left"}
-                                                                        Btn={
+                                                                        btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
                                                                                     <img
@@ -680,7 +680,7 @@ const Tv = () => {
                                                                 <div>
                                                                     <CustomModal
                                                                         position={"left"}
-                                                                        Btn={
+                                                                        btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
                                                                                     <img
@@ -739,7 +739,7 @@ const Tv = () => {
                                                                 <div>
                                                                     <CustomModal
                                                                         position={"left"}
-                                                                        Btn={
+                                                                        btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
                                                                                     <img
@@ -800,7 +800,7 @@ const Tv = () => {
                                                                 <div>
                                                                     <CustomModal
                                                                         position={"left"}
-                                                                        Btn={
+                                                                        btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
                                                                                     <img

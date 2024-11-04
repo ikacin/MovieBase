@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Card, Container, Flex, Text } from "@mantine/core";
 import { useHover } from '@mantine/hooks';
 import Axios from "axios";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Header from "../../components/organisms/Header/Header";
 import SubHeader from "../../components/organisms/Header/SubHeader";
 import ActionHeader from "../../components/organisms/Header/ActionHeader";
@@ -21,7 +21,6 @@ const Keyword = () => {
     const [keywordDetails, setKeywordDetails] = useState({});
     const [page, setPage] = useState(1);
     const { keyword_id } = useParams();
-    const location = useLocation();
     const { lang } = useParams();
     const navigate = useNavigate();
     const { hovered, ref } = useHover();
@@ -31,8 +30,7 @@ const Keyword = () => {
             method: "GET",
             headers: {
                 accept: "application/json",
-                Authorization:
-                    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis",
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             },
         };
         try {
@@ -53,8 +51,7 @@ const Keyword = () => {
             method: "GET",
             headers: {
                 accept: "application/json",
-                Authorization:
-                    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis",
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             },
         };
         try {
@@ -211,19 +208,23 @@ const Keyword = () => {
                             <DataNotFound />
                         )
                     )}
-                    <CustomButton
-                        loading={loading}
-                        height={"60px"}
-                        leftIcon={false}
-                        children={"Daha Fazla Yükle"}
-                        background={"#23b7d9"}
-                        hoverBackground={"#23b7d9"}
-                        hoverColor={"#000"}
-                        color={"#fff"}
-                        radius={"6px"}
-                        fontsize={"18px"}
-                        onClick={MorePage}
-                    />
+                    {
+                        page === 1 && (
+                            <CustomButton
+                                loading={loading}
+                                height={"60px"}
+                                leftIcon={false}
+                                children={"Daha Fazla Yükle"}
+                                background={"#23b7d9"}
+                                hoverBackground={"#23b7d9"}
+                                hoverColor={"#000"}
+                                color={"#fff"}
+                                radius={"6px"}
+                                fontsize={"18px"}
+                                onClick={MorePage}
+                            />
+                        )
+                    }
                 </Flex>
             </Container>
             <Footer />

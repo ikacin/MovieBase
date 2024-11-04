@@ -18,8 +18,8 @@ import {
     IconBrandGooglePlay,
     IconDna,
     IconLock,
-    IconThumbDown,
-    IconThumbUp, IconThumbDownFilled, IconThumbUpFilled, IconSearch, IconCheck, IconX
+    IconThumbDownFilled,
+    IconThumbUpFilled,
 } from '@tabler/icons-react';
 import AvatarItems from "../../components/atoms/Avatar";
 import CustomToolTip from "../../components/atoms/Tooltip";
@@ -34,10 +34,6 @@ import CustomGrid from "../../components/atoms/Grid";
 import CustomBadge from "../../components/atoms/Badge";
 import Images from "../../components/atoms/Images";
 import DataNotFound from "../../components/atoms/DataNotFound";
-import {openModal} from "@mantine/modals";
-import axios from "axios";
-import {showNotification, updateNotification} from "@mantine/notifications";
-
 
 const Details = () => {
     const [list,setList] = useState([])
@@ -51,6 +47,7 @@ const Details = () => {
     const [posterUrl, setPosterUrl] = useState(null);
     const [reviewsList, setReviewsList] = useState([]);
     const[keywordsList,setKeywordsList] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
     const[total,setTotal] = useState(null)
     const navigate = useNavigate()
     const MovieDetails = async () => {
@@ -58,7 +55,7 @@ const Details = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
 
@@ -82,7 +79,7 @@ const Details = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
 
@@ -105,7 +102,7 @@ const Details = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
 
@@ -127,7 +124,7 @@ const Details = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
 
@@ -150,10 +147,9 @@ const Details = () => {
             method: 'GET',
             headers: {
                 accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZTlhYjhkNTI2Zjg5YjFjZTQ0OWY4MWExYTYwNWVhMCIsInN1YiI6IjY1OGMxYjkxMjcxNjcxNzFkNmE0ZmE3NiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Y9nvU3wDIXAZ-f-QsOXAudhNNoNGaACW6RVy_O3fuis'
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
             }
         };
-
         try {
             const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/keywords`, options);
             console.log("keywords",response.data.keywords);
@@ -198,16 +194,8 @@ const Details = () => {
     }
 
     const closeBtn = () => {
-
+        setModalOpen(false)
     }
-
-
-
-
-
-
-
-
 
 
     return(
@@ -223,7 +211,6 @@ const Details = () => {
                           fluid={true}
                           m={"0"}
                           p={"0"}
-
                       >
                           <HeaderLargeFirst  posterUrl={posterUrl}>
                               <Wrappers>
@@ -233,10 +220,11 @@ const Details = () => {
                                           src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}
                                       />
                                       <CustomModal
+                                          setOpenedX={closeBtn}
                                           headerDisplay={"none"}
                                           className={"overlay"}
                                           position={"left"}
-                                          Btn={
+                                          btn={
                                               "Büyüt"
                                           }
                                           size="60%"
@@ -308,7 +296,6 @@ const Details = () => {
                                                                   <div>
                                                                       <IconLock stroke={2} size={"20px"}/>
                                                                   </div>
-
                                                               </Flex>
 
                                                               <CustomDivider />
@@ -346,18 +333,18 @@ const Details = () => {
                                                                   <Text
                                                                       style={{cursor:"pointer"}}
                                                                   >
-                                                                  <span
+                                                                  <Text
+                                                                     color={"blue"}
                                                                       onClick={() => getHomePageLink(movieDetails.homepage)}
-                                                                  >İzlemek için Tıkla</span>
+                                                                  >
+                                                                      İzlemek için Tıkla
                                                                   </Text>
+                                                                </Text>
                                                               </div>
                                                           </Flex>
 
                                                       </Flex>
                                                   </Flex>
-
-
-
                                               </Flex>
                                           }
                                       />
@@ -455,7 +442,7 @@ const Details = () => {
                                               <div>
                                                   <StyledPlay>
 
-                                                      <CustomModal Btn={"Fragmanı Oynat"}
+                                                      <CustomModal btn={"Fragmanı Oynat"}
                                                                    heightX={""}
                                                                    leftIcon={ <IconPlayerPlayFilled
                                                                        stroke={2.5}
@@ -672,7 +659,7 @@ const Details = () => {
                                                                 <div>
                                                                     <CustomModal
                                                                         position={"left"}
-                                                                        Btn={
+                                                                        btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
                                                                                     <img
@@ -729,7 +716,7 @@ const Details = () => {
                                                                 <div>
                                                                     <CustomModal
                                                                         position={"left"}
-                                                                        Btn={
+                                                                        btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
                                                                                     <img
@@ -753,8 +740,6 @@ const Details = () => {
                                                                                     />
                                                                                 </PopularImage>
                                                                             </div>
-
-
                                                                         }
                                                                         title={"Fragmanı Oynat"}
                                                                         size="75%"
@@ -788,7 +773,7 @@ const Details = () => {
                                                                 <div>
                                                                     <CustomModal
                                                                         position={"left"}
-                                                                        Btn={
+                                                                        btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
                                                                                     <img
@@ -811,10 +796,7 @@ const Details = () => {
                                                                                         src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
                                                                                     />
                                                                                 </PopularImage>
-
                                                                             </div>
-
-
                                                                         }
                                                                         title={"Fragmanı Oynat"}
                                                                         size="75%"
@@ -849,7 +831,7 @@ const Details = () => {
                                                                 <div>
                                                                     <CustomModal
                                                                         position={"left"}
-                                                                        Btn={
+                                                                        btn={
                                                                             <div style={{display:"flex"}}>
                                                                                 <PopularImage>
                                                                                     <img
@@ -870,11 +852,7 @@ const Details = () => {
                                                                                         src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
                                                                                     />
                                                                                 </PopularImage>
-
-
                                                                             </div>
-
-
                                                                         }
                                                                         title={"Fragmanı Oynat"}
                                                                         size="75%"
@@ -922,7 +900,6 @@ const Details = () => {
                                                                     ))}
                                                                     {reviewsList.length > 3 && <Argument>Tartışmalara Git</Argument>}
                                                                 </div>
-
                                                             }
                                                             header={true}
                                                             type={"more"}
@@ -937,8 +914,6 @@ const Details = () => {
                                             </Container>
                                         }/>
                                 </Container>
-
-
                             </Container>
                         }
                                     second={
@@ -992,7 +967,6 @@ const Details = () => {
                                                                 <KeywordText key={index} className="sc-dPWqtL bhbwkB">{item.name}</KeywordText>
                                                             }
                                                         />
-
                                                     ))}
                                                 </WrapKeywords>
                                             </StyledSticker>
@@ -1002,13 +976,12 @@ const Details = () => {
                                             <div>
                                                 <div>İçerik Sonucu</div>
                                                 <div>
-                                                    <BadgeResult>{list.popularity}</BadgeResult>
+                                                    <div>{list.popularity}</div>
                                                 </div>
                                             </div>
                                         </StyledMenu>
                                     }
                         />
-
                     </Container>
                 </Container>
 
@@ -1088,7 +1061,6 @@ const StyledPoster = styled.div`
   &:hover .overlay {
     opacity: 1; 
   }
-  
 `
 
 const StyledList = styled.div`
@@ -1100,8 +1072,6 @@ const Wrappers = styled.div`
   display: flex;
   gap: 50px;
   align-items: center;
-
-    
 `
 const Title = styled.div`
   font-size: 35.2px;
@@ -1221,13 +1191,6 @@ const CardStyle = styled.div`
   height: calc(150px*1.5);
   margin: 8px -20px 8px 40px;
   z-index: 9;
-  .movie-text{
-      padding: 15px;
-      background: #ffffff;
-      max-height: 100px;
-      min-height: 102px;
-   
-  }
   
   .movie-text div:nth-child(1){
     font-weight: 700;
@@ -1248,7 +1211,7 @@ const CardStyle = styled.div`
 `
 const StyledImage = styled.div`
   position: relative;
-  display: inline-block; /* Optional: makes the container fit its content */
+  display: inline-block;
   min-height: 230px;
 `;
 const fadeIn = keyframes`
@@ -1271,12 +1234,6 @@ const StyledTrend = styled.div`
   font-size: 1.2em;
   color: #000000;
 }
-  
-  #caption-text{
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #000000;
-  }
 `
 
 const SliderContent = styled.div`
@@ -1439,10 +1396,5 @@ const StyledMedia = styled.div`
 `
 const StyledSticker = styled.div`
   padding: 0 10px;
-`
-
-const BadgeResult = styled.div`
-
-
 `
 export default Details
