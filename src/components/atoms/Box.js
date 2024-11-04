@@ -4,7 +4,7 @@ import { IconCheck } from '@tabler/icons-react';
 
 import styled from 'styled-components';
 import Avatar from "./Avatar";
-const CustomPaper = ({title,type,shadow,color,background,padding,fontSize,borderradius,textFirst,textSecond,textThird,textFourth,textFifth,textSixth,textSeventh}) => {
+const CustomPaper = ({title,type,shadow,color,background,padding,fontSize,borderradius,textFirst,textSecond,textThird,textFourth,textFifth,textSixth,textSeventh,src}) => {
     return (
         <Papers shadow={shadow ?? ""} radius="xs" w={"300px"} >
             <TextTitle
@@ -51,7 +51,7 @@ const CustomPaper = ({title,type,shadow,color,background,padding,fontSize,border
                     center
                     icon={
                         <ThemeIcons  size={24} radius="xl">
-                            <Avatar type={1} color={"#fff"}/>
+                            <Avatar type={1} color={"#fff"} src={src}/>
                         </ThemeIcons>
                     }
 

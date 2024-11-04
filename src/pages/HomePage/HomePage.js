@@ -4,7 +4,7 @@ import styled, { keyframes } from 'styled-components';
 import mainBanner from'../../assests/image/banner.webp';
 import subBanner from'../../assests/image/sub-banner.webp';
 import trending from'../../assests/image/trending-bg.svg';
-import {Container} from '@mantine/core';
+import {Container, Flex, Radio} from '@mantine/core';
 import CustomButton from "../../components/atoms/CustomButton";
 import {IconSearch, IconArrowRight, IconCheck, IconX} from '@tabler/icons-react';
 import CustomTabs from "../../components/atoms/Tabs";
@@ -33,6 +33,7 @@ const HomePage = () => {
     const[loading,setLoading] = useState(true)
     const[isLoading,setIsloading] = useState(true);
     const [isMenuClicked, setIsMenuClicked] = useState(false);
+    const [posterPathItem, setPosterPathItem] = useState([]);
     const [selectedItemId, setSelectedItemId] = useState(null);
     const[searchValue,setSearchValue] = useState("");
     const navigate = useNavigate();
@@ -151,6 +152,8 @@ const HomePage = () => {
                 setNames( response.data.results.map(item => item.name));
                 setLeadList(response.data.results.map(i => i.known_for[0].popularity))
                 setAverage(response.data.results.map(i => i.known_for[0].vote_average))
+                setPosterPathItem(response.data.results)
+                console.log(posterPathItem)
             }
         } catch (error) {
             console.error(error);
@@ -178,7 +181,6 @@ const HomePage = () => {
 
 
     const addFavorite = (item) => {
-
             const isFavorited = state?.favoriteItems?.includes(item.id) || false;
             const message = isFavorited ? "Favoriden çıkarıldı." : "Favorilere eklendi.";
             Axios.post(`https://api.themoviedb.org/3/account/20865423/favorite`, {
@@ -460,8 +462,9 @@ const HomePage = () => {
                                                                             <StyledImage >
                                                                                 <img  onClick={() => pageDetails(item.id)}   src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
                                                                                 <CustomMenu
-                                                                                    Context={<PositionedIcon size={16} />}
-                                                                                    onClick={() => handleMenuClick()}
+                                                                                    addFavorite={() => addFavorite(item)}
+                                                                                    Context={<PositionedIcon size={18}  />}
+                                                                                    onClick={() => handleMenuClick(item)}
                                                                                     itemId={item.id}
                                                                                     setSelectedItemId={setSelectedItemId}
                                                                                 />
@@ -549,8 +552,9 @@ const HomePage = () => {
                                                                             <StyledImage >
                                                                                 <img  onClick={() => pageDetails(item.id)}  src={`https://media.themoviedb.org/t/p/w220_and_h330_face/${item.poster_path}.jpg`}/>
                                                                                 <CustomMenu
-                                                                                    Context={<PositionedIcon size={16} />}
-                                                                                    onClick={() => handleMenuClick()}
+                                                                                    addFavorite={() => addFavorite(item)}
+                                                                                    Context={<PositionedIcon size={18}  />}
+                                                                                    onClick={() => handleMenuClick(item)}
                                                                                     itemId={item.id}
                                                                                     setSelectedItemId={setSelectedItemId}
                                                                                 />
@@ -618,6 +622,7 @@ const HomePage = () => {
                                         </InfoItem>
                                     </TitleStyled>
                                 }
+
                                 type={"avatar"}
                                 padding={"20px"}
                                 fontSize={"20px"}
@@ -625,36 +630,36 @@ const HomePage = () => {
                                 textFirst={
                                     <Item>
                                         <div>{names[0]}</div>
-                                        <CustomProgress value={leadList[0]} color={"#61e6b9"}/>
-                                        <CustomProgress value={average[0]} color={"#e05666"}/>
+                                        <CustomProgress values={[leadList[0]]}  colors={["#c0fecf","#61e6b9"]}/>
+                                        <CustomProgress values={average[0]} colors={["#fabf6f","#e05666"]}/>
                                     </Item>
                                 }
                                 textSecond={
                                     <Item>
                                         <div>{names[1]}</div>
-                                        <CustomProgress value={leadList[1]} color={"#61e6b9"}/>
-                                        <CustomProgress value={average[1]} color={"#e05666"}/>
+                                        <CustomProgress values={[leadList[1]]}  colors={["#c0fecf","#61e6b9"]}/>
+                                        <CustomProgress values={average[1]} colors={["#fabf6f","#e05666"]}/>
                                     </Item>
                                 }
                                 textThird={
                                     <Item>
                                         <div>{names[2]}</div>
-                                        <CustomProgress value={leadList[2]} color={"#61e6b9"}/>
-                                        <CustomProgress value={average[2]} color={"#e05666"}/>
+                                        <CustomProgress values={[leadList[2]]}  colors={["#c0fecf","#61e6b9"]}/>
+                                        <CustomProgress values={average[2]} colors={["#fabf6f","#e05666"]}/>
                                     </Item>
                                 }
                                 textFourth={
                                     <Item>
                                         <div>{names[3]}</div>
-                                        <CustomProgress value={leadList[3]} color={"#61e6b9"}/>
-                                        <CustomProgress value={average[3]} color={"#e05666"}/>
+                                        <CustomProgress values={[leadList[3]]} colors={["#c0fecf","#61e6b9"]}/>
+                                        <CustomProgress values={average[3]} colors={[,"#fabf6f","#e05666"]}/>
                                     </Item>
                                 }
                                 textFifth={
                                     <Item>
                                         <div>{names[4]}</div>
-                                        <CustomProgress value={leadList[4]} color={"#61e6b9"}/>
-                                        <CustomProgress value={average[4]} color={"#e05666"}/>
+                                        <CustomProgress values={[leadList[4]]}  colors={["#c0fecf","#61e6b9"]}/>
+                                        <CustomProgress values={[average[4]]} colors={["#fabf6f","#e05666"]}/>
                                     </Item>
                                 }
 
@@ -668,36 +673,44 @@ const HomePage = () => {
                                 textFirst={
                                     <Item>
                                         <div>{names[5]}</div>
-                                        <CustomProgress value={leadList[5]} color={"#61e6b9"}/>
-                                        <CustomProgress value={average[5]} color={"#e05666"}/>
+                                        <CustomProgress
+                                            values={[leadList[5]]}  colors={["#c0fecf","#61e6b9"]}
+                                            label={"test"}
+                                        />
+                                        <CustomProgress
+                                            values={average[5]}
+                                            colors={["#fabf6f","#e05666"]}
+                                            label={"test"}
+
+                                        />
                                     </Item>
                                 }
                                 textSecond={
                                     <Item>
                                         <div>{names[6]}</div>
-                                        <CustomProgress value={leadList[6]} color={"#61e6b9"}/>
-                                        <CustomProgress value={average[6]} color={"#e05666"}/>
+                                        <CustomProgress values={[leadList[6]]}  colors={["#c0fecf","#61e6b9"]}/>
+                                        <CustomProgress values={[average[6]]} colors={["#fabf6f","#e05666"]}/>
                                     </Item>
                                 }
                                 textThird={
                                     <Item>
                                         <div>{names[7]}</div>
-                                        <CustomProgress value={leadList[7]} color={"#61e6b9"}/>
-                                        <CustomProgress value={average[7]} color={"#e05666"}/>
+                                        <CustomProgress values={[leadList[7]]}  colors={["#c0fecf","#61e6b9"]}/>
+                                        <CustomProgress values={[average[7]]} colors={["#fabf6f","#e05666"]}/>
                                     </Item>
                                 }
                                 textFourth={
                                     <Item>
                                         <div>{names[8]}</div>
-                                        <CustomProgress value={leadList[8]} color={"#61e6b9"}/>
-                                        <CustomProgress value={average[8]} color={"#e05666"}/>
+                                        <CustomProgress values={[leadList[8]]}  colors={["#c0fecf","#61e6b9"]}/>
+                                        <CustomProgress values={[average[8]]}   colors={["#fabf6f","#e05666"]}/>
                                     </Item>
                                 }
                                 textFifth={
                                     <Item>
                                         <div>{names[9]}</div>
-                                        <CustomProgress value={leadList[9]}/>
-                                        <CustomProgress value={average[9]} color={"#e05666"}/>
+                                        <CustomProgress values={[leadList[9]]}  colors={["#c0fecf","#61e6b9"]}/>
+                                        <CustomProgress values={[average[9]]} colors={["#fabf6f","#e05666"]}/>
                                     </Item>
                                 }
                             />

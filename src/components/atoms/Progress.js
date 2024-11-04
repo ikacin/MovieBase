@@ -1,7 +1,29 @@
-import { Progress } from '@mantine/core';
+import {Flex, Progress, Text} from '@mantine/core';
 
-const CustomProgress = ({value,color}) => {
-    return <Progress value={value}  color={color} />;
-}
+const CustomProgress = ({ values = [], colors = [],label }) => {
 
-export default CustomProgress
+    const sections = Array.isArray(values)
+        ? values.map((value, index) => ({
+            value: value ,
+            color: colors[index] ,
+        }))
+        : [{ value: 50, color: "#e05666" }];
+
+    return (
+        <Flex
+            align={'center'}
+            gap={"sm"}
+        >
+            <Progress
+                sections={sections}
+                style={{flex: 1}}
+            />
+            <Text
+                fz={"xs"}
+            >{label}
+            </Text>
+        </Flex>
+    )
+};
+
+export default CustomProgress;
