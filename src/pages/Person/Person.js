@@ -28,6 +28,7 @@ const Person = () => {
     const [showFullText, setShowFullText] = useState(false);
     const MAX_LENGTH = 500;
     const lang = langs.lang
+    const languageCode = lang === "tr" ? "tr-TR" : "en-US";
     const getPerson = async () => {
         const options = {
             method: 'GET',
@@ -37,7 +38,7 @@ const Person = () => {
             }
         };
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/person/${personId}?language=en-US`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/person/${personId}?language=${languageCode}`, options);
             console.log("credits",response.data);
             setPersonList(response.data)
 

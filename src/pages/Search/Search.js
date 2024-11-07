@@ -39,6 +39,7 @@ const Search = ({}) => {
     const[loading, setLoading] = useState(false);
     const [active, setActive] = useState("tv");
     const isSearchPath = location.pathname.includes('search');
+    const languageCode = lang === "tr" ? "tr-TR" : "en-US";
     const Links = [
         {
             icon: IconGauge,
@@ -179,7 +180,7 @@ const Search = ({}) => {
             }
         };
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/search/multi?query=${params}&include_adult=false&language=en-US&page=1`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/search/multi?query=${params}&include_adult=false&language=${languageCode}&page=1`, options);
             console.log("searchPage", response.data);
             setSearchList(response.data.results);
 
@@ -203,7 +204,7 @@ const Search = ({}) => {
             }
         };
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/search/collection?query=${params}&include_adult=false&language=en-US&page=1`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/search/collection?query=${params}&include_adult=false&language=${languageCode}&page=1`, options);
             console.log("searchCollection", response.data);
             setSearchCollection(response.data.results);
             setCollectionTotal(response.data.total_results);
@@ -226,7 +227,7 @@ const Search = ({}) => {
             }
         };
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/search/keyword?query=${params}&include_adult=false&language=en-US&page=1`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/search/keyword?query=${params}&include_adult=false&language=${languageCode}&page=1`, options);
             console.log("searchKeywords", response.data);
             setSearchKeywords(response.data.results);
             setKeywordsTotal(response.data.total_results)
@@ -249,7 +250,7 @@ const Search = ({}) => {
             }
         };
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/search/company?query=${params}&include_adult=false&language=en-US&page=1`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/search/company?query=${params}&include_adult=false&language=${languageCode}&page=1`, options);
             console.log("searchCompany", response.data);
             setSearchCompany(response.data.results);
             setCompanyTotal(response.data.total_results)

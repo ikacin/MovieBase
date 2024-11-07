@@ -19,7 +19,7 @@ import {
     IconDna,
     IconLock,
     IconThumbDownFilled,
-    IconThumbUpFilled,
+    IconThumbUpFilled, IconX, IconCheck,
 } from '@tabler/icons-react';
 import AvatarItems from "../../components/atoms/Avatar";
 import CustomToolTip from "../../components/atoms/Tooltip";
@@ -34,22 +34,26 @@ import CustomGrid from "../../components/atoms/Grid";
 import CustomBadge from "../../components/atoms/Badge";
 import Images from "../../components/atoms/Images";
 import DataNotFound from "../../components/atoms/DataNotFound";
+import {showNotification, updateNotification} from "@mantine/notifications";
 
 const Details = () => {
     const [list,setList] = useState([])
     const[movieDetails,setMovieDetails] = useState([]);
     const[videoList,setVideoList] = useState([])
     const[creditsList,setCreditsList] = useState([])
-    const { movieId } = useParams();
-    const{lang} = useParams()
     const[isLoading,setIsloading] = useState(true);
     const[loading,setLoading] = useState(true);
     const [posterUrl, setPosterUrl] = useState(null);
     const [reviewsList, setReviewsList] = useState([]);
     const[keywordsList,setKeywordsList] = useState([]);
+    const[recommendList,setRecommendList] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const[total,setTotal] = useState(null)
     const navigate = useNavigate()
+    const { movieId } = useParams();
+    const{lang} = useParams()
+    const languageCode = lang === "tr" ? "tr-TR" : "en-US";
+
     const MovieDetails = async () => {
         const options = {
             method: 'GET',
@@ -60,7 +64,7 @@ const Details = () => {
         };
 
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}?language=${languageCode}`, options);
             console.log(response.data);
             setMovieDetails(response.data)
             setList(response.data)
@@ -84,7 +88,7 @@ const Details = () => {
         };
 
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=${languageCode}`, options);
             console.log("videos",response.data.results);
 
             setVideoList(response.data.results)
@@ -107,7 +111,7 @@ const Details = () => {
         };
 
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=${languageCode}`, options);
             console.log("credits",response.data);
 
             setCreditsList(response.data.cast)
@@ -129,7 +133,7 @@ const Details = () => {
         };
 
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/reviews?language=en-US&page=1`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/reviews?language=${languageCode}&page=1`, options);
             console.log("reviews",response.data);
             setReviewsList(response.data.results)
             setTotal(response.data.total_results)
@@ -163,11 +167,34 @@ const Details = () => {
     };
 
 
+    const getRecommendations = async () => {
+
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+            }
+        };
+        try {
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/recommendations`, options);
+            console.log("recommendations",response.data.results);
+            setRecommendList(response.data.results)
+
+        } catch (error) {
+            console.error(error);
+        }  finally {
+
+        }
+    };
+
+
     useEffect(() => {
         MovieDetails()
         getVideos()
         getCredits()
         getKeywords()
+        getRecommendations()
     },[])
 
 
@@ -176,10 +203,8 @@ const Details = () => {
         const minutes = runtime % 60;
         return hours + 'h ' + minutes + 'm';
     }
+
     const formattedRuntime = formatRuntime(list.runtime);
-
-
-
 
     function formatNumberToDollar(number) {
         return '$' + new Intl.NumberFormat('en-US').format(number);
@@ -195,6 +220,107 @@ const Details = () => {
 
     const closeBtn = () => {
         setModalOpen(false)
+    }
+
+    const ratingAdd = async (movieDetails,rating) => {
+               await Axios.post(`https://api.themoviedb.org/3/movie/${movieDetails}/rating`, {
+                    "value": rating,
+                }, {
+                    headers: {
+                        accept: 'application/json',
+                        'content-type': 'application/json',
+                        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+                    }
+                }).then(function (response) {
+                    if (response.data.success === true) {
+                    }else {
+                        return response
+                    } showNotification({
+                        id: 'load-data',
+                        autoClose: false,
+                        disallowclose: true,
+                        loading: true,
+                        title:"Please Wait",
+                    })
+                    setTimeout(() => {
+                        updateNotification({
+                            id: 'load-data',
+                            color: 'teal',
+                            title:"Success",
+                            message:"Görüntüyü Başarıyla Derecelendirdiniz",
+                            icon: <IconCheck size="1rem" />,
+                            autoClose: 1000,
+                        });
+                    }, 1000);
+                })
+                    .catch(function (error) {
+                        console.error("Error submitting rating:", error);
+                        showNotification({
+                            id: 'error-notification',
+                            disallowClose: false,
+                            autoClose: 5000,
+                            title: "Error",
+                            message: "An error occurred while submitting your rating. Please try again.",
+                            color: 'red',
+                            icon: <IconX size="1rem" />,
+                            className: 'my-notification-class',
+                            style: { backgroundColor: '#fff' },
+                            loading: false,
+                        });
+                    });
+        }
+
+
+
+    const ratingDelete = async (movieDetails) => {
+        await Axios.delete(`https://api.themoviedb.org/3/movie/${movieDetails}/rating`,
+         {
+            headers: {
+                accept: 'application/json',
+                'content-type': 'application/json',
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+            }
+        }).then(function (response) {
+            if (response.data.success === true) {
+            }else {
+                return response
+            } showNotification({
+                id: 'load-data',
+                autoClose: false,
+                disallowclose: true,
+                loading: true,
+                title:"Please Wait",
+            })
+            setTimeout(() => {
+                updateNotification({
+                    id: 'load-data',
+                    color: 'teal',
+                    title:"Success",
+                    message:"Öğe/Kayıt Başarıyla Silindi",
+                    icon: <IconCheck size="1rem" />,
+                    autoClose: 1000,
+                });
+            }, 1000);
+        })
+            .catch(function (error) {
+                console.error("Error submitting rating:", error);
+                showNotification({
+                    id: 'error-notification',
+                    disallowClose: false,
+                    autoClose: 5000,
+                    title: "Error",
+                    message: "An error occurred while submitting your rating. Please try again.",
+                    color: 'red',
+                    icon: <IconX size="1rem" />,
+                    className: 'my-notification-class',
+                    style: { backgroundColor: '#fff' },
+                    loading: false,
+                });
+            });
+    }
+
+    const discussPage = (movieId) => {
+        navigate(`/${lang}/movie/${movieId}/discuss`);
     }
 
 
@@ -272,14 +398,17 @@ const Details = () => {
                                                           px={"xl"}
                                                           >
                                                               <ActionIcon
+                                                                  onClick={() => ratingDelete(movieDetails.id)}
+                                                                  variant="transparent" >
+                                                                  <IconThumbDownFilled stroke={2} />
+                                                              </ActionIcon>
+                                                              <ActionIcon
+                                                                  onClick={() => ratingAdd(movieDetails.id,"0.5")}
                                                                   variant="transparent"
                                                               >
                                                                   <IconThumbUpFilled
                                                                       stroke={2}
                                                                   />
-                                                              </ActionIcon>
-                                                              <ActionIcon  variant="transparent" >
-                                                                  <IconThumbDownFilled stroke={2} />
                                                               </ActionIcon>
                                                           </Flex>
 
@@ -502,420 +631,428 @@ const Details = () => {
 
                     <Container size={"xl"}>
                         <CustomGrid firstValue={10}
-                                     secondValue={2}
+                                    secondValue={2}
                                     first={
-                            <Container  size="xl">
-                                <SliderContent>
-                                    <StyledTrend>
-                                        <div className={"wrap-list"}>
-                                            {
-                                                loading ? <StyledLoader>
-                                                        <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                        <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                        <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                        <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                        <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                        <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                    </StyledLoader>
-                                                    :
-                                                    <CreditsWrap>
-                                                        <LeadActors>Başrol Oyuncuları</LeadActors>
-                                                        <StyledCredits>
-                                                            {creditsList.map((item, index) => (
-                                                                <div key={index}>
-                                                                    <TrendingContainer>
-                                                                        <CardStyle id={"card-style-first"}>
-                                                                            <StyledMovie>
-                                                                                <StyledImage>
-                                                                                    <img onClick={() => personBtn(item)} src={item.profile_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.profile_path}.jpg` : logo} />
-                                                                                </StyledImage>
-
-                                                                                <div className={"movie-text"}>
-                                                                                    <div>{item.original_name}</div>
-                                                                                    <div>{item.character}</div>
-                                                                                </div>
-                                                                            </StyledMovie>
-                                                                        </CardStyle>
-                                                                    </TrendingContainer>
-                                                                </div>
-                                                            ))}
-                                                        </StyledCredits>
-                                                    </CreditsWrap>
-                                            }
-
-                                        </div>
-                                    </StyledTrend>
-                                </SliderContent>
-                                <Container size="xl">
-                                    <CustomGrid
-                                        firstValue={12}
-                                        first={
-                                            <Container size="xl" px={0}>
-                                                <div>
-                                                    <div>
-                                                        Tüm Oyuncular ve Ekip
-                                                    </div>
-
-                                                    <div style={{padding:"20px 0"}}>
-                                                        <CustomDivider/>
-                                                    </div>
-
-                                                    <div>
-                                                        <CustomTabs
-                                                            maxHeight={"30px"}
-                                                            NowPlaying={getReviews}
-                                                            caption={"Sosyal"}
-                                                            VisualComm={"Tartışmalar"}
-                                                            MediaHub={"Değerlendirmeler"}
-                                                            firstCount={0}
-                                                            secondCount={total}
-                                                            type={"list"}
-                                                            defaultValue={"gallery"}
-                                                            text={
-                                                                <Evaluation>
-                                                                    {list.title} için yorumumuz yok. bir tane yazmak ister misiniz?
-                                                                </Evaluation>
-                                                            }
-                                                            content={
-                                                                <Flex
-                                                                direction={"column"}
-                                                                >
-                                                                    {
-                                                                        isLoading ?
-                                                                            <Flex
-                                                                            direction={"column"}
-                                                                            >
-                                                                                <CustomSkeleton heights={["calc(30px*1.5)"]} widths={['100%']}  />
-                                                                                <CustomSkeleton heights={["calc(30px*1.5)"]} widths={['100%']}  />
-                                                                                <CustomSkeleton heights={["calc(30px*1.5)"]} widths={['100%']}  />
-                                                                            </Flex>
-
-                                                                        :
-                                                                            reviewsList.length ? (
-                                                                                    <>
-                                                                                        {reviewsList.slice(0, 3).map((item) => (
-                                                                                            <StyledReviews
-                                                                                                key={item.id || item.author_details.username}>
-                                                                                                <WrapNames>
-                                                                                                    <AvatarItems
-                                                                                                        type={1}
-                                                                                                        src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`}
-                                                                                                    />
-                                                                                                    <Text
-                                                                                                        size={"sm"}
-                                                                                                    >{item.author_details.username}
-                                                                                                    </Text>
-                                                                                                </WrapNames>
-                                                                                                <Text
-                                                                                                    c={"dimmed"}
-                                                                                                    size={"xs"}
-                                                                                                >{new Date(item.created_at).toLocaleString('tr-TR')}
-                                                                                                </Text>
-                                                                                            </StyledReviews>
-                                                                                        ))}
-                                                                                        {reviewsList.length > 3 &&
-                                                                                            <Argument>Tartışmalara Git</Argument>}
-                                                                                    </>
-                                                                                ) : (
-                                                                                    <DataNotFound
-                                                                                        height={"100%"}
-                                                                                        fontSize={"12px"}
-                                                                                        backgroundSize={"50px"}
-                                                                                        paddingTop={"0"}
-                                                                                    />
-                                                                                )
-                                                                    }
-                                                                </Flex>
-                                                            }
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <CustomDivider/>
-                                                    </div>
-                                                </div>
-                                            </Container>
-                                        }/>
-                                </Container>
-
-
-                                <Container size="xl">
-                                    <CustomGrid
-                                        firstValue={12}
-                                        first={
-                                            <Container size="xl" px={0}>
-                                                <div>
-
-                                                    <StyledMedia>
-                                                        <CustomTabs
-                                                            maxHeight={"30px"}
-                                                            NowPlaying={getReviews}
-                                                            caption={"Medya"}
-                                                            populars={"En Popüler"}
-                                                            videos={"Videolar"}
-                                                            rear={"Arka planda"}
-                                                            placard={"Afişler"}
-                                                            secondCount={total}
-                                                            popularText={
-                                                                <div>
-                                                                    <CustomModal
-                                                                        position={"left"}
-                                                                        btn={
-                                                                            <div style={{display:"flex"}}>
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt={""}
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-
-
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt={""}
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt={""}
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-                                                                            </div>
-                                                                    }
-                                                                                 title={"Fragmanı Oynat"}
-                                                                                 size="75%"
-                                                                                 height={"950px"}
-                                                                                 padding={"5px 0 0 0"}
-                                                                                 background={"transparent"}
-                                                                                 boxshadow={"none"}
-                                                                                 content={
-                                                                                     <FragmentModal>
-                                                                                         {videoList && videoList.map((item, index) => (
-                                                                                             <div key={index}>
-                                                                                                 {index === 0 && (
-                                                                                                     <iframe
-                                                                                                         width="560"
-                                                                                                         height="315"
-                                                                                                         src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
-                                                                                                         title="YouTube video player"
-                                                                                                         frameBorder="0"
-                                                                                                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                                                         allowFullScreen
-                                                                                                     ></iframe>
-                                                                                                 )}
-                                                                                             </div>
-                                                                                         ))}
-                                                                                     </FragmentModal>
-                                                                                 }
-                                                                    />
-                                                                </div>
-                                                            }
-                                                            videosText= {
-                                                                <div>
-                                                                    <CustomModal
-                                                                        position={"left"}
-                                                                        btn={
-                                                                            <div style={{display:"flex"}}>
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt={""}
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-
-
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt={""}
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt={""}
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-                                                                            </div>
-                                                                        }
-                                                                        title={"Fragmanı Oynat"}
-                                                                        size="75%"
-                                                                        height={"950px"}
-                                                                        padding={"5px 0 0 0"}
-                                                                        background={"transparent"}
-                                                                        boxshadow={"none"}
-                                                                        content={
-                                                                            <FragmentModal>
-                                                                                {videoList && videoList.map((item, index) => (
-                                                                                    <div key={index}>
-                                                                                        {index === 0 && (
-                                                                                            <iframe
-                                                                                                width="560"
-                                                                                                height="315"
-                                                                                                src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
-                                                                                                title="YouTube video player"
-                                                                                                frameBorder="0"
-                                                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                                                allowFullScreen
-                                                                                            ></iframe>
-                                                                                        )}
-                                                                                    </div>
-                                                                                ))}
-                                                                            </FragmentModal>
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                            }
-                                                            rearText={
-                                                                <div>
-                                                                    <CustomModal
-                                                                        position={"left"}
-                                                                        btn={
-                                                                            <div style={{display:"flex"}}>
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt=""
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt=""
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-
-
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt=""
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-                                                                            </div>
-                                                                        }
-                                                                        title={"Fragmanı Oynat"}
-                                                                        size="75%"
-                                                                        height={"950px"}
-                                                                        padding={"5px 0 0 0"}
-                                                                        background={"transparent"}
-                                                                        boxshadow={"none"}
-                                                                        content={
-                                                                            <FragmentModal>
-                                                                                {videoList && videoList.map((item, index) => (
-                                                                                    <div key={index}>
-                                                                                        {index === 0 && (
-                                                                                            <iframe
-                                                                                                width="560"
-                                                                                                height="315"
-                                                                                                src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
-                                                                                                title="YouTube video player"
-                                                                                                frameBorder="0"
-                                                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                                                allowFullScreen
-                                                                                            ></iframe>
-                                                                                        )}
-                                                                                    </div>
-                                                                                ))}
-                                                                            </FragmentModal>
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                            }
-
-                                                            placardText={
-                                                                <div>
-                                                                    <CustomModal
-                                                                        position={"left"}
-                                                                        btn={
-                                                                            <div style={{display:"flex"}}>
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt=""
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt=""
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-
-                                                                                <PopularImage>
-                                                                                    <img
-                                                                                        alt=""
-                                                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
-                                                                                    />
-                                                                                </PopularImage>
-                                                                            </div>
-                                                                        }
-                                                                        title={"Fragmanı Oynat"}
-                                                                        size="75%"
-                                                                        height={"950px"}
-                                                                        padding={"5px 0 0 0"}
-                                                                        background={"transparent"}
-                                                                        boxshadow={"none"}
-                                                                        content={
-                                                                            <FragmentModal>
-                                                                                {videoList && videoList.map((item, index) => (
-                                                                                    <div key={index}>
-                                                                                        {index === 0 && (
-                                                                                            <iframe
-                                                                                                width="560"
-                                                                                                height="315"
-                                                                                                src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
-                                                                                                title="YouTube video player"
-                                                                                                frameBorder="0"
-                                                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                                                allowFullScreen
-                                                                                            ></iframe>
-                                                                                        )}
-                                                                                    </div>
-                                                                                ))}
-                                                                            </FragmentModal>
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                            }
-
-                                                            content={
-                                                                <div>
-                                                                    {reviewsList.map((item, index) => (
-                                                                        index < 3 && (
+                                        <Container  size="xl">
+                                            <SliderContent>
+                                                <StyledTrend>
+                                                    <div className={"wrap-list"}>
+                                                        {
+                                                            loading ? <StyledLoader>
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                </StyledLoader>
+                                                                :
+                                                                <CreditsWrap>
+                                                                    <LeadActors>Öne Çıkan Oyuncular</LeadActors>
+                                                                    <StyledCredits>
+                                                                        {creditsList.map((item, index) => (
                                                                             <div key={index}>
-                                                                                <StyledReviews>
-                                                                                    <WrapNames>
-                                                                                        <AvatarItems type={1} src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`} />
-                                                                                        <div>{item.author_details.username}</div>
-                                                                                    </WrapNames>
-                                                                                    <div>{new Date(item.created_at).toLocaleString('tr-TR')}</div>
-                                                                                </StyledReviews>
-                                                                            </div>
-                                                                        )
-                                                                    ))}
-                                                                    {reviewsList.length > 3 && <Argument>Tartışmalara Git</Argument>}
-                                                                </div>
-                                                            }
-                                                            header={true}
-                                                            type={"more"}
-                                                            defaultValue={"popular"}
-                                                        />
-                                                    </StyledMedia>
+                                                                                <TrendingContainer>
+                                                                                    <CardStyle id={"card-style-first"}>
+                                                                                        <StyledMovie>
+                                                                                            <StyledImage>
+                                                                                                <img onClick={() => personBtn(item)} src={item.profile_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.profile_path}.jpg` : logo} />
+                                                                                            </StyledImage>
 
-                                                    <div style={{padding: "20px 0"}}>
-                                                        <CustomDivider/>
+                                                                                            <div className={"movie-text"}>
+                                                                                                <div>{item.original_name}</div>
+                                                                                                <div>{item.character}</div>
+                                                                                            </div>
+                                                                                        </StyledMovie>
+                                                                                    </CardStyle>
+                                                                                </TrendingContainer>
+                                                                            </div>
+                                                                        ))}
+                                                                    </StyledCredits>
+                                                                </CreditsWrap>
+                                                        }
+
                                                     </div>
-                                                </div>
+                                                </StyledTrend>
+                                            </SliderContent>
+                                            <Container size="xl">
+                                                <CustomGrid
+                                                    firstValue={12}
+                                                    first={
+                                                        <Container size="xl" px={0}>
+                                                            <div>
+                                                                <div>
+                                                                    Tüm Oyuncular ve Ekip
+                                                                </div>
+
+                                                                <div style={{padding:"20px 0"}}>
+                                                                    <CustomDivider/>
+                                                                </div>
+
+                                                                <div>
+                                                                    <CustomTabs
+                                                                        maxHeight={"30px"}
+                                                                        NowPlaying={getReviews}
+                                                                        caption={"Sosyal"}
+                                                                        VisualComm={"Tartışmalar"}
+                                                                        MediaHub={"Değerlendirmeler"}
+                                                                        firstCount={0}
+                                                                        secondCount={total}
+                                                                        type={"list"}
+                                                                        defaultValue={"gallery"}
+                                                                        text={
+                                                                            <Evaluation>
+                                                                                {list.title} için yorumumuz yok. bir tane yazmak ister misiniz?
+                                                                            </Evaluation>
+                                                                        }
+                                                                        content={
+                                                                            <Flex
+                                                                                direction={"column"}
+                                                                            >
+                                                                                {
+                                                                                    isLoading ?
+                                                                                        reviewsList.length &&  reviewsList.map  ((item, index) => (
+                                                                                                <Flex
+                                                                                                    direction={"column"}
+                                                                                                >
+                                                                                                    <CustomSkeleton
+                                                                                                        index={index}
+                                                                                                        heights={["calc(30px*1.5)"]}
+                                                                                                        widths={['100%']}
+                                                                                                    />
+                                                                                                </Flex>
+                                                                                            )
+
+                                                                                        )
+
+                                                                                        :
+                                                                                        reviewsList.length ? (
+                                                                                            <>
+                                                                                                {reviewsList.slice(0, 3).map((item) => (
+                                                                                                    <StyledReviews
+                                                                                                        key={item.id || item.author_details.username}>
+                                                                                                        <WrapNames>
+                                                                                                            <AvatarItems
+                                                                                                                type={1}
+                                                                                                                src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`}
+                                                                                                            />
+                                                                                                            <Text
+                                                                                                                size={"sm"}
+                                                                                                            >{item.author_details.username}
+                                                                                                            </Text>
+                                                                                                        </WrapNames>
+                                                                                                        <Text
+                                                                                                            c={"dimmed"}
+                                                                                                            size={"xs"}
+                                                                                                        >{new Date(item.created_at).toLocaleString('tr-TR')}
+                                                                                                        </Text>
+                                                                                                    </StyledReviews>
+                                                                                                ))}
+                                                                                                {reviewsList.length > 3 &&
+                                                                                                    <Argument
+                                                                                                        onClick={() => discussPage(movieId)}
+                                                                                                    >Tartışmalara Git</Argument>}
+                                                                                            </>
+                                                                                        ) : (
+                                                                                            <DataNotFound
+                                                                                                height={"100%"}
+                                                                                                fontSize={"12px"}
+                                                                                                backgroundSize={"50px"}
+                                                                                                paddingTop={"0"}
+                                                                                            />
+                                                                                        )
+                                                                                }
+                                                                            </Flex>
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                                <div>
+                                                                    <CustomDivider/>
+                                                                </div>
+                                                            </div>
+                                                        </Container>
+                                                    }/>
                                             </Container>
-                                        }/>
-                                </Container>
-                            </Container>
-                        }
+
+
+                                            <Container size="xl">
+                                                <CustomGrid
+                                                    firstValue={12}
+                                                    first={
+                                                        <Container size="xl" px={0}>
+                                                            <div>
+
+                                                                <StyledMedia>
+                                                                    <CustomTabs
+                                                                        maxHeight={"30px"}
+                                                                        NowPlaying={getReviews}
+                                                                        caption={"Medya"}
+                                                                        populars={"En Popüler"}
+                                                                        videos={"Videolar"}
+                                                                        rear={"Arka planda"}
+                                                                        placard={"Afişler"}
+                                                                        secondCount={total}
+                                                                        popularText={
+                                                                            <div>
+                                                                                <CustomModal
+                                                                                    position={"left"}
+                                                                                    btn={
+                                                                                        <div style={{display:"flex"}}>
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt={""}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+
+
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt={""}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt={""}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+                                                                                        </div>
+                                                                                    }
+                                                                                    title={"Fragmanı Oynat"}
+                                                                                    size="75%"
+                                                                                    height={"950px"}
+                                                                                    padding={"5px 0 0 0"}
+                                                                                    background={"transparent"}
+                                                                                    boxshadow={"none"}
+                                                                                    content={
+                                                                                        <FragmentModal>
+                                                                                            {videoList && videoList.map((item, index) => (
+                                                                                                <div key={index}>
+                                                                                                    {index === 0 && (
+                                                                                                        <iframe
+                                                                                                            width="560"
+                                                                                                            height="315"
+                                                                                                            src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                                            title="YouTube video player"
+                                                                                                            frameBorder="0"
+                                                                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                                            allowFullScreen
+                                                                                                        ></iframe>
+                                                                                                    )}
+                                                                                                </div>
+                                                                                            ))}
+                                                                                        </FragmentModal>
+                                                                                    }
+                                                                                />
+                                                                            </div>
+                                                                        }
+                                                                        videosText= {
+                                                                            <div>
+                                                                                <CustomModal
+                                                                                    position={"left"}
+                                                                                    btn={
+                                                                                        <div style={{display:"flex"}}>
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt={""}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+
+
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt={""}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt={""}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+                                                                                        </div>
+                                                                                    }
+                                                                                    title={"Fragmanı Oynat"}
+                                                                                    size="75%"
+                                                                                    height={"950px"}
+                                                                                    padding={"5px 0 0 0"}
+                                                                                    background={"transparent"}
+                                                                                    boxshadow={"none"}
+                                                                                    content={
+                                                                                        <FragmentModal>
+                                                                                            {videoList && videoList.map((item, index) => (
+                                                                                                <div key={index}>
+                                                                                                    {index === 0 && (
+                                                                                                        <iframe
+                                                                                                            width="560"
+                                                                                                            height="315"
+                                                                                                            src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                                            title="YouTube video player"
+                                                                                                            frameBorder="0"
+                                                                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                                            allowFullScreen
+                                                                                                        ></iframe>
+                                                                                                    )}
+                                                                                                </div>
+                                                                                            ))}
+                                                                                        </FragmentModal>
+                                                                                    }
+                                                                                />
+                                                                            </div>
+                                                                        }
+                                                                        rearText={
+                                                                            <div>
+                                                                                <CustomModal
+                                                                                    position={"left"}
+                                                                                    btn={
+                                                                                        <div style={{display:"flex"}}>
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt=""
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt=""
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+
+
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt=""
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+                                                                                        </div>
+                                                                                    }
+                                                                                    title={"Fragmanı Oynat"}
+                                                                                    size="75%"
+                                                                                    height={"950px"}
+                                                                                    padding={"5px 0 0 0"}
+                                                                                    background={"transparent"}
+                                                                                    boxshadow={"none"}
+                                                                                    content={
+                                                                                        <FragmentModal>
+                                                                                            {videoList && videoList.map((item, index) => (
+                                                                                                <div key={index}>
+                                                                                                    {index === 0 && (
+                                                                                                        <iframe
+                                                                                                            width="560"
+                                                                                                            height="315"
+                                                                                                            src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                                            title="YouTube video player"
+                                                                                                            frameBorder="0"
+                                                                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                                            allowFullScreen
+                                                                                                        ></iframe>
+                                                                                                    )}
+                                                                                                </div>
+                                                                                            ))}
+                                                                                        </FragmentModal>
+                                                                                    }
+                                                                                />
+                                                                            </div>
+                                                                        }
+
+                                                                        placardText={
+                                                                            <div>
+                                                                                <CustomModal
+                                                                                    position={"left"}
+                                                                                    btn={
+                                                                                        <div style={{display:"flex"}}>
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt=""
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt=""
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+
+                                                                                            <PopularImage>
+                                                                                                <img
+                                                                                                    alt=""
+                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                                />
+                                                                                            </PopularImage>
+                                                                                        </div>
+                                                                                    }
+                                                                                    title={"Fragmanı Oynat"}
+                                                                                    size="75%"
+                                                                                    height={"950px"}
+                                                                                    padding={"5px 0 0 0"}
+                                                                                    background={"transparent"}
+                                                                                    boxshadow={"none"}
+                                                                                    content={
+                                                                                        <FragmentModal>
+                                                                                            {videoList && videoList.map((item, index) => (
+                                                                                                <div key={index}>
+                                                                                                    {index === 0 && (
+                                                                                                        <iframe
+                                                                                                            width="560"
+                                                                                                            height="315"
+                                                                                                            src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                                            title="YouTube video player"
+                                                                                                            frameBorder="0"
+                                                                                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                                            allowFullScreen
+                                                                                                        ></iframe>
+                                                                                                    )}
+                                                                                                </div>
+                                                                                            ))}
+                                                                                        </FragmentModal>
+                                                                                    }
+                                                                                />
+                                                                            </div>
+                                                                        }
+
+                                                                        content={
+                                                                            <div>
+                                                                                {reviewsList.map((item, index) => (
+                                                                                    index < 3 && (
+                                                                                        <div key={index}>
+                                                                                            <StyledReviews>
+                                                                                                <WrapNames>
+                                                                                                    <AvatarItems type={1} src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`} />
+                                                                                                    <div>{item.author_details.username}</div>
+                                                                                                </WrapNames>
+                                                                                                <div>{new Date(item.created_at).toLocaleString('tr-TR')}</div>
+                                                                                            </StyledReviews>
+                                                                                        </div>
+                                                                                    )
+                                                                                ))}
+                                                                                {reviewsList.length > 3 && <Argument>Tartışmalara Git</Argument>}
+                                                                            </div>
+                                                                        }
+                                                                        header={true}
+                                                                        type={"more"}
+                                                                        defaultValue={"popular"}
+                                                                    />
+                                                                </StyledMedia>
+
+                                                                <div style={{padding: "20px 0"}}>
+                                                                    <CustomDivider/>
+                                                                </div>
+                                                            </div>
+                                                        </Container>
+                                                    }/>
+                                            </Container>
+                                        </Container>
+                                    }
                                     second={
                                         <StyledMenu>
                                             <RightTopMenu>
@@ -970,9 +1107,9 @@ const Details = () => {
                                                     ))}
                                                 </WrapKeywords>
                                             </StyledSticker>
-                                                <div style={{padding:"20px 0"}}>
-                                                    <CustomDivider/>
-                                                </div>
+                                            <div style={{padding:"20px 0"}}>
+                                                <CustomDivider/>
+                                            </div>
                                             <div>
                                                 <div>İçerik Sonucu</div>
                                                 <div>
@@ -982,6 +1119,55 @@ const Details = () => {
                                         </StyledMenu>
                                     }
                         />
+
+                        <Container  size="xl">
+
+                                <StyledTrend>
+                                    <div className={"wrap-list"}>
+                                        {
+                                            loading ? <StyledLoader>
+                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                </StyledLoader>
+                                                :
+                                                <CreditsWrap>
+                                                    <LeadActors>Öne Çıkan Oyuncular</LeadActors>
+                                                    <StyledCredits>
+                                                        {recommendList.map((item, index) => (
+                                                            <div key={index}>
+                                                                <TrendingContainer>
+                                                                    <CardStyle id={"card-style-first"}>
+                                                                        <StyledMovie>
+                                                                            <StyledRecommend>
+                                                                                <img
+
+                                                                                    onClick={() => personBtn(item)}
+                                                                                    src={item.backdrop_path ? `https://media.themoviedb.org/t/p/w500_and_h282_face/${item.backdrop_path}.jpg` : logo} />
+                                                                            </StyledRecommend>
+
+                                                                            <div className={"movie-text"}>
+                                                                                <div>{item.original_name}</div>
+                                                                                <div>{item.character}</div>
+                                                                            </div>
+                                                                        </StyledMovie>
+                                                                    </CardStyle>
+                                                                </TrendingContainer>
+                                                            </div>
+                                                        ))}
+                                                    </StyledCredits>
+                                                </CreditsWrap>
+                                        }
+
+                                    </div>
+                                </StyledTrend>
+
+
+
+                        </Container>
                     </Container>
                 </Container>
 
@@ -1190,15 +1376,19 @@ const CardStyle = styled.div`
   min-height: calc(150px*1.5);
   height: calc(150px*1.5);
   margin: 8px -20px 8px 40px;
-  z-index: 9;
-  
+  z-index: 9; 
+    
+ .movie-text{
+        min-height:100px;
+        text-align: center;
+        padding: 10px 0;
+    }
   .movie-text div:nth-child(1){
     font-weight: 700;
     color: #000;
     font-size: 14px;
   }
-
-  .movie-text div:nth-child(2){
+    .movie-text div:nth-child(2){
     color: rgba(0,0,0,.6);
     font-size: 12px;
   }
@@ -1221,6 +1411,19 @@ const fadeIn = keyframes`
     to {
         opacity: 1;
     }
+`;
+
+const StyledRecommend = styled.div`
+  width: 200px;
+  height: 160px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    cursor: pointer;
+  }
 `;
 
 const StyledMovie = styled.div`
@@ -1288,7 +1491,7 @@ const CreditsWrap = styled.div`
 const LeadActors = styled.div`
   font-weight: 600;
   font-size: 1.4em;
-  padding: 0 0 20px 40px;
+  padding: 0 0 20px 0;
 `
 const StyledReviews = styled.div`
   width: 100%;

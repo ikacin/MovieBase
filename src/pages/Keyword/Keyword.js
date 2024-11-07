@@ -24,7 +24,7 @@ const Keyword = () => {
     const { lang } = useParams();
     const navigate = useNavigate();
     const { hovered, ref } = useHover();
-
+    const languageCode = lang === "tr" ? "tr-TR" : "en-US";
     const getKeywordDetails = async (keyword_id) => {
         const options = {
             method: "GET",
@@ -56,7 +56,7 @@ const Keyword = () => {
         };
         try {
             const response = await Axios.get(
-                `https://api.themoviedb.org/3/keyword/${keyword_id}/movies?include_adult=false&language=en-US&page=${page}`,
+                `https://api.themoviedb.org/3/keyword/${keyword_id}/movies?include_adult=false&language=${languageCode}&page=${page}`,
                 options
             );
             console.log("keyword", response.data);

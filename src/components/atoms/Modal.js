@@ -2,22 +2,15 @@ import { useDisclosure } from '@mantine/hooks';
 import { Modal, Group} from '@mantine/core';
 import styled from 'styled-components';
 import CustomButton from "./CustomButton";
-import {useState} from "react";
-const CustomModal = ({content,btn,title,size,height,padding,background,boxshadow,position,className,centered,disabled,btnBackground,leftIcon,heightX,bordercolor,headerDisplay,setOpenedX}) => {
+const CustomModal = ({content,btn,title,size,height,padding,background,boxshadow,position,className,centered,disabled,btnBackground,leftIcon,heightX,bordercolor,headerDisplay}) => {
     const [opened, { open, close }] = useDisclosure(false);
 
-
-    const handleClose = () => {
-        console.log("handleClose called")
-        setOpenedX(false);
-        close();
-    }
 
     return (
         <>
             <ModalX
                 opened={opened}
-                onClose={handleClose}
+                onClose={close}
                 title={title}
                 size={size ?? "md"}
                 height={height}

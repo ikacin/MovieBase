@@ -39,6 +39,8 @@ const HomePage = () => {
     const navigate = useNavigate();
     const { lang } = useParams();
     const{state,dispatch} = useContext(MyContext)
+    const languageCode = lang === "tr" ? "tr-TR" : "en-US";
+
     const gotoPage = () => {
         window.location.href = "/2023";
     }
@@ -61,7 +63,7 @@ const HomePage = () => {
         };
 
         try {
-            const response = await Axios.get('https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1', options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/top_rated?language=${languageCode}&page=1`, options);
             console.log(response.data);
             setList(response.data.results)
         } catch (error) {
@@ -82,7 +84,7 @@ const HomePage = () => {
         };
 
         try {
-            const response = await Axios.get('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/now_playing?language=${languageCode}&page=1`, options);
             console.log(response.data);
             setNowList(response.data.results)
         } catch (error) {
@@ -104,7 +106,7 @@ const HomePage = () => {
         };
 
         try {
-            const response = await Axios.get('https://api.themoviedb.org/3/trending/movie/week?language=en-US', options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/trending/movie/week?language=${languageCode}`, options);
             console.log(response.data);
             setPopularList(response.data.results)
         } catch (error) {
@@ -125,7 +127,7 @@ const HomePage = () => {
         };
 
         try {
-            const response = await Axios.get('https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1', options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/upcoming?language=${languageCode}&page=1`, options);
             console.log(response.data);
             setUpComingList(response.data.results)
         } catch (error) {
@@ -146,7 +148,7 @@ const HomePage = () => {
         };
 
         try {
-            const response = await Axios.get('https://api.themoviedb.org/3/person/popular?language=en-US&page=1', options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/person/popular?language=${languageCode}&page=1`, options);
             console.log(response.data);
             if (response.data.results.length > 0) {
                 setNames( response.data.results.map(item => item.name));
@@ -245,7 +247,7 @@ const HomePage = () => {
         };
 
         try {
-            const response = await Axios.get('https://api.themoviedb.org/3/account/20865423/favorite/movies?language=en-US&page=1&sort_by=created_at.desc', options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/account/20865423/favorite/movies?language=${languageCode}&page=1&sort_by=created_at.desc`, options);
             console.log(response.data);
             if (response.data.results.length > 0) {
 

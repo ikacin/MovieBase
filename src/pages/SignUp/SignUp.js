@@ -118,7 +118,7 @@ const SignUp = () => {
                             autoClose: 5000,
                             title:"Success",
                             message:"Bildirim 2 saniye içinde kapanacak, bu bildirimi şimdi kapatabilirsiniz",
-                            color: 'white',
+                            color: 'red',
                             icon: <IconX size="1rem" />,
                             className: 'my-notification-class',
                             style: { backgroundColor: 'white' },

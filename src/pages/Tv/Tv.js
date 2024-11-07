@@ -48,6 +48,8 @@ const Tv = () => {
     const[keywordsList,setKeywordsList] = useState([]);
     const[total,setTotal] = useState(null)
     const navigate = useNavigate()
+    const languageCode = lang === "tr" ? "tr-TR" : "en-US";
+
     const MovieDetails = async () => {
         const options = {
             method: 'GET',
@@ -58,7 +60,7 @@ const Tv = () => {
         };
 
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}?language=en-US`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}?language=${languageCode}`, options);
             console.log(response.data);
             setMovieDetails(response.data)
             setList(response.data)
@@ -82,7 +84,7 @@ const Tv = () => {
         };
 
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=en-US`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?language=${languageCode}`, options);
             console.log("videos",response.data.results);
 
             setVideoList(response.data.results)
@@ -105,7 +107,7 @@ const Tv = () => {
         };
 
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits?language=${languageCode}`, options);
             console.log("credits",response.data);
 
             setCreditsList(response.data.cast)
@@ -127,7 +129,7 @@ const Tv = () => {
         };
 
         try {
-            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/reviews?language=en-US&page=1`, options);
+            const response = await Axios.get(`https://api.themoviedb.org/3/movie/${movieId}/reviews?language=${languageCode}&page=1`, options);
             console.log("reviews",response.data);
             setReviewsList(response.data.results)
             setTotal(response.data.total_results)
