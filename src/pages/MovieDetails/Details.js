@@ -223,64 +223,64 @@ const Details = () => {
     }
 
     const ratingAdd = async (movieDetails,rating) => {
-               await Axios.post(`https://api.themoviedb.org/3/movie/${movieDetails}/rating`, {
-                    "value": rating,
-                }, {
-                    headers: {
-                        accept: 'application/json',
-                        'content-type': 'application/json',
-                        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
-                    }
-                }).then(function (response) {
-                    if (response.data.success === true) {
-                    }else {
-                        return response
-                    } showNotification({
-                        id: 'load-data',
-                        autoClose: false,
-                        disallowclose: true,
-                        loading: true,
-                        title:"Please Wait",
-                    })
-                    setTimeout(() => {
-                        updateNotification({
-                            id: 'load-data',
-                            color: 'teal',
-                            title:"Success",
-                            message:"Görüntüyü Başarıyla Derecelendirdiniz",
-                            icon: <IconCheck size="1rem" />,
-                            autoClose: 1000,
-                        });
-                    }, 1000);
-                })
-                    .catch(function (error) {
-                        console.error("Error submitting rating:", error);
-                        showNotification({
-                            id: 'error-notification',
-                            disallowClose: false,
-                            autoClose: 5000,
-                            title: "Error",
-                            message: "An error occurred while submitting your rating. Please try again.",
-                            color: 'red',
-                            icon: <IconX size="1rem" />,
-                            className: 'my-notification-class',
-                            style: { backgroundColor: '#fff' },
-                            loading: false,
-                        });
-                    });
-        }
-
-
-
-    const ratingDelete = async (movieDetails) => {
-        await Axios.delete(`https://api.themoviedb.org/3/movie/${movieDetails}/rating`,
-         {
+        await Axios.post(`https://api.themoviedb.org/3/movie/${movieDetails}/rating`, {
+            "value": rating,
+        }, {
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
                 Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
             }
         }).then(function (response) {
+            if (response.data.success === true) {
+            }else {
+                return response
+            } showNotification({
+                id: 'load-data',
+                autoClose: false,
+                disallowclose: true,
+                loading: true,
+                title:"Please Wait",
+            })
+            setTimeout(() => {
+                updateNotification({
+                    id: 'load-data',
+                    color: 'teal',
+                    title:"Success",
+                    message:"Görüntüyü Başarıyla Derecelendirdiniz",
+                    icon: <IconCheck size="1rem" />,
+                    autoClose: 1000,
+                });
+            }, 1000);
+        })
+            .catch(function (error) {
+                console.error("Error submitting rating:", error);
+                showNotification({
+                    id: 'error-notification',
+                    disallowClose: false,
+                    autoClose: 5000,
+                    title: "Error",
+                    message: "An error occurred while submitting your rating. Please try again.",
+                    color: 'red',
+                    icon: <IconX size="1rem" />,
+                    className: 'my-notification-class',
+                    style: { backgroundColor: '#fff' },
+                    loading: false,
+                });
+            });
+    }
+
+
+
+    const ratingDelete = async (movieDetails) => {
+        await Axios.delete(`https://api.themoviedb.org/3/movie/${movieDetails}/rating`,
+            {
+                headers: {
+                    accept: 'application/json',
+                    'content-type': 'application/json',
+                    Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+                }
+            }).then(function (response) {
             if (response.data.success === true) {
             }else {
                 return response
@@ -328,323 +328,330 @@ const Details = () => {
         <div>
             <LangButton/>
             <SubHeader/>
-                <Container
-                    fluid={true}
-                    px={0}
-                >
-                    <InnerContentCustomBg posterUrl={posterUrl}>
-                      <Container
-                          fluid={true}
-                          m={"0"}
-                          p={"0"}
-                      >
-                          <HeaderLargeFirst  posterUrl={posterUrl}>
-                              <Wrappers>
-                                  <StyledPoster>
-                                      <img
-                                          alt={""}
-                                          src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}
-                                      />
-                                      <CustomModal
-                                          setOpenedX={closeBtn}
-                                          headerDisplay={"none"}
-                                          className={"overlay"}
-                                          position={"left"}
-                                          btn={
-                                              "Büyüt"
-                                          }
-                                          size="60%"
-                                          height={"650px"}
-                                          boxshadow={"none"}
-                                          padding={"0"}
-                                          centered={true}
-                                          content={
-                                              <Flex
-                                              >
-                                                  <div>
-                                                      <Images
-                                                          height={"650px"}
-                                                          radius="0"
-                                                          src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
-                                                      />
-                                                  </div>
+            <Container
+                fluid={true}
+                px={0}
+            >
+                <InnerContentCustomBg posterUrl={posterUrl}>
+                    <Container
+                        fluid={true}
+                        m={"0"}
+                        p={"0"}
+                    >
+                        <HeaderLargeFirst  posterUrl={posterUrl}>
+                            <Wrappers>
+                                <StyledPoster>
+                                    <img
+                                        alt={""}
+                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}
+                                    />
+                                    <CustomModal
+                                        setOpenedX={closeBtn}
+                                        headerDisplay={"none"}
+                                        className={"overlay"}
+                                        position={"left"}
+                                        btn={
+                                            "Büyüt"
+                                        }
+                                        size="60%"
+                                        height={"650px"}
+                                        boxshadow={"none"}
+                                        padding={"0"}
+                                        centered={true}
+                                        content={
+                                            <Flex
+                                            >
+                                                <div>
+                                                    <Images
+                                                        height={"650px"}
+                                                        radius="0"
+                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                    />
+                                                </div>
 
-                                                  <Flex
-                                                   style={{flexGrow:1}}
-                                                  >
-                                                      <Flex
-                                                          direction={"column"}
-                                                          w={"100%"}
-                                                      >
-                                                          <Flex
-                                                              px={"10px"}
-                                                              justify={"flex-end"}
-                                                              w={"100%"}
-                                                              style={{flexGrow:"0.5"}}
-                                                          >
-                                                              <div
-                                                                  onClick={closeBtn}
-                                                              >
-                                                                  <CloseButton
-                                                                      title="Close popover"
-                                                                      size="xl"
-                                                                      iconSize={20}
-                                                                  />
-                                                              </div>
-                                                          </Flex>
+                                                <Flex
+                                                    style={{flexGrow:1}}
+                                                >
+                                                    <Flex
+                                                        direction={"column"}
+                                                        w={"100%"}
+                                                    >
+                                                        <Flex
+                                                            px={"10px"}
+                                                            justify={"flex-end"}
+                                                            w={"100%"}
+                                                            style={{flexGrow:"0.5"}}
+                                                        >
+                                                            <div
+                                                                onClick={closeBtn}
+                                                            >
+                                                                <CloseButton
+                                                                    title="Close popover"
+                                                                    size="xl"
+                                                                    iconSize={20}
+                                                                />
+                                                            </div>
+                                                        </Flex>
 
-                                                          <Flex
-                                                          justify={"space-between"}
-                                                          px={"xl"}
-                                                          >
-                                                              <ActionIcon
-                                                                  onClick={() => ratingDelete(movieDetails.id)}
-                                                                  variant="transparent" >
-                                                                  <IconThumbDownFilled stroke={2} />
-                                                              </ActionIcon>
-                                                              <ActionIcon
-                                                                  onClick={() => ratingAdd(movieDetails.id,"0.5")}
-                                                                  variant="transparent"
-                                                              >
-                                                                  <IconThumbUpFilled
-                                                                      stroke={2}
-                                                                  />
-                                                              </ActionIcon>
-                                                          </Flex>
+                                                        <Flex
+                                                            justify={"space-between"}
+                                                            px={"xl"}
+                                                        >
+                                                            <ActionIcon
+                                                                onClick={() => ratingDelete(movieDetails.id)}
+                                                                variant="transparent" >
+                                                                <IconThumbDownFilled stroke={2} />
+                                                            </ActionIcon>
+                                                            <ActionIcon
+                                                                onClick={() => ratingAdd(movieDetails.id,"0.5")}
+                                                                variant="transparent"
+                                                            >
+                                                                <IconThumbUpFilled
+                                                                    stroke={2}
+                                                                />
+                                                            </ActionIcon>
+                                                        </Flex>
 
-                                                          <Flex
-                                                          direction={"column"}
-                                                          gap={"md"}
-                                                          >
-                                                              <Flex
-                                                                  pt={"50px"}
-                                                                  px={"20px"}
-                                                                  justify={"space-between"}
-                                                              >
-                                                                  <div>Bilgi</div>
-                                                                  <div>
-                                                                      <IconLock stroke={2} size={"20px"}/>
-                                                                  </div>
-                                                              </Flex>
+                                                        <Flex
+                                                            direction={"column"}
+                                                            gap={"md"}
+                                                        >
+                                                            <Flex
+                                                                pt={"50px"}
+                                                                px={"20px"}
+                                                                justify={"space-between"}
+                                                            >
+                                                                <div>Bilgi</div>
+                                                                <div>
+                                                                    <IconLock stroke={2} size={"20px"}/>
+                                                                </div>
+                                                            </Flex>
 
-                                                              <CustomDivider />
-                                                          </Flex>
-                                                          <Flex
-                                                              pt={"20px"}
-                                                              px={"20px"}
-                                                              direction={"column"}
-                                                              gap={"20px"}
-                                                          >
-                                                              <div>
-                                                                  <Text fw={600}>Birincil</Text>
-                                                                  <Text>{movieDetails.title}</Text>
-                                                              </div>
-                                                              <div>
-                                                                  <Text fw={600}>yayın tarihi</Text>
-                                                                  <Text>{movieDetails.release_date}</Text>
-                                                              </div>
-                                                              <div>
-                                                                  <Text fw={600}>Slogan</Text>
-                                                                  <Text>{movieDetails.tagline}</Text>
-                                                              </div>
+                                                            <CustomDivider />
+                                                        </Flex>
+                                                        <Flex
+                                                            pt={"20px"}
+                                                            px={"20px"}
+                                                            direction={"column"}
+                                                            gap={"20px"}
+                                                        >
+                                                            <div>
+                                                                <Text fw={600}>Birincil</Text>
+                                                                <Text>{movieDetails.title}</Text>
+                                                            </div>
+                                                            <div>
+                                                                <Text fw={600}>yayın tarihi</Text>
+                                                                <Text>{movieDetails.release_date}</Text>
+                                                            </div>
+                                                            <div>
+                                                                <Text fw={600}>Slogan</Text>
+                                                                <Text>{movieDetails.tagline}</Text>
+                                                            </div>
 
-                                                              <div>
-                                                                  <Text fw={600}>Dil</Text>
-                                                                  <Text>
-                                                                      {movieDetails && movieDetails.spoken_languages &&
-                                                                          movieDetails.spoken_languages[0].english_name
-                                                                      }
-                                                                  </Text>
-
-                                                              </div>
-                                                              <div>
-                                                                  <Text fw={600}>Link</Text>
-                                                                  <Text
-                                                                      style={{cursor:"pointer"}}
-                                                                  >
-                                                                  <Text
-                                                                     color={"blue"}
-                                                                      onClick={() => getHomePageLink(movieDetails.homepage)}
-                                                                  >
-                                                                      İzlemek için Tıkla
-                                                                  </Text>
+                                                            <div>
+                                                                <Text fw={600}>Dil</Text>
+                                                                <Text>
+                                                                    {movieDetails && movieDetails.spoken_languages &&
+                                                                        movieDetails.spoken_languages[0].english_name
+                                                                    }
                                                                 </Text>
-                                                              </div>
-                                                          </Flex>
 
-                                                      </Flex>
-                                                  </Flex>
-                                              </Flex>
-                                          }
-                                      />
+                                                            </div>
+                                                            <div>
+                                                                <Text fw={600}>Link</Text>
+                                                                <Text
+                                                                    style={{cursor:"pointer"}}
+                                                                >
+                                                                    <Text
+                                                                        color={"blue"}
+                                                                        onClick={() => getHomePageLink(movieDetails.homepage)}
+                                                                    >
+                                                                        İzlemek için Tıkla
+                                                                    </Text>
+                                                                </Text>
+                                                            </div>
+                                                        </Flex>
 
-                                  </StyledPoster>
-                                  <StyledList>
-                                      <Title>{list.original_title}</Title>
-                                      <InfoItem>
-                                          <div>{list.release_date}</div>
-                                          <div>{formattedRuntime}</div>
-                                          <StyleGenres>
-                                              {list.genres &&  list.genres.map((genre) => (
-                                                  <div key={genre.id}>{genre.name}</div>
-                                              ))}
-                                          </StyleGenres>
+                                                    </Flex>
+                                                </Flex>
+                                            </Flex>
+                                        }
+                                    />
 
-                                      </InfoItem>
-                                      <ContentList>
-                                          <CustomRingProgress
-                                              value={list.vote_average}
-                                              count={list.vote_average}
-                                              color={"green"}
-                                              size={90}
-                                              thickness={10}
-                                          />
-                                          <div>Üye Puanları</div>
-                                          <StyledIcons>
-                                              <div>
-                                                  <CustomToolTip
-                                                      label={"Listeye Ekle"}
-                                                      position={"bottom"}
-                                                      text={
-                                                          <AvatarItems
-                                                              background={"#032541"}
-                                                              size={"50px"}
-                                                              color={"#fff"}
-                                                              type={4}
-                                                              Icon={<IconList
-                                                                  stroke={2.5}
-                                                                  size={"15px"}/>}/>
-                                                      } />
+                                </StyledPoster>
+                                <StyledList>
+                                    <Title>{list.original_title}</Title>
+                                    <InfoItem>
+                                        <div>{list.release_date}</div>
+                                        <div>{formattedRuntime}</div>
+                                        <StyleGenres>
+                                            {list.genres &&  list.genres.map((genre) => (
+                                                <div key={genre.id}>{genre.name}</div>
+                                            ))}
+                                        </StyleGenres>
 
-                                              </div>
-                                              <div>
+                                    </InfoItem>
+                                    <ContentList>
+                                        <CustomRingProgress
+                                            value={list.vote_average}
+                                            count={list.vote_average}
+                                            color={"green"}
+                                            size={90}
+                                            thickness={10}
+                                        />
+                                        <div>Üye Puanları</div>
+                                        <StyledIcons>
+                                            <div>
+                                                <CustomToolTip
+                                                    label={"Listeye Ekle"}
+                                                    position={"bottom"}
+                                                    text={
+                                                        <AvatarItems
+                                                            background={"#032541"}
+                                                            size={"50px"}
+                                                            color={"#fff"}
+                                                            type={4}
+                                                            Icon={<IconList
+                                                                stroke={2.5}
+                                                                size={"15px"}/>}/>
+                                                    } />
 
-                                                  <CustomToolTip
-                                                      label={"Favori Olarak İşaretle"}
-                                                      position={"bottom"}
-                                                      text={
-                                                          <AvatarItems
-                                                              background={"#032541"}
-                                                              size={"50px"}
-                                                              type={4}
-                                                              color={"#fff"}
-                                                              Icon={<IconHeartFilled
-                                                                  stroke={2.5}
-                                                                  size={"15px"}/>}/>
-                                                      } />
+                                            </div>
+                                            <div>
 
-                                              </div>
-                                              <div>
+                                                <CustomToolTip
+                                                    label={"Favori Olarak İşaretle"}
+                                                    position={"bottom"}
+                                                    text={
+                                                        <AvatarItems
+                                                            background={"#032541"}
+                                                            size={"50px"}
+                                                            type={4}
+                                                            color={"#fff"}
+                                                            Icon={<IconHeartFilled
+                                                                stroke={2.5}
+                                                                size={"15px"}/>}/>
+                                                    } />
 
-                                                  <CustomToolTip
-                                                      label={"İzleme Listesine Ekle"}
-                                                      position={"bottom"}
-                                                      text={
-                                                          <AvatarItems
-                                                              background={"#032541"}
-                                                              size={"50px"}
-                                                              type={4}
-                                                              color={"#fff"}
-                                                              Icon={<IconBookmarkFilled
-                                                                  stroke={2.5}
-                                                                  size={"15px"}/>}/>
-                                                      } />
+                                            </div>
+                                            <div>
 
-                                              </div>
-                                              <div>
+                                                <CustomToolTip
+                                                    label={"İzleme Listesine Ekle"}
+                                                    position={"bottom"}
+                                                    text={
+                                                        <AvatarItems
+                                                            background={"#032541"}
+                                                            size={"50px"}
+                                                            type={4}
+                                                            color={"#fff"}
+                                                            Icon={<IconBookmarkFilled
+                                                                stroke={2.5}
+                                                                size={"15px"}/>}/>
+                                                    } />
 
-                                                  <CustomToolTip
-                                                      label={"Oyla!"}
-                                                      position={"bottom"}
-                                                      text={
-                                                          <AvatarItems
-                                                              background={"#032541"}
-                                                              size={"50px"}
-                                                              type={4}
-                                                              color={"#fff"}
-                                                              Icon={<IconStarFilled
-                                                                  stroke={2.5}
-                                                                  size={"15px"}/>}/>
-                                                      } />
+                                            </div>
+                                            <div>
 
-                                              </div>
-                                              <div>
-                                                  <StyledPlay>
+                                                <CustomToolTip
+                                                    label={"Oyla!"}
+                                                    position={"bottom"}
+                                                    text={
+                                                        <AvatarItems
+                                                            background={"#032541"}
+                                                            size={"50px"}
+                                                            type={4}
+                                                            color={"#fff"}
+                                                            Icon={<IconStarFilled
+                                                                stroke={2.5}
+                                                                size={"15px"}/>}/>
+                                                    } />
 
-                                                      <CustomModal btn={"Fragmanı Oynat"}
-                                                                   heightX={""}
-                                                                   leftIcon={ <IconPlayerPlayFilled
-                                                                       stroke={2.5}
-                                                                       size={"24px"}
+                                            </div>
+                                            <div>
+                                                <StyledPlay>
 
-                                                                   />}
-                                                                   title={"Fragmanı Oynat"}
-                                                                   size="75%"
-                                                                   height={"950px"}
-                                                                   padding={"5px 0 0 0"}
-                                                                   background={"transparent"}
-                                                                   boxshadow={"none"}
-                                                                   disabled={videoList.length === 0 ? true : false}
-                                                                   content={
-                                                                       <FragmentModal>
-                                                                           {loading ? (
-                                                                               <div>Yükleniyor...</div>
-                                                                           ) : videoList.length > 0 ? (
-                                                                               videoList.map((item, index) => (
-                                                                                   <div key={index}>
-                                                                                       {index === 2 && (
-                                                                                           <iframe
-                                                                                               width="560"
-                                                                                               height="315"
-                                                                                               src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
-                                                                                               title="YouTube video player"
-                                                                                               frameBorder="0"
-                                                                                               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                                               allowFullScreen
-                                                                                           ></iframe>
-                                                                                       )}
-                                                                                   </div>
-                                                                               ))
-                                                                           ) : (
-                                                                               <DataNotFound/>
-                                                                           )}
-                                                                       </FragmentModal>
+                                                    <CustomModal btn={"Fragmanı Oynat"}
+                                                                 heightX={""}
+                                                                 leftIcon={ <IconPlayerPlayFilled
+                                                                     stroke={2.5}
+                                                                     size={"24px"}
 
-                                                                   }
-                                                      />
-                                                  </StyledPlay>
-                                              </div>
-                                          </StyledIcons>
-                                      </ContentList>
-                                      <TagLine>
-                                          {list.tagline}
-                                      </TagLine>
-                                      <StyleOverview>
-                                          <div>Özet</div>
-                                          <div>{list.overview}</div>
-                                      </StyleOverview>
-                                  </StyledList>
-                              </Wrappers>
-                          </HeaderLargeFirst>
-                      </Container>
-                    </InnerContentCustomBg>
+                                                                 />}
+                                                                 title={"Fragmanı Oynat"}
+                                                                 size="75%"
+                                                                 height={"950px"}
+                                                                 padding={"5px 0 0 0"}
+                                                                 background={"transparent"}
+                                                                 boxshadow={"none"}
+                                                                 disabled={videoList.length === 0 ? true : false}
+                                                                 content={
+                                                                     <FragmentModal>
+                                                                         {loading ? (
+                                                                             <div>Yükleniyor...</div>
+                                                                         ) : videoList.length > 0 ? (
+                                                                             videoList.map((item, index) => (
+                                                                                 <div key={index}>
+                                                                                     {index === 2 && (
+                                                                                         <iframe
+                                                                                             width="560"
+                                                                                             height="315"
+                                                                                             src={`//www.youtube.com/embed/${item.key}?autoplay=1&origin=https%3A%2F%2Fwww.themoviedb.org&hl=tr&modestbranding=1&fs=1&autohide=1`}
+                                                                                             title="YouTube video player"
+                                                                                             frameBorder="0"
+                                                                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                                             allowFullScreen
+                                                                                         ></iframe>
+                                                                                     )}
+                                                                                 </div>
+                                                                             ))
+                                                                         ) : (
+                                                                             <DataNotFound/>
+                                                                         )}
+                                                                     </FragmentModal>
 
+                                                                 }
+                                                    />
+                                                </StyledPlay>
+                                            </div>
+                                        </StyledIcons>
+                                    </ContentList>
+                                    <TagLine>
+                                        {list.tagline}
+                                    </TagLine>
+                                    <StyleOverview>
+                                        <div>Özet</div>
+                                        <div>{list.overview}</div>
+                                    </StyleOverview>
+                                </StyledList>
+                            </Wrappers>
+                        </HeaderLargeFirst>
+                    </Container>
+                </InnerContentCustomBg>
+
+                <Container size={"xl"}>
                     <Container size={"xl"}>
                         <CustomGrid firstValue={10}
                                     secondValue={2}
                                     first={
-                                        <Container  size="xl">
+                                        <Container size="xl">
                                             <SliderContent>
                                                 <StyledTrend>
                                                     <div className={"wrap-list"}>
                                                         {
                                                             loading ? <StyledLoader>
-                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]}
+                                                                                    widths={['150px', '150px', '150px']}/>
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]}
+                                                                                    widths={['150px', '150px', '150px']}/>
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]}
+                                                                                    widths={['150px', '150px', '150px']}/>
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]}
+                                                                                    widths={['150px', '150px', '150px']}/>
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]}
+                                                                                    widths={['150px', '150px', '150px']}/>
+                                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]}
+                                                                                    widths={['150px', '150px', '150px']}/>
                                                                 </StyledLoader>
                                                                 :
                                                                 <CreditsWrap>
@@ -656,7 +663,9 @@ const Details = () => {
                                                                                     <CardStyle id={"card-style-first"}>
                                                                                         <StyledMovie>
                                                                                             <StyledImage>
-                                                                                                <img onClick={() => personBtn(item)} src={item.profile_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.profile_path}.jpg` : logo} />
+                                                                                                <img
+                                                                                                    onClick={() => personBtn(item)}
+                                                                                                    src={item.profile_path ? `https://media.themoviedb.org/t/p/w220_and_h330_face/${item.profile_path}.jpg` : logo}/>
                                                                                             </StyledImage>
 
                                                                                             <div className={"movie-text"}>
@@ -685,7 +694,7 @@ const Details = () => {
                                                                     Tüm Oyuncular ve Ekip
                                                                 </div>
 
-                                                                <div style={{padding:"20px 0"}}>
+                                                                <div style={{padding: "20px 0"}}>
                                                                     <CustomDivider/>
                                                                 </div>
 
@@ -702,7 +711,8 @@ const Details = () => {
                                                                         defaultValue={"gallery"}
                                                                         text={
                                                                             <Evaluation>
-                                                                                {list.title} için yorumumuz yok. bir tane yazmak ister misiniz?
+                                                                                {list.title} için yorumumuz yok. bir tane
+                                                                                yazmak ister misiniz?
                                                                             </Evaluation>
                                                                         }
                                                                         content={
@@ -711,7 +721,7 @@ const Details = () => {
                                                                             >
                                                                                 {
                                                                                     isLoading ?
-                                                                                        reviewsList.length &&  reviewsList.map  ((item, index) => (
+                                                                                        reviewsList.length && reviewsList.map((item, index) => (
                                                                                                 <Flex
                                                                                                     direction={"column"}
                                                                                                 >
@@ -722,7 +732,6 @@ const Details = () => {
                                                                                                     />
                                                                                                 </Flex>
                                                                                             )
-
                                                                                         )
 
                                                                                         :
@@ -751,7 +760,8 @@ const Details = () => {
                                                                                                 {reviewsList.length > 3 &&
                                                                                                     <Argument
                                                                                                         onClick={() => discussPage(movieId)}
-                                                                                                    >Tartışmalara Git</Argument>}
+                                                                                                    >Tartışmalara
+                                                                                                        Git</Argument>}
                                                                                             </>
                                                                                         ) : (
                                                                                             <DataNotFound
@@ -797,7 +807,7 @@ const Details = () => {
                                                                                 <CustomModal
                                                                                     position={"left"}
                                                                                     btn={
-                                                                                        <div style={{display:"flex"}}>
+                                                                                        <div style={{display: "flex"}}>
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt={""}
@@ -849,12 +859,12 @@ const Details = () => {
                                                                                 />
                                                                             </div>
                                                                         }
-                                                                        videosText= {
+                                                                        videosText={
                                                                             <div>
                                                                                 <CustomModal
                                                                                     position={"left"}
                                                                                     btn={
-                                                                                        <div style={{display:"flex"}}>
+                                                                                        <div style={{display: "flex"}}>
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt={""}
@@ -911,7 +921,7 @@ const Details = () => {
                                                                                 <CustomModal
                                                                                     position={"left"}
                                                                                     btn={
-                                                                                        <div style={{display:"flex"}}>
+                                                                                        <div style={{display: "flex"}}>
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt=""
@@ -969,7 +979,7 @@ const Details = () => {
                                                                                 <CustomModal
                                                                                     position={"left"}
                                                                                     btn={
-                                                                                        <div style={{display:"flex"}}>
+                                                                                        <div style={{display: "flex"}}>
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt=""
@@ -1027,7 +1037,8 @@ const Details = () => {
                                                                                         <div key={index}>
                                                                                             <StyledReviews>
                                                                                                 <WrapNames>
-                                                                                                    <AvatarItems type={1} src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`} />
+                                                                                                    <AvatarItems type={1}
+                                                                                                                 src={`https://media.themoviedb.org/t/p/w45_and_h45_face/${item.author_details.avatar_path}`}/>
                                                                                                     <div>{item.author_details.username}</div>
                                                                                                 </WrapNames>
                                                                                                 <div>{new Date(item.created_at).toLocaleString('tr-TR')}</div>
@@ -1035,7 +1046,8 @@ const Details = () => {
                                                                                         </div>
                                                                                     )
                                                                                 ))}
-                                                                                {reviewsList.length > 3 && <Argument>Tartışmalara Git</Argument>}
+                                                                                {reviewsList.length > 3 &&
+                                                                                    <Argument>Tartışmalara Git</Argument>}
                                                                             </div>
                                                                         }
                                                                         header={true}
@@ -1043,16 +1055,13 @@ const Details = () => {
                                                                         defaultValue={"popular"}
                                                                     />
                                                                 </StyledMedia>
-
-                                                                <div style={{padding: "20px 0"}}>
-                                                                    <CustomDivider/>
-                                                                </div>
                                                             </div>
                                                         </Container>
                                                     }/>
                                             </Container>
                                         </Container>
                                     }
+
                                     second={
                                         <StyledMenu>
                                             <RightTopMenu>
@@ -1101,13 +1110,14 @@ const Details = () => {
                                                             background={"#d7d7d7"}
                                                             radius={"sm"}
                                                             text={
-                                                                <KeywordText key={index} className="sc-dPWqtL bhbwkB">{item.name}</KeywordText>
+                                                                <KeywordText key={index}
+                                                                             className="sc-dPWqtL bhbwkB">{item.name}</KeywordText>
                                                             }
                                                         />
                                                     ))}
                                                 </WrapKeywords>
                                             </StyledSticker>
-                                            <div style={{padding:"20px 0"}}>
+                                            <div style={{padding: "20px 0"}}>
                                                 <CustomDivider/>
                                             </div>
                                             <div>
@@ -1120,56 +1130,81 @@ const Details = () => {
                                     }
                         />
 
-                        <Container  size="xl">
 
-                                <StyledTrend>
-                                    <div className={"wrap-list"}>
-                                        {
-                                            loading ? <StyledLoader>
-                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                    <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                </StyledLoader>
-                                                :
-                                                <CreditsWrap>
-                                                    <LeadActors>Öne Çıkan Oyuncular</LeadActors>
-                                                    <StyledCredits>
-                                                        {recommendList.map((item, index) => (
-                                                            <div key={index}>
-                                                                <TrendingContainer>
-                                                                    <CardStyle id={"card-style-first"}>
-                                                                        <StyledMovie>
-                                                                            <StyledRecommend>
-                                                                                <img
-
-                                                                                    onClick={() => personBtn(item)}
-                                                                                    src={item.backdrop_path ? `https://media.themoviedb.org/t/p/w500_and_h282_face/${item.backdrop_path}.jpg` : logo} />
-                                                                            </StyledRecommend>
-
-                                                                            <div className={"movie-text"}>
-                                                                                <div>{item.original_name}</div>
-                                                                                <div>{item.character}</div>
-                                                                            </div>
-                                                                        </StyledMovie>
-                                                                    </CardStyle>
-                                                                </TrendingContainer>
-                                                            </div>
-                                                        ))}
-                                                    </StyledCredits>
-                                                </CreditsWrap>
-                                        }
-
-                                    </div>
-                                </StyledTrend>
-
-
-
-                        </Container>
-                    </Container>
+                          <CustomDivider />
                 </Container>
+
+
+                </Container>
+                <Container size={"xl"}>
+                    <CustomGrid firstValue={10}
+                                secondValue={2}
+                                first={
+                                    <Container  size="xl">
+                                        <SliderContent>
+                                            <StyledTrend>
+                                                <div className={"wrap-list"}>
+                                                    {
+                                                        loading ? <StyledLoader>
+                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
+                                                            </StyledLoader>
+                                                            :
+                                                            <CreditsWrap>
+                                                                <LeadActors>Ayrıca Önerilenler</LeadActors>
+                                                                <StyledCredits
+                                                                 minHeight={"120px"}
+                                                                 gap={"20px"}
+                                                                >
+                                                                    {recommendList.map((item, index) => (
+                                                                        <div
+                                                                            key={index}>
+                                                                                <Suggestions id={"suggestion-list-item"}>
+                                                                                        <StyledRecommend>
+                                                                                            <img
+
+                                                                                                onClick={() => personBtn(item)}
+                                                                                                src={item.backdrop_path ? `https://media.themoviedb.org/t/p/w500_and_h282_face/${item.backdrop_path}.jpg` : logo} />
+                                                                                        </StyledRecommend>
+
+                                                                                        <Flex
+                                                                                            justify={"space-between"}
+                                                                                            id={"suggestions-title"}
+                                                                                        >
+                                                                                            <Text
+                                                                                             fz={"sm"}
+                                                                                             truncate={true}
+                                                                                            >
+                                                                                                {item.original_title || item.title}
+                                                                                           </Text>
+                                                                                            <Text
+                                                                                                fz={"sm"}
+                                                                                                truncate={true}
+                                                                                            >
+                                                                                                {`${(item.vote_average*10).toFixed(0)}%`}
+                                                                                            </Text>
+                                                                                        </Flex>
+
+                                                                                </Suggestions>
+                                                                        </div>
+                                                                    ))}
+                                                                </StyledCredits>
+                                                            </CreditsWrap>
+                                                    }
+                                                </div>
+                                            </StyledTrend>
+                                        </SliderContent>
+                                    </Container>
+                                }
+                    />
+
+
+                </Container>
+            </Container>
 
             <Footer/>
         </div>
@@ -1369,6 +1404,7 @@ const TrendingContainer = styled.div`
   background-position-y: 90px;
   justify-content: center;
 `;
+
 const CardStyle = styled.div`
   min-width: 150px;
   box-shadow: 0 2px 8px rgba(0,0,0,.1);
@@ -1399,6 +1435,18 @@ const CardStyle = styled.div`
   }
 ;
 `
+
+const Suggestions = styled.div`
+    min-width: 150px;
+    width: 100%;
+    min-height: calc(130px*1.5);
+    height: calc(130px*1.5);
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`
+
 const StyledImage = styled.div`
   position: relative;
   display: inline-block;
@@ -1414,9 +1462,13 @@ const fadeIn = keyframes`
 `;
 
 const StyledRecommend = styled.div`
-  width: 200px;
-  height: 160px;
-  overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 141px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
 
   img {
     width: 100%;
@@ -1476,13 +1528,11 @@ const StyledLoader = styled.div`
 
 const StyledCredits = styled.div`
   display: flex;
-  gap: 5px;
+  gap: ${({gap}) => gap ? gap : "5px"};
   max-width: 990px;
   overflow-y: hidden;
   overflow-x: scroll;
-  min-height: 380px;
-
-  
+  min-height: ${({minHeight}) => minHeight ? minHeight : "380px"};
 `
 const CreditsWrap = styled.div`
   font-weight: 600;
