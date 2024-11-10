@@ -97,7 +97,7 @@ const Person = () => {
                     style={{flexDirection:"column"}}
                     mb={"40px"}
                     mt={"40px"}
-                    px={"60px"}
+                    p={0}
                     size={"xl"}
                     display={"flex"}
 

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import LangButton from "../../components/atoms/LangButton";
 import SubHeader from "../../components/organisms/Header/SubHeader";
-import {ActionIcon, CloseButton, Container, Flex, Text} from '@mantine/core';
+import {ActionIcon, Box, CloseButton, Container, Flex, Loader, Text} from '@mantine/core';
 import styled, { keyframes, css } from 'styled-components';
 import Axios from 'axios';
 import {useParams,useNavigate } from "react-router-dom";
@@ -41,12 +41,12 @@ const Details = () => {
     const[movieDetails,setMovieDetails] = useState([]);
     const[videoList,setVideoList] = useState([])
     const[creditsList,setCreditsList] = useState([])
-    const[isLoading,setIsloading] = useState(true);
     const[loading,setLoading] = useState(true);
     const [posterUrl, setPosterUrl] = useState(null);
     const [reviewsList, setReviewsList] = useState([]);
     const[keywordsList,setKeywordsList] = useState([]);
     const[recommendList,setRecommendList] = useState([]);
+    const[collectionList,setCollectionList] = useState({});
     const [modalOpen, setModalOpen] = useState(false);
     const[total,setTotal] = useState(null)
     const navigate = useNavigate()
@@ -101,7 +101,6 @@ const Details = () => {
 
 
     const getCredits = async () => {
-        setLoading(true)
         const options = {
             method: 'GET',
             headers: {
@@ -117,13 +116,10 @@ const Details = () => {
             setCreditsList(response.data.cast)
         } catch (error) {
             console.error(error);
-        }  finally {
-            setLoading(false)
         }
     };
 
     const getReviews = async () => {
-        setIsloading(true)
         const options = {
             method: 'GET',
             headers: {
@@ -139,8 +135,6 @@ const Details = () => {
             setTotal(response.data.total_results)
         } catch (error) {
             console.error(error);
-        }  finally {
-            setIsloading(false)
         }
     };
 
@@ -168,7 +162,6 @@ const Details = () => {
 
 
     const getRecommendations = async () => {
-
         const options = {
             method: 'GET',
             headers: {
@@ -183,44 +176,28 @@ const Details = () => {
 
         } catch (error) {
             console.error(error);
-        }  finally {
-
         }
     };
 
 
-    useEffect(() => {
-        MovieDetails()
-        getVideos()
-        getCredits()
-        getKeywords()
-        getRecommendations()
-    },[])
+    const getCollections = async () => {
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+            }
+        };
+        try {
+            const response = await Axios.get(`https://api.themoviedb.org/3/collection/263`, options);
+            console.log("collections",response.data);
+            setCollectionList(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
 
-    function formatRuntime(runtime) {
-        const hours = Math.floor(runtime / 60);
-        const minutes = runtime % 60;
-        return hours + 'h ' + minutes + 'm';
-    }
-
-    const formattedRuntime = formatRuntime(list.runtime);
-
-    function formatNumberToDollar(number) {
-        return '$' + new Intl.NumberFormat('en-US').format(number);
-    }
-
-    const personBtn = (item) => {
-        navigate(`/${lang}/person/${item.id}`);
-    }
-
-    const getHomePageLink = (link) => {
-        window.open(link, '_blank');
-    }
-
-    const closeBtn = () => {
-        setModalOpen(false)
-    }
 
     const ratingAdd = async (movieDetails,rating) => {
         await Axios.post(`https://api.themoviedb.org/3/movie/${movieDetails}/rating`, {
@@ -319,9 +296,66 @@ const Details = () => {
             });
     }
 
+    function formatRuntime(runtime) {
+        const hours = Math.floor(runtime / 60);
+        const minutes = runtime % 60;
+        return hours + 'h ' + minutes + 'm';
+    }
+
+    const formattedRuntime = formatRuntime(list.runtime);
+
+    function formatNumberToDollar(number) {
+        return '$' + new Intl.NumberFormat('en-US').format(number);
+    }
+
+    const personBtn = (item) => {
+        navigate(`/${lang}/person/${item.id}`);
+    }
+
+    const getHomePageLink = (link) => {
+        window.open(link, '_blank');
+    }
+
+    const closeBtn = () => {
+        setModalOpen(false)
+    }
+
+
     const discussPage = (movieId) => {
         navigate(`/${lang}/movie/${movieId}/discuss`);
     }
+
+
+    const pageDetails = (id) => {
+        if (movieId !== id){
+            navigate(`/${lang}/movie/${id}`);
+        }
+    }
+
+
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+            try {
+               await Promise.all([
+                   MovieDetails(),
+                   getVideos(),
+                   getCredits(),
+                   getKeywords(),
+                   getRecommendations(),
+                   getCollections()
+                ])
+            }catch (error) {
+                console.log(error)
+            }finally {
+                setLoading(false)
+            }
+        }
+        fetchData()
+    },[movieId])
+
 
 
     return(
@@ -341,10 +375,23 @@ const Details = () => {
                         <HeaderLargeFirst  posterUrl={posterUrl}>
                             <Wrappers>
                                 <StyledPoster>
-                                    <img
-                                        alt={""}
-                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}
-                                    />
+                                    {
+                                        loading ?
+                                            <Flex
+                                                direction="column"
+                                                mx={"sm"}
+                                            >
+                                                <CustomSkeleton
+                                                    heights={["calc(425px*1.5)"]}
+                                                    widths={['425px']}
+                                                />
+                                            </Flex>
+                                            :
+                                            <img
+                                                alt={""}
+                                                src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails.backdrop_path}.jpg`}
+                                            />
+                                    }
                                     <CustomModal
                                         setOpenedX={closeBtn}
                                         headerDisplay={"none"}
@@ -359,122 +406,134 @@ const Details = () => {
                                         padding={"0"}
                                         centered={true}
                                         content={
-                                            <Flex
-                                            >
-                                                <div>
-                                                    <Images
-                                                        height={"650px"}
-                                                        radius="0"
-                                                        src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
-                                                    />
-                                                </div>
-
+                                            loading ?
                                                 <Flex
-                                                    style={{flexGrow:1}}
+                                                direction="column"
+                                                mx={"sm"}
                                                 >
+                                                    <CustomSkeleton
+                                                        heights={["calc(425px*1.5)"]}
+                                                        widths={['425px']}
+                                                    />
+                                                </Flex>
+                                            :movieDetails && (
+                                                <Flex
+                                                >
+                                                    <div>
+                                                        <Images
+                                                            height={"650px"}
+                                                            radius="0"
+                                                            src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                        />
+                                                    </div>
+
                                                     <Flex
-                                                        direction={"column"}
-                                                        w={"100%"}
+                                                        style={{flexGrow:1}}
                                                     >
                                                         <Flex
-                                                            px={"10px"}
-                                                            justify={"flex-end"}
-                                                            w={"100%"}
-                                                            style={{flexGrow:"0.5"}}
-                                                        >
-                                                            <div
-                                                                onClick={closeBtn}
-                                                            >
-                                                                <CloseButton
-                                                                    title="Close popover"
-                                                                    size="xl"
-                                                                    iconSize={20}
-                                                                />
-                                                            </div>
-                                                        </Flex>
-
-                                                        <Flex
-                                                            justify={"space-between"}
-                                                            px={"xl"}
-                                                        >
-                                                            <ActionIcon
-                                                                onClick={() => ratingDelete(movieDetails.id)}
-                                                                variant="transparent" >
-                                                                <IconThumbDownFilled stroke={2} />
-                                                            </ActionIcon>
-                                                            <ActionIcon
-                                                                onClick={() => ratingAdd(movieDetails.id,"0.5")}
-                                                                variant="transparent"
-                                                            >
-                                                                <IconThumbUpFilled
-                                                                    stroke={2}
-                                                                />
-                                                            </ActionIcon>
-                                                        </Flex>
-
-                                                        <Flex
                                                             direction={"column"}
-                                                            gap={"md"}
+                                                            w={"100%"}
                                                         >
                                                             <Flex
-                                                                pt={"50px"}
-                                                                px={"20px"}
-                                                                justify={"space-between"}
+                                                                px={"10px"}
+                                                                justify={"flex-end"}
+                                                                w={"100%"}
+                                                                style={{flexGrow:"0.5"}}
                                                             >
-                                                                <div>Bilgi</div>
-                                                                <div>
-                                                                    <IconLock stroke={2} size={"20px"}/>
+                                                                <div
+                                                                    onClick={closeBtn}
+                                                                >
+                                                                    <CloseButton
+                                                                        title="Close popover"
+                                                                        size="xl"
+                                                                        iconSize={20}
+                                                                    />
                                                                 </div>
                                                             </Flex>
 
-                                                            <CustomDivider />
-                                                        </Flex>
-                                                        <Flex
-                                                            pt={"20px"}
-                                                            px={"20px"}
-                                                            direction={"column"}
-                                                            gap={"20px"}
-                                                        >
-                                                            <div>
-                                                                <Text fw={600}>Birincil</Text>
-                                                                <Text>{movieDetails.title}</Text>
-                                                            </div>
-                                                            <div>
-                                                                <Text fw={600}>yayın tarihi</Text>
-                                                                <Text>{movieDetails.release_date}</Text>
-                                                            </div>
-                                                            <div>
-                                                                <Text fw={600}>Slogan</Text>
-                                                                <Text>{movieDetails.tagline}</Text>
-                                                            </div>
-
-                                                            <div>
-                                                                <Text fw={600}>Dil</Text>
-                                                                <Text>
-                                                                    {movieDetails && movieDetails.spoken_languages &&
-                                                                        movieDetails.spoken_languages[0].english_name
-                                                                    }
-                                                                </Text>
-
-                                                            </div>
-                                                            <div>
-                                                                <Text fw={600}>Link</Text>
-                                                                <Text
-                                                                    style={{cursor:"pointer"}}
+                                                            <Flex
+                                                                justify={"space-between"}
+                                                                px={"xl"}
+                                                            >
+                                                                <ActionIcon
+                                                                    onClick={() => ratingDelete(movieDetails.id)}
+                                                                    variant="transparent" >
+                                                                    <IconThumbDownFilled stroke={2} />
+                                                                </ActionIcon>
+                                                                <ActionIcon
+                                                                    onClick={() => ratingAdd(movieDetails.id,"0.5")}
+                                                                    variant="transparent"
                                                                 >
-                                                                    <Text
-                                                                        color={"blue"}
-                                                                        onClick={() => getHomePageLink(movieDetails.homepage)}
-                                                                    >
-                                                                        İzlemek için Tıkla
-                                                                    </Text>
-                                                                </Text>
-                                                            </div>
-                                                        </Flex>
+                                                                    <IconThumbUpFilled
+                                                                        stroke={2}
+                                                                    />
+                                                                </ActionIcon>
+                                                            </Flex>
 
+                                                            <Flex
+                                                                direction={"column"}
+                                                                gap={"md"}
+                                                            >
+                                                                <Flex
+                                                                    pt={"50px"}
+                                                                    px={"20px"}
+                                                                    justify={"space-between"}
+                                                                >
+                                                                    <div>Bilgi</div>
+                                                                    <div>
+                                                                        <IconLock stroke={2} size={"20px"}/>
+                                                                    </div>
+                                                                </Flex>
+
+                                                                <CustomDivider />
+                                                            </Flex>
+                                                            <Flex
+                                                                pt={"20px"}
+                                                                px={"20px"}
+                                                                direction={"column"}
+                                                                gap={"20px"}
+                                                            >
+                                                                <div>
+                                                                    <Text fw={600}>Birincil</Text>
+                                                                    <Text>{movieDetails.title}</Text>
+                                                                </div>
+                                                                <div>
+                                                                    <Text fw={600}>yayın tarihi</Text>
+                                                                    <Text>{movieDetails.release_date}</Text>
+                                                                </div>
+                                                                <div>
+                                                                    <Text fw={600}>Slogan</Text>
+                                                                    <Text>{movieDetails.tagline}</Text>
+                                                                </div>
+
+                                                                <div>
+                                                                    <Text fw={600}>Dil</Text>
+                                                                    <Text>
+                                                                        {movieDetails && movieDetails.spoken_languages &&
+                                                                            movieDetails.spoken_languages[0].english_name
+                                                                        }
+                                                                    </Text>
+
+                                                                </div>
+                                                                <div>
+                                                                    <Text fw={600}>Link</Text>
+                                                                    <Text
+                                                                        style={{cursor:"pointer"}}
+                                                                    >
+                                                                        <Text
+                                                                            color={"blue"}
+                                                                            onClick={() => getHomePageLink(movieDetails.homepage)}
+                                                                        >
+                                                                            İzlemek için Tıkla
+                                                                        </Text>
+                                                                    </Text>
+                                                                </div>
+                                                            </Flex>
+
+                                                        </Flex>
                                                     </Flex>
                                                 </Flex>
-                                            </Flex>
+                                            )
                                         }
                                     />
 
@@ -629,8 +688,12 @@ const Details = () => {
                     </Container>
                 </InnerContentCustomBg>
 
-                <Container size={"xl"}>
-                    <Container size={"xl"}>
+                <Container
+                    pl={"60px"}
+                    m={0}
+                    size="xl"
+                >
+                    <Container fluid={true}>
                         <CustomGrid firstValue={10}
                                     secondValue={2}
                                     first={
@@ -720,7 +783,7 @@ const Details = () => {
                                                                                 direction={"column"}
                                                                             >
                                                                                 {
-                                                                                    isLoading ?
+                                                                                    loading ?
                                                                                         reviewsList.length && reviewsList.map((item, index) => (
                                                                                                 <Flex
                                                                                                     direction={"column"}
@@ -811,7 +874,7 @@ const Details = () => {
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt={""}
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails.poster_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
 
@@ -819,14 +882,14 @@ const Details = () => {
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt={""}
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails?.backdrop_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
 
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt={""}
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
                                                                                         </div>
@@ -868,7 +931,7 @@ const Details = () => {
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt={""}
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails.poster_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
 
@@ -876,14 +939,14 @@ const Details = () => {
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt={""}
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails?.backdrop_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
 
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt={""}
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
                                                                                         </div>
@@ -925,14 +988,14 @@ const Details = () => {
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt=""
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.poster_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails.poster_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
 
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt=""
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
 
@@ -940,7 +1003,7 @@ const Details = () => {
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt=""
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails?.backdrop_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
                                                                                         </div>
@@ -983,20 +1046,20 @@ const Details = () => {
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt=""
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails?.belongs_to_collection?.backdrop_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt=""
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails.backdrop_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails.backdrop_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
 
                                                                                             <PopularImage>
                                                                                                 <img
                                                                                                     alt=""
-                                                                                                    src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2/${movieDetails?.backdrop_path}.jpg`}
+                                                                                                    src={`https://media.themoviedb.org/t/p/w500_and_h282_face/${movieDetails?.backdrop_path}.jpg`}
                                                                                                 />
                                                                                             </PopularImage>
                                                                                         </div>
@@ -1058,6 +1121,135 @@ const Details = () => {
                                                             </div>
                                                         </Container>
                                                     }/>
+
+                                                <CustomDivider />
+                                            </Container>
+
+                                            <Container size="xl">
+                                                {loading ? (
+                                                    <StyledLoader>
+                                                        <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={["150px", "150px", "150px"]} />
+                                                    </StyledLoader>
+                                                ) : (
+                                                    <CreditsWrap>
+
+                                                            {collectionList && (
+                                                                <div>
+                                                                    <Suggestions onClick={() => pageDetails(collectionList.id)} id="suggestion-list-item">
+                                                                        <StyledCollection>
+                                                                            <img
+                                                                                src={
+                                                                                    collectionList.backdrop_path
+                                                                                        ? `https://media.themoviedb.org/t/p/w500_and_h282_face/${collectionList.backdrop_path}.jpg`
+                                                                                        : logo
+                                                                                }
+                                                                                alt={collectionList.name || "Default image"}
+                                                                            />
+                                                                        </StyledCollection>
+
+                                                                        <Flex justify="space-between" id="suggestions-title">
+                                                                            <Box w={200}>
+                                                                                <Text fz="sm" truncate>
+                                                                                    {collectionList.name}
+                                                                                </Text>
+                                                                            </Box>
+                                                                            <Text fz="sm" truncate>
+                                                                                {/* Bu boş Text etiketi kaldırılabilir veya başka bilgi eklenebilir */}
+                                                                            </Text>
+                                                                        </Flex>
+                                                                    </Suggestions>
+                                                                </div>
+                                                            )}
+
+                                                    </CreditsWrap>
+                                                )}
+                                            </Container>
+
+
+                                            <Container size={"xl"}>
+                                                <CustomGrid firstValue={10}
+                                                            secondValue={2}
+                                                            first={
+                                                                <Container size="xl">
+                                                                    <SliderContent>
+                                                                        <StyledTrend>
+                                                                            <div className={"wrap-list"}>
+                                                                                {
+                                                                                    loading ? <StyledLoader>
+                                                                                            <CustomSkeleton
+                                                                                                heights={["calc(150px*1.5)", 25, 25]}
+                                                                                                widths={['150px', '150px', '150px']}/>
+                                                                                            <CustomSkeleton
+                                                                                                heights={["calc(150px*1.5)", 25, 25]}
+                                                                                                widths={['150px', '150px', '150px']}/>
+                                                                                            <CustomSkeleton
+                                                                                                heights={["calc(150px*1.5)", 25, 25]}
+                                                                                                widths={['150px', '150px', '150px']}/>
+                                                                                            <CustomSkeleton
+                                                                                                heights={["calc(150px*1.5)", 25, 25]}
+                                                                                                widths={['150px', '150px', '150px']}/>
+                                                                                            <CustomSkeleton
+                                                                                                heights={["calc(150px*1.5)", 25, 25]}
+                                                                                                widths={['150px', '150px', '150px']}/>
+                                                                                            <CustomSkeleton
+                                                                                                heights={["calc(150px*1.5)", 25, 25]}
+                                                                                                widths={['150px', '150px', '150px']}/>
+                                                                                        </StyledLoader>
+                                                                                        :
+                                                                                        <CreditsWrap>
+                                                                                            <LeadActors>Ayrıca
+                                                                                                Önerilenler</LeadActors>
+                                                                                            <StyledCredits
+                                                                                                minHeight={"120px"}
+                                                                                                gap={"20px"}
+                                                                                            >
+                                                                                                {recommendList.map((item, index) => (
+                                                                                                    <div
+                                                                                                        key={index}>
+                                                                                                        <Suggestions
+                                                                                                            onClick={() =>pageDetails(item.id)}
+                                                                                                            id={"suggestion-list-item"}>
+                                                                                                            <StyledRecommend>
+                                                                                                                <img
+                                                                                                                    src={item.backdrop_path ? `https://media.themoviedb.org/t/p/w500_and_h282_face/${item.backdrop_path}.jpg` : logo} />
+                                                                                                            </StyledRecommend>
+
+                                                                                                            <Flex
+                                                                                                                justify={"space-between"}
+                                                                                                                id={"suggestions-title"}
+                                                                                                            >
+                                                                                                                <Box
+                                                                                                                    w={200}
+                                                                                                                >
+                                                                                                                    <Text
+                                                                                                                        fz={"sm"}
+                                                                                                                        truncate={true}
+                                                                                                                    >
+                                                                                                                        {item.original_title || item.title}
+                                                                                                                    </Text>
+                                                                                                                </Box>
+                                                                                                                <Text
+                                                                                                                    fz={"sm"}
+                                                                                                                    truncate={true}
+                                                                                                                >
+                                                                                                                    {`${(item.vote_average*10).toFixed(0)}%`}
+                                                                                                                </Text>
+                                                                                                            </Flex>
+
+                                                                                                        </Suggestions>
+                                                                                                    </div>
+                                                                                                ))}
+                                                                                            </StyledCredits>
+                                                                                        </CreditsWrap>
+                                                                                }
+                                                                            </div>
+                                                                        </StyledTrend>
+                                                                    </SliderContent>
+                                                                </Container>
+                                                            }
+                                                />
+
+
                                             </Container>
                                         </Container>
                                     }
@@ -1129,81 +1321,11 @@ const Details = () => {
                                         </StyledMenu>
                                     }
                         />
-
-
-                          <CustomDivider />
                 </Container>
 
 
                 </Container>
-                <Container size={"xl"}>
-                    <CustomGrid firstValue={10}
-                                secondValue={2}
-                                first={
-                                    <Container  size="xl">
-                                        <SliderContent>
-                                            <StyledTrend>
-                                                <div className={"wrap-list"}>
-                                                    {
-                                                        loading ? <StyledLoader>
-                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                                <CustomSkeleton heights={["calc(150px*1.5)", 25, 25]} widths={['150px', '150px', '150px']}  />
-                                                            </StyledLoader>
-                                                            :
-                                                            <CreditsWrap>
-                                                                <LeadActors>Ayrıca Önerilenler</LeadActors>
-                                                                <StyledCredits
-                                                                 minHeight={"120px"}
-                                                                 gap={"20px"}
-                                                                >
-                                                                    {recommendList.map((item, index) => (
-                                                                        <div
-                                                                            key={index}>
-                                                                                <Suggestions id={"suggestion-list-item"}>
-                                                                                        <StyledRecommend>
-                                                                                            <img
 
-                                                                                                onClick={() => personBtn(item)}
-                                                                                                src={item.backdrop_path ? `https://media.themoviedb.org/t/p/w500_and_h282_face/${item.backdrop_path}.jpg` : logo} />
-                                                                                        </StyledRecommend>
-
-                                                                                        <Flex
-                                                                                            justify={"space-between"}
-                                                                                            id={"suggestions-title"}
-                                                                                        >
-                                                                                            <Text
-                                                                                             fz={"sm"}
-                                                                                             truncate={true}
-                                                                                            >
-                                                                                                {item.original_title || item.title}
-                                                                                           </Text>
-                                                                                            <Text
-                                                                                                fz={"sm"}
-                                                                                                truncate={true}
-                                                                                            >
-                                                                                                {`${(item.vote_average*10).toFixed(0)}%`}
-                                                                                            </Text>
-                                                                                        </Flex>
-
-                                                                                </Suggestions>
-                                                                        </div>
-                                                                    ))}
-                                                                </StyledCredits>
-                                                            </CreditsWrap>
-                                                    }
-                                                </div>
-                                            </StyledTrend>
-                                        </SliderContent>
-                                    </Container>
-                                }
-                    />
-
-
-                </Container>
             </Container>
 
             <Footer/>
@@ -1403,6 +1525,7 @@ const TrendingContainer = styled.div`
   display: flex;
   background-position-y: 90px;
   justify-content: center;
+  cursor: pointer;  
 `;
 
 const CardStyle = styled.div`
@@ -1460,6 +1583,33 @@ const fadeIn = keyframes`
         opacity: 1;
     }
 `;
+const StyledCollection = styled.div`
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 141px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    width: 100%;
+    background: linear-gradient(
+            to right,
+            rgba(107, 125, 142, 1) 0%,
+            rgba(3, 37, 65, 0.6) 100%
+    );
+    position: relative;
+    background-size: cover;
+    background-position: 50% 50%;
+    img {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+ 
+        z-index: -999999;
+        position: relative;
+    }
+`
+
 
 const StyledRecommend = styled.div`
     top: 0;
@@ -1495,11 +1645,11 @@ const SliderContent = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  justify-content: center;
   padding: 30px 0;
   gap: 20px;
   color: #ffffff;
   position: relative;
+  min-width: 960px;
   
   &:after{
     content: "";
@@ -1529,7 +1679,7 @@ const StyledLoader = styled.div`
 const StyledCredits = styled.div`
   display: flex;
   gap: ${({gap}) => gap ? gap : "5px"};
-  max-width: 990px;
+  max-width: 960px;
   overflow-y: hidden;
   overflow-x: scroll;
   min-height: ${({minHeight}) => minHeight ? minHeight : "380px"};

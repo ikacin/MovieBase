@@ -7,7 +7,6 @@ const Dividers = ({color,orientation,size}) => {
                 color={color}
                 orientation={orientation}
                 size={size}
-
             />
         </>
     );
